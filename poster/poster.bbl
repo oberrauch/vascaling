@@ -1,0 +1,29 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Auer et~al.(2007)}]{Auer2007}
+Auer, I., et~al., 2007: {HISTALP—historical instrumental climatological
+  surface time series of the Greater Alpine Region}. \textit{International
+  Journal of Climatology}, \textbf{27~(1)}, 17--46, \doi{10.1002/joc.1377},
+  \urlprefix\url{http://cdiac.esd.ornl.gov/oceans/GLODAP/glodap{\_}pdfs/Thermohaline.web.pdf
+  http://doi.wiley.com/10.1002/joc.1377}.
+
+\bibitem[{Marzeion et~al.(2012)Marzeion, Jarosch, and Hofer}]{Marzeion2012}
+Marzeion, B., a.~H. Jarosch, and M.~Hofer, 2012: {Past and future sea-level
+  change from the surface mass balance of glaciers}. \textit{The Cryosphere},
+  \textbf{6~(6)}, 1295--1322, \doi{10.5194/tc-6-1295-2012}.
+
+\bibitem[{{RGI Consortium}(2017)}]{RGI}
+{RGI Consortium}, 2017: Randolph glacier inventory – a dataset of global
+  glacier outlines: Version 6.0: Technical report: Global land ice measurements
+  from space, colorado, usa. \urlprefix\url{http://www.glims.org/RGI/},
+  \doi{10.7265/N5-RGI-60}, \urlprefix\url{http://www.glims.org/RGI/}.
+
+\end{thebibliography}

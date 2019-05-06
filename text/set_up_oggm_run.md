@@ -1,0 +1,9 @@
+# Set up a OGGM run
+
+1. The first thing to do, is always to load the (default) parameter set via `cfg.initialize()` and thereafter set the needed paths and parameters.
+2. Get the **RGI** entity (containing the outline shapefile), most easily via `get_rgi_glacier_entities(ids)`.
+3. Create a `oggm.GlacierDirectory` using the RGI entity. Thereby it is necessary to specify the working directory under `cfg.PATHS['working_dir']`.
+4. Set path to the **DEM** `cfg.PATHS['dem_file']`. It is possible to download the SRTM data using `utils.get_topo_file()`. Additionally, if intersections should be used it must be specified using `cfg.set_intersects_db()` or set the intersection flag to `cfg.PARAMS['use_intersects'] = False`. Another GIS relevant parameter is `cfg.PARAMS['border']`, which defines the grid border buffer around the glacier (default is 20 pixels).
+5. **GIS tasks:** The very first task  `gis.define_glacier_region()` defines the glacier's local grid, using the glacier directory and the RGI entity. Thereafter, it is necessary to compute the gridded mask of the glacier outline and topography using  `gis.glacier_mask()`.
+6. Process the **climate data**. Default is to use the *CRU* dataset with `climate.process_cru_data()`. If you want to use the *HistAlp* dataset via `climate.process_histalp_data()`, the baseline climate parameter must be changed `cfg.PARAMS['baseline_climate'] = 'HISTALP'`. It is also possible to use a custom climate file via `climate.process_custom_climate_data()`, thereby the path to the climate file must be set in the configuration dictionary `cfg.PATHS['climate_file']`. This calls for a mass balance calibration on a later point. Additionally, the hyper parameters (like `cfg.PARAMS['prcp_scaling_factor']`, ...) for the mass balance calibration can/should be set here.
+7. @TODO

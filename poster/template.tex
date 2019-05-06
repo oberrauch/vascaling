@@ -1,0 +1,197 @@
+% -------------------------------------------------------------------
+% - NAME:        grindelwald_agm_poster.tex
+% - AUTHOR:      Moritz Oberrauch
+% - BASED ON:    UIBK beamer poster template by Reto Stauffer
+% - DATE:        2014-09-29
+% -------------------------------------------------------------------
+% - DESCRIPTION: 
+% -------------------------------------------------------------------
+\pdfminorversion=4 % Fixed a bug where rendered pdf's were not readable on windows/acroread
+\documentclass[final]{beamer}
+
+\usepackage{natbib}
+
+\usepackage[tight,nooneline,FIGTOPCAP,bf]{subfigure}
+
+\usepackage[orientation=portrait,size=a0,scale=1.25]{beamerposter}
+\usetheme[ncols=2]{uibkposter}
+%% ------------------------------------------------------------------
+%% Use the two lines above for portrait posters
+%% The option 'orangetheme' can be used to switch the theme.
+%% Additional options allowed:
+%% - orangetheme: uses alternative color theme
+%% - boxskip=X: set length for vskip before each box. Allows to
+%%   adjust spacing between boxes.
+%% ------------------------------------------------------------------
+
+\headerimage{1}
+%% ------------------------------------------------------------------
+%% The theme offers four different header images based on the
+%% corporate design of the university of innsbruck. Currently
+%% 1, 2, 3 and 4 is allowed as input to \headerimage{...}. Default
+%% or fallback is '1'.
+%% ------------------------------------------------------------------
+
+%% ------------------------------------------------------------------
+%% The official corporate colors of the university are predefined and
+%% can be used for e.g., highlighting something. Simply use
+%% \color{uibkorange} or \begin{color}{uibkorange} ... \end{color}
+%% Defined colors are:
+%% - uibkorange, uibkblue, uibkgray, uibkgraym
+%% Please note that there are two faculty colors (see definition above)
+%% - uibkcol, uibkcoll
+%% The frametitle color can be easily adjusted e.g., to black with
+%% \setbeamercolor{titlelike}{fg=black}
+%% ------------------------------------------------------------------
+
+%\setbeamercolor{verbcolor}{fg=uibkorange}
+%% ------------------------------------------------------------------
+%% Setting a highlight color for verbatim output such as from
+%% the commands \pkg, \email, \file, \dataset 
+%% ------------------------------------------------------------------
+
+%% The title of your poster
+\title{The Upper Grindelwald Glacier as indicator for Holocene climate variability?}
+
+%% If the subtitle is not set or empty no subtitle will be shown
+\subtitle{}
+
+%% Author(s) of the poster
+\author{Moritz Oberrauch (\textit{moritz.oberrauch@uibk.ac.at}, University of Innsbruck), Fabien Maussion (University of Innsbruck), Marc Luetscher (University of Innsbruck), Samuel Nussbaumer (University of Zurich; Univerity of Friburg), Alexander Jarosch (University of Island)} 
+
+%% Enable numbered captions (figures, tables)
+\setbeamertemplate{caption}[numbered]
+
+\usepackage{tikz} %% For the example figure
+
+%% Begin document
+\begin{document}
+
+\begin{frame}[fragile]
+\begin{columns}[t]
+
+%% ------------------------------------------------------------------
+%% begin left column for both, portrait and landscape
+%% ------------------------------------------------------------------
+\begin{leftcolumn}
+   %% please leave one blank line here
+   %% first block
+   \begin{boxblock}{What is so special about the Upper Grindelwald Glacier?!}
+      The starting point is an unique time series of Holocene glacier fluctuations recorded by spelethems at the Milchbach cave system adjacent to the Upper Grindelwald glacier \citep[Bernese Oberland, Switzerland;][cf. Fig.~\ref{fig:map}]{Luetscher2011}.
+      \begin{figure}[hb]
+        \begin{center}
+          \includegraphics[width=0.53\textwidth]{./images/luetscher_geographic_map.png}
+          \includegraphics[width=0.47\textwidth]{./images/luetscher_height.png}
+        \end{center}
+        \vspace{-6mm}
+        \caption{\footnotesize \textbf{Left:} Geographical setting of the study site. The 2010 glacier outlines (dark blue) are shown together with the maximal glacier extent of 1870 (light blue). Milchbach cave (bold black) opens along a regional fault (dashed red line) on the left side of Upper Grindelwald Glacier. Altitudes are given in meters above sea level; the equidistance of the contour lines is 100~m. \textbf{Right:} Schematic lateral cross section of the glacier bed near the entrances, with the estimated glacier thickness for 2000, 2005 and 2010. The cave system is sketched in black (on the left side of the bedrock), while the colors specify different rock types. Both figures reproduced from \citet{Luetscher2011}.}
+        \label{fig:map}
+      \end{figure}
+      The cave system exhibits multiple entrances at different altitudes. Depending on the extend of the glacier and thereby the ice thickness near those entrances, they will be open or closed by glacial ice. Each opening or closing affects the ventilation and microclimate (like temperature and humiditiy) inside the the cave system. Those changes are reflected in the petrography of the speleothems \citep{Luetscher2011}. As such, the Milchbach cave record carries detailed temporal information, over 9'000 years back.
+
+   \end{boxblock}
+   %% end first block
+
+   
+   %% second block
+   \begin{boxblock}{Goals}
+    The overarching goal is to extract a climate signal from the Holocene history of the Upper Grindelwald Glacier as recorded by the Milchbach cave speleothems. By using the Open Global Glacier Model (OGGM, \citep{Maussion2018}; \url(http://oggm.org)) we want to (i) gain better understanding of the complex dynamics of the Upper Grindelwald Glacier, (ii) infer the climate conditions to open and close the various Milchbach cave entrances, ans (iii) gain insights into the Holocene climate variations in this region. To do so, the specified objectives are to:
+    \begin{enumerate}
+      \item calibrate and validate a dynamical model of the Upper Grindelwald Glacier able to simulate the observed fluctuations of the past 150 years.
+      \item use the calibrated model to assess the climate conditions (temperature and precipitation) necessary to close each of the Milchbach cave entrances.
+      \item realize sensititivy studies to asses the relevative importance of factors such as seasonality and glacier dynamics parameters;
+      \item provide a range of possible Holocene temperature and precipitation time series, with well defined uncertainty measures.
+    \end{enumerate}
+
+    \begin{figure}[!ht]
+      \centering
+      \subfigure[]{
+        \includegraphics[width=0.48\textwidth]{images/entrance1.png}}
+      \subfigure[]{
+        \includegraphics[width=0.48\textwidth]{images/entrance2.png}}\\
+      \subfigure[]{
+        \includegraphics[width=0.48\textwidth]{images/entrance3.png}}
+      \subfigure[]{
+        \includegraphics[width=0.48\textwidth]{images/entrance4.png}}
+      
+      \caption{Opening and closing of the different cave entrances for different temperature and precipation biases. Numbers indicate ice height relative to the cave entrance. Orange color denotes open, while blue color denotes closed entrance. Note that the uppermost entrance is never fully closed, while the lowermost entrance is never fully open. This is a problem in the current model setup. All figures reproduced from \citet{Gstir2016}.}
+    \end{figure}
+
+      
+   \end{boxblock}
+   %% end second block
+
+\end{leftcolumn} 
+%% end left column
+
+
+%% ------------------------------------------------------------------
+%% begin right column for both, portrait and landscape
+%% ------------------------------------------------------------------
+\begin{rightcolumn}
+   %% please leave one blank line here
+
+   %% first block
+   \begin{boxblock}{Work in progress...}
+    The project is based on two Bachelor Theses which provide a feasibility study \citep[cf.][]{Oberrauch2016, Gstir2016}. The calibration using a single flowline model with simple and idealized bed shapes brought already sensible results. The main problems arise from the uncertainties in the tongue area. The Upper Grindelwald Glacier has a large accumulation area in comparison to most alpine glaciers. This mass flux feeds a narrow valley tongue confined by a steep canyon, where the cave entrances are located. Therefore the ice thickness estimation of the model in this region is higly sensitive to the bed shape. Another major issue is the geolocation of the cave entrances along the model flowline. This is why the data compilation and preparation is a crucial step to ensure a successful investigation...
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.94\textwidth]{images/length.png}
+      \caption{Observed (dark purple) and modelled (light red) Upper Grindelwald Glacier length (in meters) from 1879 to the present. The fast behaviour at the beginning of the time series is due to model spin-up. Figure from \citet{Oberrauch2016}, observation data from \url{http://glaciology.ethz.ch/messnetz/glaciers/obgrindelwald.html}.}
+      \label{fig:length}
+    \end{figure}
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{images/height.png}
+      \caption{Longitudinal cross section of the glacier around the cave entrances for different years between 1980 and 2012. The glacier surface is shown in different colors for each year, while the bed rock is black. Relative height of the cave entrances are marked with dotted lines. The circles specify the position of the entrances. Figure from \citet{Oberrauch2016}}
+      \label{fig:height}
+    \end{figure}
+      
+
+   \end{boxblock}
+   %% end first block
+
+   %% second
+   \begin{boxblock}{Open questions and future work;}
+    \begin{itemize}
+      \item First step will be to make an inventory of all availiable data, such as an accurate \textbf{Digital Elevation Model} in combination with \textbf{Glacier Outline} at a similar date for calibration and thickness estimation, \textbf{Glacier length variations} record for validation, as well as \textbf{recent} and \textbf{paleo climate data}.
+      \item The shallow ice (water) approximation is not fully valid near the transient from the wide and at accumulation basin into the narrow and steep tongue area. How these \textbf{latitudinal stresses} and \textbf{lateral drag} in the tongue area influence the dynamics?!
+      \item \textbf{Infrared radiation emitted by the neighboring walls} contributes to a certain extend to the melt near the entrances, thus opening the cave entrances despite of higher glacier stands. 
+      \item How to deal with some entrances that are below the modelled bedrock or way above the glacier surface?!
+    \end{itemize}
+   \end{boxblock}
+   %% end second block
+
+   %% references
+   \begin{footnotesize}
+   
+   \vspace{0.3cm}
+   \begin{minipage}[t]{0.75\textwidth}
+      \textbf{References:} \\
+      \bibliographystyle{ametsoc}
+      \bibliography{grindelwald}
+
+      \vspace{1cm}
+   
+      \textbf{Acknowledgements:} \\
+        Ongoing project funded by the Tiroler Wissenschaftsfonds. %@TODO: Project code
+   \end{minipage}
+   \hfill
+   \begin{minipage}[t]{0.12\textwidth}
+      \begin{figure}
+         \includegraphics[width=\textwidth]{license_ccby}
+         \vspace{5mm}
+   
+         \includegraphics[width=\textwidth]{./images/qr_code} \\
+      \end{figure}
+   \end{minipage}
+   \end{footnotesize}
+   %% end references
+
+\end{rightcolumn}
+%% end right column
+
+\end{columns}
+\end{frame}
+
+\end{document}

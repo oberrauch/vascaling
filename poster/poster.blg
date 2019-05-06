@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: poster.aux
+The style file: ametsoc.bst
+Database file #1: master.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--missing publisher in RGI
+You've used 3 entries,
+            3488 wiz_defined-function locations,
+            707 strings with 6381 characters,
+and the built_in function-call counts, 2824 in all, are:
+= -- 329
+> -- 72
+< -- 1
++ -- 42
+- -- 18
+* -- 158
+:= -- 304
+add.period$ -- 6
+call.type$ -- 3
+change.case$ -- 20
+chr.to.int$ -- 3
+cite$ -- 4
+duplicate$ -- 293
+empty$ -- 168
+format.name$ -- 25
+if$ -- 567
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 28
+newline$ -- 19
+num.names$ -- 12
+pop$ -- 105
+preamble$ -- 1
+purify$ -- 17
+quote$ -- 0
+skip$ -- 174
+stack$ -- 0
+substring$ -- 131
+swap$ -- 233
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 27
+warning$ -- 1
+while$ -- 15
+width$ -- 0
+write$ -- 46
+(There was 1 warning)

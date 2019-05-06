@@ -1,0 +1,11 @@
+2019-03-27T11:29:26;define_glacier_region;SUCCESS
+2019-03-27T11:29:27;glacier_masks;SUCCESS
+2019-03-27T11:29:30;process_histalp_data;SUCCESS
+2019-03-27T11:29:31;compute_centerlines;SUCCESS
+2019-03-27T11:29:31;initialize_flowlines;SUCCESS
+2019-03-27T11:29:31;compute_downstream_line;SUCCESS
+2019-03-27T11:29:32;compute_downstream_bedshape;SUCCESS
+2019-03-27T11:29:35;catchment_area;SUCCESS
+2019-03-27T11:29:35;catchment_intersections;SUCCESS
+2019-03-27T11:29:37;catchment_width_geom;SUCCESS
+2019-03-27T11:29:37;catchment_width_correction;SUCCESS

@@ -1,0 +1,15 @@
+2019-03-26T13:51:58;define_glacier_region;SUCCESS
+2019-03-26T13:51:58;glacier_masks;InvalidDEMError: Not a single valid grid point in DEM
+2019-03-26T13:52:03;define_glacier_region;SUCCESS
+2019-03-26T13:52:03;glacier_masks;InvalidDEMError: Not a single valid grid point in DEM
+2019-03-26T13:53:07;define_glacier_region;SUCCESS
+2019-03-26T13:53:08;glacier_masks;SUCCESS
+2019-03-26T13:53:13;process_histalp_data;SUCCESS
+2019-03-26T13:53:14;compute_centerlines;SUCCESS
+2019-03-26T13:53:14;initialize_flowlines;SUCCESS
+2019-03-26T13:53:14;compute_downstream_line;SUCCESS
+2019-03-26T13:53:14;compute_downstream_bedshape;SUCCESS
+2019-03-26T13:53:16;catchment_area;SUCCESS
+2019-03-26T13:53:16;catchment_intersections;SUCCESS
+2019-03-26T13:53:17;catchment_width_geom;SUCCESS
+2019-03-26T13:53:17;catchment_width_correction;SUCCESS
