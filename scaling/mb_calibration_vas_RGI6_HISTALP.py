@@ -131,8 +131,3 @@ execute_entity_task(vascaling.local_t_star, gdirs)
 mb_calib = gdirs[0].read_pickle('climate_info')['mb_calib_params']
 with open(os.path.join(WORKING_DIR, 'mb_calib_params.json'), 'w') as fp:
     json.dump(mb_calib, fp)
-
-# And also some statistics
-# utils.compile_glacier_statistics(gdirs)
-
-pass

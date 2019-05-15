@@ -9,7 +9,7 @@ import os
 import oggm
 from oggm import cfg, utils, tasks, workflow
 from oggm.workflow import execute_entity_task
-from oggm.core import vascaling
+# from oggm.core import vascaling
 
 
 def mb_calibration(rgi_version, baseline):
@@ -24,14 +24,10 @@ def mb_calibration(rgi_version, baseline):
     cfg.initialize(logging_level='WORKFLOW')
 
     # local paths (where to write the OGGM run output)
-    dirname = 'OGGM_ref_mb_{}_RGIV{}_OGGM{}'.format(baseline, rgi_version,
-                                                    oggm.__version__)
+    dirname = 'OGGM_ref_mb_{}_RGIV{}'.format(baseline, rgi_version)
     wdir = utils.gettempdir(dirname, home=True, reset=True)
     utils.mkdir(wdir, reset=True)
     cfg.PATHS['working_dir'] = wdir
-
-    # the following code block alters certain parameters from
-    # the default config file.
 
     # we are running the calibration ourselves
     cfg.PARAMS['run_mb_calibration'] = True
@@ -54,14 +50,16 @@ def mb_calibration(rgi_version, baseline):
     # i.e. glaciers with mass balance measurements.
 
     # get the reference glacier ids (they are different for each RGI version)
+    rgi_dir = utils.get_rgi_dir(version=rgi_version)
     df, _ = utils.get_wgms_files()
     rids = df['RGI{}0_ID'.format(rgi_version[0])]
 
     # we can't do Antarctica
     rids = [rid for rid in rids if not ('-19.' in rid)]
 
-    # for HISTALP only RGI reg 11
-    rids = [rid for rid in rids if '-11.' in rid]
+    # For HISTALP only RGI reg 11.01 (ALPS)
+    if baseline == 'HISTALP':
+        rids = [rid for rid in rids if '-11' in rid]
 
     # make a new dataframe with those (this takes a while)
     print('Reading the RGI shapefiles...')
@@ -74,15 +72,17 @@ def mb_calibration(rgi_version, baseline):
 
     # we need to know which period we have data for
     print('Process the climate data...')
-    cfg.PARAMS['continue_on_error'] = True  # Some glaciers are not in Alps
-    if baseline == 'HISTALP':
-        execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
-    elif baseline == 'CRU':
+    if baseline == 'CRU':
         execute_entity_task(tasks.process_cru_data, gdirs, print_log=False)
+    elif baseline == 'HISTALP':
+        # Some glaciers are not in Alps
+        # gdirs = [gdir for gdir in gdirs if gdir.rgi_subregion == '11-01']
+        cfg.PARAMS['continue_on_error'] = True
+        execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
+        cfg.PARAMS['continue_on_error'] = False
     else:
-        execute_entity_task(tasks.process_custom_climate_data, gdirs, print_log=False)
-
-    cfg.PARAMS['continue_on_error'] = False
+        execute_entity_task(tasks.process_custom_climate_data,
+                            gdirs, print_log=False)
 
     # get reference glaciers with mass balance measurements
     gdirs = utils.get_ref_mb_glaciers(gdirs)
@@ -125,14 +125,25 @@ def mb_calibration(rgi_version, baseline):
     with open(os.path.join(wdir, 'mb_calib_params.json'), 'w') as fp:
         json.dump(mb_calib, fp)
 
+    # rename ref_tstars.csv file
+    new_name = os.path.join(wdir,
+                            'ref_tstars_vas_rgi{}_{}.csv'.format(
+                                rgi_version[0], baseline.lower()))
+    os.rename(os.path.join(wdir, 'ref_tstars.csv'), new_name)
+    # rename ref_tstars.csv file
+    new_name = os.path.join(wdir,
+                            'ref_tstars_vas_rgi{}_{}_calib_params.json'.format(
+                                rgi_version[0], baseline.lower()))
+    os.rename(os.path.join(wdir, 'mb_calib_params.json'), new_name)
+
 
 if __name__ == '__main__':
     """ Run the mass balance calibration for the given RGI version and
     baseline climate file. `ref_tstars.csv` is store in
-    ~/tmp/OGGM/OGGM_ref_mb_xx_RGIVxx_OGGMxx/ directory."""
+    ~/tmp/OGGM/OGGM_ref_mb_xx_RGIVxx/ directory."""
     # specify RGI Version and baseline climate
-    rgi_version = '61'
-    baseline = 'CRU'
+    rgi_version = '5'
+    baseline = 'HISTALP'
 
     # run mass balance calibration
     mb_calibration(rgi_version, baseline)

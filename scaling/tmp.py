@@ -1,189 +1,147 @@
-# Run and find start ares
-# Set up an OGGM/VAS run from scratch and test the start area seeking tasks.
-# The only thing to specify ist the RGI ID and the glacier's name, the rest
-# should run without any adjustments...
+# Python imports
+import json
+import os
 
-## Import section
-# import externals libs
-import sys
+# Libs
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 
-# import the needed OGGM modules
+# Locals
 import oggm
-from oggm import cfg, utils
-from oggm.utils import get_rgi_glacier_entities
-from oggm.core import gis, climate, centerlines
-from oggm.core import vascaling
+from oggm import cfg, utils, tasks, workflow
+from oggm.workflow import execute_entity_task
+from oggm.core.massbalance import (ConstantMassBalance, PastMassBalance,
+                                   MultipleFlowlineMassBalance)
 
-## decide wheter to show plots or not
-show = False
+# Module logger
+import logging
+log = logging.getLogger(__name__)
 
-## Initialization
-# load parameter file
+# RGI Version
+rgi_version = '61'
+
+# CRU or HISTALP?
+baseline = 'HISTALP'
+
+# Initialize OGGM and set up the run parameters
 cfg.initialize()
 
-## RGI entity
-# choose glacier
-name = 'Ob. Grindelwaldgletscher'
-rgi_id = 'RGI60-11.01270'
+# Local paths (where to write the OGGM run output)
+dirname = 'OGGM_ref_mb_{}_RGIV{}_OGGM{}'.format(baseline, rgi_version,
+                                                oggm.__version__)
+WORKING_DIR = utils.gettempdir(dirname, home=True)
+utils.mkdir(WORKING_DIR, reset=True)
+cfg.PATHS['working_dir'] = WORKING_DIR
 
-# get/downlaod the rgi entity including the outline shapefile
-rgi_df = get_rgi_glacier_entities([rgi_id])
-# set name, since not delivered with RGI
-if rgi_df.loc[int(rgi_id[-5:])-1, 'Name'] is None:
-    rgi_df.loc[int(rgi_id[-5:])-1, 'Name'] = name
+# We are running the calibration ourselves
+cfg.PARAMS['run_mb_calibration'] = True
 
-# select single entry
-rgi_entity = rgi_df.iloc[0]
-# visualize
-rgi_df.plot()
-plt.title(rgi_entity.Name)
-if show:
-    plt.show()
+# We are using which baseline data?
+cfg.PARAMS['baseline_climate'] = baseline
 
+# Use multiprocessing?
+cfg.PARAMS['use_multiprocessing'] = True
 
-## Glacier Directory
-# specify the working directory and define the glacier directory
-cfg.PATHS['working_dir'] = './'
-gdir = oggm.GlacierDirectory(rgi_entity, reset=True)
+# Set to True for operational runs - here we want all glaciers to run
+cfg.PARAMS['continue_on_error'] = False
 
-## DEM and GIS tasks
-# get the path to the DEM file (will download if necessary)
-dem = utils.get_topo_file(gdir.cenlon, gdir.cenlat)
-print('DEM source: {}, path to DEM file: {}'.format(dem[1], dem[0][0]))
+if baseline == 'HISTALP':
+    # Other params: see https://oggm.org/2018/08/10/histalp-parameters/
+    cfg.PARAMS['baseline_y0'] = 1850
+    cfg.PARAMS['prcp_scaling_factor'] = 1.75
+    cfg.PARAMS['temp_melt'] = -1.75
 
-# set path in config file
-cfg.PATHS['dem_file'] = dem[0][0]
-cfg.PARAMS['border'] = 10
-cfg.PARAMS['use_intersects'] = False
+# Get the reference glacier ids (they are different for each RGI version)
+rgi_dir = utils.get_rgi_dir(version=rgi_version)
+df, _ = utils.get_wgms_files()
+rids = df['RGI{}0_ID'.format(rgi_version[0])]
 
-# run GIS tasks
-gis.define_glacier_region(gdir, entity=rgi_entity)
-gis.glacier_masks(gdir)
+# We can't do Antarctica
+rids = [rid for rid in rids if not ('-19.' in rid)]
 
-## Climate data
-# set mb calibration parameters
-cfg.PARAMS['baseline_climate'] = 'HISTALP'
-cfg.PARAMS['prcp_scaling_factor'] = 1.75
-cfg.PARAMS['temp_melt'] = -1.75
-# process HistAlp climate data
-climate.process_histalp_data(gdir)
+# For HISTALP only RGI reg 11.01 (ALPS)
+if baseline == 'HISTALP':
+    rids = [rid for rid in rids if '-11.01' in rid]
 
-## Centerlines
-# run center line preprocessing tasks
-centerlines.compute_centerlines(gdir)
-centerlines.initialize_flowlines(gdir)
-centerlines.compute_downstream_line(gdir)
-centerlines.compute_downstream_bedshape(gdir)
-centerlines.catchment_area(gdir)
-centerlines.catchment_intersections(gdir)
-centerlines.catchment_width_geom(gdir)
-centerlines.catchment_width_correction(gdir)
+# Make a new dataframe with those (this takes a while)
+log.info('Reading the RGI shapefiles...')
+rgidf = utils.get_rgi_glacier_entities(rids, version=rgi_version)
+log.info('For RGIV{} we have {} candidate reference '
+         'glaciers.'.format(rgi_version, len(rgidf)))
 
-## Mass balance model
-#  compute local t* and the corresponding mu*
-vascaling.local_t_star(gdir)
-# see calibration results
-print(gdir.read_json('vascaling_mustar'))
+# We have to check which of them actually have enough mb data.
+# Let OGGM do it:
+gdirs = workflow.init_glacier_regions(rgidf)
 
-# create mass balance model
-mb_mod = vascaling.VAScalingMassBalance(gdir)
+# We need to know which period we have data for
+log.info('Process the climate data...')
+if baseline == 'CRU':
+    execute_entity_task(tasks.process_cru_data, gdirs, print_log=False)
+elif baseline == 'HISTALP':
+    cfg.PARAMS['continue_on_error'] = True  # Some glaciers are not in Alps
+    execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
+    cfg.PARAMS['continue_on_error'] = False
 
-# look at specific mass balance over climate data period
-min_hgt, max_hgt = vascaling.get_min_max_elevation(gdir)
-y0 = 1802
-y1 = 2014
-years = np.arange(y0, y1)
-mb = list()
-for y in years:
-    mb.append(mb_mod.get_specific_mb(min_hgt, max_hgt, y))
+gdirs = utils.get_ref_mb_glaciers(gdirs)
 
-# visualize
-plt.plot(years, mb)
-plt.axhline(0, c='k', ls=':', lw=0.8)
-plt.title('Modeled mass balance - {}'.format('Ob. Grindelwald Gletscher'))
-plt.ylabel('Mass balance [mm w.e. yr$^{-1}$]')
-if show:
-    plt.show()
+# Keep only these
+rgidf = rgidf.loc[rgidf.RGIId.isin([g.rgi_id for g in gdirs])]
 
+# Save
+log.info('For RGIV{} and {} we have {} reference glaciers.'.format(rgi_version,
+                                                                   baseline,
+                                                                   len(rgidf)))
+rgidf.to_file(os.path.join(WORKING_DIR, 'mb_ref_glaciers.shp'))
 
-## Find start area
-# run scalar minimization
-minimize_res = vascaling.find_start_area(gdir)
-print(minimize_res)
+# Sort for more efficient parallel computing
+rgidf = rgidf.sort_values('Area', ascending=False)
 
-# stop script if minimization was not successful
-if minimize_res.status:
-    sys.exit(minimize_res.status)
+# Go - initialize glacier directories
+gdirs = workflow.init_glacier_regions(rgidf)
 
-# instance glacier with today's values
-model_ref = vascaling.VAScalingModel(year_0=gdir.rgi_date,
-                                     area_m2_0=gdir.rgi_area_m2,
-                                     min_hgt=min_hgt, max_hgt=max_hgt,
-                                     mb_model=mb_mod)
+# Prepro tasks
+task_list = [
+    tasks.glacier_masks,
+    tasks.compute_centerlines,
+    tasks.initialize_flowlines,
+    tasks.catchment_area,
+    tasks.catchment_intersections,
+    tasks.catchment_width_geom,
+    tasks.catchment_width_correction,
+]
+for task in task_list:
+    execute_entity_task(task, gdirs)
 
-# instance guessed starting areas
-num = 15
-area_guess = np.linspace(100, gdir.rgi_area_m2*2,  num, endpoint=True)
-# create empty containers
-iteration_list = list()
-spec_mb_list = list()
+# Climate tasks
+tasks.compute_ref_t_stars(gdirs)
+execute_entity_task(tasks.local_t_star, gdirs)
+execute_entity_task(tasks.mu_star_calibration, gdirs)
 
-# iterate over all starting areas
-for area_ in area_guess:
-    # instance iteration model
-    model_guess = vascaling.VAScalingModel(year_0=gdir.rgi_date,
-                                           area_m2_0=gdir.rgi_area_m2,
-                                           min_hgt=min_hgt, max_hgt=max_hgt,
-                                           mb_model=mb_mod)
-    # set new starting values
-    model_guess.create_start_glacier(area_)
-    # run model and save years and area
-    diag_ds = model_guess.run_until_and_store(year_end=model_ref.year)
-    # create series and store in container
-    iteration_list.append(diag_ds.area_m2.to_dataframe()['area_m2'])
-    spec_mb_list.append(diag_ds.spec_mb.to_dataframe()['spec_mb'])
-    
-# create DataFrame
-iteration_df = pd.DataFrame(iteration_list, index=['{:.2f}'.format(a/1e6) for a in area_guess])
-iteration_df.index.name = 'Start Area [km$^2$]'
+# We store the associated params
+mb_calib = gdirs[0].read_pickle('climate_info')['mb_calib_params']
+with open(os.path.join(WORKING_DIR, 'mb_calib_params.json'), 'w') as fp:
+    json.dump(mb_calib, fp)
 
-# set up model with resulted starting area
-model = vascaling.VAScalingModel(year_0=model_ref.year_0,
-                                 area_m2_0=model_ref.area_m2_0,
-                                 min_hgt=model_ref.min_hgt_0,
-                                 max_hgt=model_ref.max_hgt,
-                                 mb_model=model_ref.mb_model)
-model.create_start_glacier(minimize_res.x)
+# And also some statistics
+utils.compile_glacier_statistics(gdirs)
 
-# run
-diag_ds = model.run_until_and_store(year_end=model_ref.year)
+# Tests: for all glaciers, the mass-balance around tstar and the
+# bias with observation should be approx 0
+for gd in gdirs:
 
-plt.plot([0,1], [1,3])
-plt.show()
+    mb_mod = MultipleFlowlineMassBalance(gd,
+                                         mb_model_class=ConstantMassBalance,
+                                         use_inversion_flowlines=True,
+                                         bias=0)  # bias=0 because of calib!
+    mb = mb_mod.get_specific_mb()
+    np.testing.assert_allclose(mb, 0, atol=5)  # atol for numerical errors
 
-# create figure and add axes
-fig = plt.figure(figsize=[8, 6])
-ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
-plt.plot([0,1], [1,1])
-# plot
-# ax.plot(diag_ds.time, diag_ds.area_m2, color='k', ls='--', lw=1.2, label='Best Guess')
-# ax.axhline(model_ref.area_m2_0, c='k', ls=':', label='measured area in {}'.format(gdir.rgi_date))
-# ax = iteration_df.T.plot(legend=False, figsize=[8,6], colormap='Spectral', ax=ax)
-# # add legend
-# handels, labels = ax.get_legend_handles_labels()
-# labels[2:] = [r'{} km$^2$'.format(l) for l in labels[2:]]
-# ax.legend(handels, labels, bbox_to_anchor=(1.05, 0.5), loc=6)
-#
-# # replot best guess estimate (in case it lies below another guess)
-# ax.plot(diag_ds.time, diag_ds.area_m2, color='k', ls='--', lw=1.2, label='Best Guess')
-#
-# # labels, title
-# ax.set_ylabel('Glacier area [m$^2$]')
-# ax.set_title('Modelled glacier area - {}'.format(rgi_entity.Name))
+    mb_mod = MultipleFlowlineMassBalance(gd, mb_model_class=PastMassBalance,
+                                         use_inversion_flowlines=True)
 
-#plt.gcf().savefig('Users/oberrauch/Desktop/start_area.png', bbox_inches='tight')
+    refmb = gd.get_ref_mb_data().copy()
+    refmb['OGGM'] = mb_mod.get_specific_mb(year=refmb.index)
+    np.testing.assert_allclose(refmb.OGGM.mean(), refmb.ANNUAL_BALANCE.mean(),
+                               atol=5)  # atol for numerical errors
 
-plt.show()
+# Log
+log.info('Calibration is done!')
