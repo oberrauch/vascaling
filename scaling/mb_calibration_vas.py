@@ -9,7 +9,7 @@ import os
 import oggm
 from oggm import cfg, utils, tasks, workflow
 from oggm.workflow import execute_entity_task
-# from oggm.core import vascaling
+from oggm.core import vascaling
 
 
 def mb_calibration(rgi_version, baseline):
@@ -60,6 +60,11 @@ def mb_calibration(rgi_version, baseline):
     # For HISTALP only RGI reg 11.01 (ALPS)
     if baseline == 'HISTALP':
         rids = [rid for rid in rids if '-11' in rid]
+        cfg.PARAMS['use_multiprocessing'] = False
+
+    debug = True
+    if debug:
+        rids = [rid for rid in rids if '-11.00897' in rid]
 
     # make a new dataframe with those (this takes a while)
     print('Reading the RGI shapefiles...')
@@ -76,10 +81,10 @@ def mb_calibration(rgi_version, baseline):
         execute_entity_task(tasks.process_cru_data, gdirs, print_log=False)
     elif baseline == 'HISTALP':
         # Some glaciers are not in Alps
-        # gdirs = [gdir for gdir in gdirs if gdir.rgi_subregion == '11-01']
-        cfg.PARAMS['continue_on_error'] = True
+        gdirs = [gdir for gdir in gdirs if gdir.rgi_subregion == '11-01']
+        # cfg.PARAMS['continue_on_error'] = True
         execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
-        cfg.PARAMS['continue_on_error'] = False
+        # cfg.PARAMS['continue_on_error'] = False
     else:
         execute_entity_task(tasks.process_custom_climate_data,
                             gdirs, print_log=False)
@@ -125,17 +130,6 @@ def mb_calibration(rgi_version, baseline):
     with open(os.path.join(wdir, 'mb_calib_params.json'), 'w') as fp:
         json.dump(mb_calib, fp)
 
-    # rename ref_tstars.csv file
-    new_name = os.path.join(wdir,
-                            'ref_tstars_vas_rgi{}_{}.csv'.format(
-                                rgi_version[0], baseline.lower()))
-    os.rename(os.path.join(wdir, 'ref_tstars.csv'), new_name)
-    # rename ref_tstars.csv file
-    new_name = os.path.join(wdir,
-                            'ref_tstars_vas_rgi{}_{}_calib_params.json'.format(
-                                rgi_version[0], baseline.lower()))
-    os.rename(os.path.join(wdir, 'mb_calib_params.json'), new_name)
-
 
 if __name__ == '__main__':
     """ Run the mass balance calibration for the given RGI version and
@@ -147,3 +141,5 @@ if __name__ == '__main__':
 
     # run mass balance calibration
     mb_calibration(rgi_version, baseline)
+
+
