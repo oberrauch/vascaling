@@ -66,7 +66,7 @@ workflow.execute_entity_task(vascaling.local_t_star, gdirs)
 # Random climate representative for the recent climate (1984-2014)
 # This is a kind of "commitment" run
 nyears = 500
-workflow.execute_entity_task(vascaling.run_random_vas_climate, gdirs,
+workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
                              nyears=nyears, y0=1999, seed=12,
                              output_filesuffix='_vas')
 # Write the compiled output

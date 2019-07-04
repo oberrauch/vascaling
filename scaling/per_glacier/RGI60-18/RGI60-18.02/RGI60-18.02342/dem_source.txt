@@ -1,5 +1,0 @@
-USER
-
-# Data files
-
-srtm_71_21.tif

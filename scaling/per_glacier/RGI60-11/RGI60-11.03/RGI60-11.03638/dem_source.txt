@@ -1,5 +1,0 @@
-USER
-
-# Data files
-
-srtm_38_03.tif

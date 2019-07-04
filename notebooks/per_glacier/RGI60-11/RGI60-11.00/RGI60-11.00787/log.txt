@@ -1,3 +1,0 @@
-2019-03-27T13:05:51;define_glacier_region;SUCCESS
-2019-03-27T13:05:51;glacier_masks;SUCCESS
-2019-03-27T13:05:54;process_histalp_data;SUCCESS

@@ -9,7 +9,7 @@ The OGGM (and [Marzeion et. al., 2012]() before that) follows these steps in ord
 1. Get all glaciers with (long enough) records of mass balance measurements, the so called **reference glaciers.**
 2. Compute a temperature sensitivity $\mu(t)$ for each year $t$ (more precise for each 31-year climate period centred around the given year), called the **$\mu$-candidates**, by solving the mass balance equation.
 3. Use the computed $\mu$-candidates to compute the average yearly mass balance over all years with mass balance records, using the given climate data (HistAlp, CRU, ...). Then compute the difference between the modelled mass balance average and the measured mass balance average. This results in one **mass balance bias** $\beta(t)$ for each year.
-4. Find the year $t^*$ with the lowest absolute mass balance bias $\beta(t^*) = \beta^*$ to choose the best fitting temperature sensitivity $\mu(t*) = \mu^*$. Thereby $t^*​$ is ... @TODO: find that line where it says: "not like a year but more like a index..."
+4. Find the year $t^*$ with the lowest absolute mass balance bias $\beta(t^*) = \beta^*$ to choose the best fitting temperature sensitivity $\mu(t*) = \mu^*$. Thereby $t^*$ is ... @TODO: find that line where it says: "not like a year but more like a index..."
 
 The above described tasks are performed by the `compute_ref_tstars()` routine, which itself performs the `t_star_from_refmb()` task on every reference glacier. The result is a `*.csv` file containing the temporal index $t^*$ and the corresponding bias $\beta^*$ for each reference glacier.
 
@@ -37,8 +37,7 @@ Yes, I think so. From now on I'll use this reference list instead of the one shi
 
 ### Todo's:
 
-- [ ] ## Store file somewhere more sensible, rather than on my desktop.
-
+- [ ] Store file somewhere more sensible, rather than on my desktop.
 - [ ] Add to `cfg.initialize()` and ship with sample data?!
 
 
