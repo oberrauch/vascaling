@@ -33,6 +33,8 @@ def normalize_ds_with_start(ds):
     ds_ = ds.copy()
     # iterate over all data variables
     for var in ds_.data_vars:
+        # add normalize variable as attribute
+        ds_.attr[var + '_0'] = ds_[var][0]
         # normalize with start value
         ds_[var] = ds_[var] / ds_[var][0]
     # return normalized dataset
@@ -56,7 +58,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.initialize()
 
     # create working directory
-    wdir = utils.gettempdir('equilibrium_wdir')
+    wdir = '/Users/oberrauch/work/master/working_directories/equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     shutil.rmtree(wdir)
@@ -223,7 +225,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.initialize()
 
     # create working directory
-    wdir = utils.gettempdir('equilibrium_wdir')
+    wdir = '/Users/oberrauch/work/master/working_directories/equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     shutil.rmtree(wdir)
@@ -368,13 +370,15 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
 
         # show plot and store to file
         plt.show()
-        fig.savefig('vas_relative_geometries.pdf', bbox_inches='tight')
+        fig.savefig('fl_relative_geometries.pdf', bbox_inches='tight')
 
     return {'normal': ds, 'logtime': ds_longtime,
             'bias_p': ds_p, 'bias_n': ds_n}
 
 
 if __name__ == '__main__':
+    # define RGI IDs
     rgi_ids = ['RGI60-11.00897', 'RGI60-11.01270']
+    #
     vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=False, use_mean=True)
     fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=False, use_mean=True)
