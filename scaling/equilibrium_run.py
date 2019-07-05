@@ -8,8 +8,6 @@
 # import externals libraries
 import os
 import shutil
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 # import the needed OGGM modules
@@ -18,12 +16,12 @@ from oggm.core import gis, climate, flowline, vascaling
 
 
 def normalize_ds_with_start(ds):
-    """ Normalize all data variables with their respecitve first entry.
-    Retrurn a new xarray.dataset.
+    """ Normalize all data variables with their respective first entry.
+    Return a new xarray.Dataset.
 
     Parameters
     ----------
-    ds: xarray.dataset
+    ds: xarray.Dataset
 
     Returns
     -------
@@ -34,7 +32,7 @@ def normalize_ds_with_start(ds):
     # iterate over all data variables
     for var in ds_.data_vars:
         # add normalize variable as attribute
-        ds_.attr[var + '_0'] = ds_[var][0]
+        ds_.attrs[var + '_0'] = ds_[var][0]
         # normalize with start value
         ds_[var] = ds_[var] / ds_[var][0]
     # return normalized dataset
@@ -42,13 +40,16 @@ def normalize_ds_with_start(ds):
 
 
 def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
-                        plot=False, figure_title='', **kwargs):
+                        plot=False, figure_title='', paths=True,  **kwargs):
     """
 
     Returns
     -------
 
     """
+    # specify suffixes
+    suffixes = ['_normal', '_bias_p', '_bias_n', '_longtime']
+
     # compute RGI region and version from RGI IDs
     # assuming all they are all the same
     rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
@@ -58,7 +59,8 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.initialize()
 
     # create working directory
-    wdir = '/Users/oberrauch/work/master/working_directories/equilibrium_wdir'
+    wdir = '/Users/oberrauch/work/master/working_directories/'
+    wdir += 'equilibrium_vas_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     shutil.rmtree(wdir)
@@ -69,7 +71,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 10
+    cfg.PARAMS['border'] = 80
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -113,17 +115,17 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 °C each.
         workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
-                                     **kwargs, output_filesuffix='_normal')
+                                     **kwargs, output_filesuffix=suffixes[0])
         workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
                                      **kwargs, temperature_bias=+0.5,
-                                     output_filesuffix='_bias_p')
+                                     output_filesuffix=suffixes[1])
         workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
                                      **kwargs, temperature_bias=-0.5,
-                                     output_filesuffix='_bias_n')
+                                     output_filesuffix=suffixes[2])
         # run over a longer time period
         kwargs['nyears'] = 3000
         workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
-                                     **kwargs, output_filesuffix='_longtime')
+                                     **kwargs, output_filesuffix=suffixes[3])
     else:
         # CONSTANT MASS BALANCE MODEL
         # -------------------------
@@ -140,63 +142,63 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 °C each.
         workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
-                                     **kwargs, output_filesuffix='_normal')
+                                     **kwargs, output_filesuffix=suffixes[0])
         workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
                                      **kwargs, temperature_bias=+0.5,
-                                     output_filesuffix='_bias_p')
+                                     output_filesuffix=suffixes[1])
         workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
                                      **kwargs, temperature_bias=-0.5,
-                                     output_filesuffix='_bias_n')
+                                     output_filesuffix=suffixes[2])
         # run over a longer time period
         kwargs['nyears'] = 3000
         workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
-                                     **kwargs, output_filesuffix='_longtime')
+                                     **kwargs, output_filesuffix=suffixes[3])
 
     # compile the run output and normalize glacier geometries with start value
-    ds = utils.compile_run_output(gdirs, filesuffix='_normal')
-    ds_longtime = utils.compile_run_output(gdirs, filesuffix='_longtime')
-    ds_p = utils.compile_run_output(gdirs, filesuffix='_bias_p')
-    ds_n = utils.compile_run_output(gdirs, filesuffix='_bias_n')
+    ds_normal = utils.compile_run_output(gdirs, filesuffix=suffixes[0])
+    ds_bias_p = utils.compile_run_output(gdirs, filesuffix=suffixes[1])
+    ds_bias_n = utils.compile_run_output(gdirs, filesuffix=suffixes[2])
+    ds_longtime = utils.compile_run_output(gdirs, filesuffix=suffixes[3])
 
     # normalize
     if use_mean:
-        ds = normalize_ds_with_start(ds).mean(dim='rgi_id')
+        ds_normal = normalize_ds_with_start(ds_normal).mean(dim='rgi_id')
+        ds_bias_p = normalize_ds_with_start(ds_bias_p).mean(dim='rgi_id')
+        ds_bias_n = normalize_ds_with_start(ds_bias_n).mean(dim='rgi_id')
         ds_longtime = normalize_ds_with_start(ds_longtime).mean(dim='rgi_id')
-        ds_p = normalize_ds_with_start(ds_p).mean(dim='rgi_id')
-        ds_n = normalize_ds_with_start(ds_n).mean(dim='rgi_id')
     else:
-        ds = normalize_ds_with_start(ds.sum(dim='rgi_id'))
+        ds_normal = normalize_ds_with_start(ds_normal.sum(dim='rgi_id'))
+        ds_bias_p = normalize_ds_with_start(ds_bias_p.sum(dim='rgi_id'))
+        ds_bias_n = normalize_ds_with_start(ds_bias_n.sum(dim='rgi_id'))
         ds_longtime = normalize_ds_with_start(ds_longtime.sum(dim='rgi_id'))
-        ds_p = normalize_ds_with_start(ds_p.sum(dim='rgi_id'))
-        ds_n = normalize_ds_with_start(ds_n.sum(dim='rgi_id'))
 
     if plot:
         # create figure and axes
         fig, [ax0, ax1, ax2] = plt.subplots(3, 1, figsize=[6, 8])
         # plot the evolution of glacier volume
-        ax0.plot(ds.volume, label='equilibrium', c='#2e3131')
-        ax0.plot(ds_p.volume, label='+0.5 °C', c='#f22613')
-        ax0.plot(ds_n.volume, label='-0.5 °C', c='#1f3a93')
-        ax0.axhline(ds.volume[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax0.plot(ds_normal.volume, label='equilibrium', c='#2e3131')
+        ax0.plot(ds_bias_p.volume, label='+0.5 °C', c='#f22613')
+        ax0.plot(ds_bias_n.volume, label='-0.5 °C', c='#1f3a93')
+        ax0.axhline(ds_normal.volume[0], c='k', ls=':', lw=0.8, label='initial value')
         ax0.set_xticklabels('')
         ax0.set_ylabel('Relative volume')
         ax0.set_title(figure_title)
         ax0.legend(bbox_to_anchor=(0.5, 0), loc=9, ncol=4)
 
         # plot the evolution of glacier area
-        ax1.plot(ds.area, label='equilibrium', c='#2e3131')
-        ax1.plot(ds_p.area, label='+0.5 °C', c='#f22613')
-        ax1.plot(ds_n.area, label='-0.5 °C', c='#1f3a93')
-        ax1.axhline(ds.area[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax1.plot(ds_normal.area, label='equilibrium', c='#2e3131')
+        ax1.plot(ds_bias_p.area, label='+0.5 °C', c='#f22613')
+        ax1.plot(ds_bias_n.area, label='-0.5 °C', c='#1f3a93')
+        ax1.axhline(ds_normal.area[0], c='k', ls=':', lw=0.8, label='initial value')
         ax1.set_xticklabels('')
         ax1.set_ylabel('Relative area')
         ax1.legend(bbox_to_anchor=(0.5, 0), loc=9, ncol=4)
 
         # plot the evolution of glacier length
-        ax2.plot(ds.length, label='equilibrium', c='#2e3131')
-        ax2.plot(ds_p.length, label='+0.5 °C', c='#f22613')
-        ax2.plot(ds_n.length, label='-0.5 °C', c='#1f3a93')
-        ax2.axhline(ds.length[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax2.plot(ds_normal.length, label='equilibrium', c='#2e3131')
+        ax2.plot(ds_bias_p.length, label='+0.5 °C', c='#f22613')
+        ax2.plot(ds_bias_n.length, label='-0.5 °C', c='#1f3a93')
+        ax2.axhline(ds_normal.length[0], c='k', ls=':', lw=0.8, label='initial value')
         ax2.set_xlabel('Years of evolution')
         ax2.set_ylabel('Relative length')
 
@@ -204,18 +206,31 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         plt.show()
         fig.savefig('vas_relative_geometries.pdf', bbox_inches='tight')
 
-    return {'normal': ds, 'logtime': ds_longtime,
-            'bias_p': ds_p, 'bias_n': ds_n}
+    # store normalized datasets
+    if paths:
+        if paths is True:
+            paths = [os.path.join(cfg.PATHS['working_dir'], 'normalized_'
+                                  + suffix + '.nc')
+                     for suffix in suffixes]
+        for path, suffix in zip(paths, suffixes):
+            ds = eval('ds' + suffix)
+            ds.to_netcdf(path)
+
+    return {'normal': ds_normal, 'bias_p': ds_bias_p, 'bias_n': ds_bias_n,
+            'longtime': ds_longtime}
 
 
 def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
-                       plot=False, figure_title='', **kwargs):
+                       plot=False, figure_title='', paths=True, **kwargs):
     """
 
     Returns
     -------
 
     """
+    # specify suffixes
+    suffixes = ['_normal', '_bias_p', '_bias_n', '_longtime']
+
     # compute RGI region and version from RGI IDs
     # assuming all they are all the same
     rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
@@ -225,7 +240,8 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.initialize()
 
     # create working directory
-    wdir = '/Users/oberrauch/work/master/working_directories/equilibrium_wdir'
+    wdir = '/Users/oberrauch/work/master/working_directories/'
+    wdir += 'equilibrium_fl_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     shutil.rmtree(wdir)
@@ -236,7 +252,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 10
+    cfg.PARAMS['border'] = 80
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -281,17 +297,17 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 °C each.
         workflow.execute_entity_task(flowline.run_random_climate, gdirs,
-                                     **kwargs, output_filesuffix='_normal')
+                                     **kwargs, output_filesuffix=suffixes[0])
         workflow.execute_entity_task(flowline.run_random_climate, gdirs,
                                      **kwargs, temperature_bias=+0.5,
-                                     output_filesuffix='_bias_p')
+                                     output_filesuffix=suffixes[1])
         workflow.execute_entity_task(flowline.run_random_climate, gdirs,
                                      **kwargs, temperature_bias=-0.5,
-                                     output_filesuffix='_bias_n')
+                                     output_filesuffix=suffixes[2])
         # run over a longer time period
         kwargs['nyears'] = 3000
         workflow.execute_entity_task(flowline.run_random_climate, gdirs,
-                                     **kwargs, output_filesuffix='_longtime')
+                                     **kwargs, output_filesuffix=suffixes[3])
     else:
         # CONSTANT MASS BALANCE MODEL
         # -------------------------
@@ -308,63 +324,63 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 °C each.
         workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
-                                     **kwargs, output_filesuffix='_normal')
+                                     **kwargs, output_filesuffix=suffixes[0])
         workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
                                      **kwargs, temperature_bias=+0.5,
-                                     output_filesuffix='_bias_p')
+                                     output_filesuffix=suffixes[1])
         workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
                                      **kwargs, temperature_bias=-0.5,
-                                     output_filesuffix='_bias_n')
+                                     output_filesuffix=suffixes[2])
         # run over a longer time period
         kwargs['nyears'] = 3000
         workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
-                                     **kwargs, output_filesuffix='_longtime')
+                                     **kwargs, output_filesuffix=suffixes[3])
 
     # compile the run output and normalize glacier geometries with start value
-    ds = utils.compile_run_output(gdirs, filesuffix='_normal')
-    ds_longtime = utils.compile_run_output(gdirs, filesuffix='_longtime')
-    ds_p = utils.compile_run_output(gdirs, filesuffix='_bias_p')
-    ds_n = utils.compile_run_output(gdirs, filesuffix='_bias_n')
+    ds_normal = utils.compile_run_output(gdirs, filesuffix=suffixes[0])
+    ds_bias_p = utils.compile_run_output(gdirs, filesuffix=suffixes[1])
+    ds_bias_n = utils.compile_run_output(gdirs, filesuffix=suffixes[2])
+    ds_longtime = utils.compile_run_output(gdirs, filesuffix=suffixes[3])
 
     # normalize
     if use_mean:
-        ds = normalize_ds_with_start(ds).mean(dim='rgi_id')
+        ds_normal = normalize_ds_with_start(ds_normal).mean(dim='rgi_id')
+        ds_bias_p = normalize_ds_with_start(ds_bias_p).mean(dim='rgi_id')
+        ds_bias_n = normalize_ds_with_start(ds_bias_n).mean(dim='rgi_id')
         ds_longtime = normalize_ds_with_start(ds_longtime).mean(dim='rgi_id')
-        ds_p = normalize_ds_with_start(ds_p).mean(dim='rgi_id')
-        ds_n = normalize_ds_with_start(ds_n).mean(dim='rgi_id')
     else:
-        ds = normalize_ds_with_start(ds.sum(dim='rgi_id'))
+        ds_normal = normalize_ds_with_start(ds_normal.sum(dim='rgi_id'))
+        ds_bias_p = normalize_ds_with_start(ds_bias_p.sum(dim='rgi_id'))
+        ds_bias_n = normalize_ds_with_start(ds_bias_n.sum(dim='rgi_id'))
         ds_longtime = normalize_ds_with_start(ds_longtime.sum(dim='rgi_id'))
-        ds_p = normalize_ds_with_start(ds_p.sum(dim='rgi_id'))
-        ds_n = normalize_ds_with_start(ds_n.sum(dim='rgi_id'))
 
     if plot:
         # create figure and axes
         fig, [ax0, ax1, ax2] = plt.subplots(3, 1, figsize=[6, 8])
         # plot the evolution of glacier volume
-        ax0.plot(ds.volume, label='equilibrium', c='#2e3131')
-        ax0.plot(ds_p.volume, label='+0.5 °C', c='#f22613')
-        ax0.plot(ds_n.volume, label='-0.5 °C', c='#1f3a93')
-        ax0.axhline(ds.volume[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax0.plot(ds_normal.volume, label='equilibrium', c='#2e3131')
+        ax0.plot(ds_bias_p.volume, label='+0.5 °C', c='#f22613')
+        ax0.plot(ds_bias_n.volume, label='-0.5 °C', c='#1f3a93')
+        ax0.axhline(ds_normal.volume[0], c='k', ls=':', lw=0.8, label='initial value')
         ax0.set_xticklabels('')
         ax0.set_ylabel('Relative volume')
         ax0.set_title(figure_title)
         ax0.legend(bbox_to_anchor=(0.5, 0), loc=9, ncol=4)
 
         # plot the evolution of glacier area
-        ax1.plot(ds.area, label='equilibrium', c='#2e3131')
-        ax1.plot(ds_p.area, label='+0.5 °C', c='#f22613')
-        ax1.plot(ds_n.area, label='-0.5 °C', c='#1f3a93')
-        ax1.axhline(ds.area[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax1.plot(ds_normal.area, label='equilibrium', c='#2e3131')
+        ax1.plot(ds_bias_p.area, label='+0.5 °C', c='#f22613')
+        ax1.plot(ds_bias_n.area, label='-0.5 °C', c='#1f3a93')
+        ax1.axhline(ds_normal.area[0], c='k', ls=':', lw=0.8, label='initial value')
         ax1.set_xticklabels('')
         ax1.set_ylabel('Relative area')
         ax1.legend(bbox_to_anchor=(0.5, 0), loc=9, ncol=4)
 
         # plot the evolution of glacier length
-        ax2.plot(ds.length, label='equilibrium', c='#2e3131')
-        ax2.plot(ds_p.length, label='+0.5 °C', c='#f22613')
-        ax2.plot(ds_n.length, label='-0.5 °C', c='#1f3a93')
-        ax2.axhline(ds.length[0], c='k', ls=':', lw=0.8, label='initial value')
+        ax2.plot(ds_normal.length, label='equilibrium', c='#2e3131')
+        ax2.plot(ds_bias_p.length, label='+0.5 °C', c='#f22613')
+        ax2.plot(ds_bias_n.length, label='-0.5 °C', c='#1f3a93')
+        ax2.axhline(ds_normal.length[0], c='k', ls=':', lw=0.8, label='initial value')
         ax2.set_xlabel('Years of evolution')
         ax2.set_ylabel('Relative length')
 
@@ -372,13 +388,23 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True,
         plt.show()
         fig.savefig('fl_relative_geometries.pdf', bbox_inches='tight')
 
-    return {'normal': ds, 'logtime': ds_longtime,
-            'bias_p': ds_p, 'bias_n': ds_n}
+    # store normalized datasets
+    if paths:
+        if paths is True:
+            paths = [os.path.join(cfg.PATHS['working_dir'], 'normalized'
+                                  + suffix + '.nc')
+                     for suffix in suffixes]
+        for path, suffix in zip(paths, suffixes):
+            ds = eval('ds' + suffix)
+            ds.to_netcdf(path)
+
+    return {'normal': ds_normal, 'bias_p': ds_bias_p, 'bias_n': ds_bias_n,
+            'longtime': ds_longtime}
 
 
 if __name__ == '__main__':
     # define RGI IDs
     rgi_ids = ['RGI60-11.00897', 'RGI60-11.01270']
-    #
-    vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=False, use_mean=True)
-    fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=False, use_mean=True)
+    # perform equilibrium experiments
+    vas_ds = equilibrium_run_vas(rgi_ids)
+    fl_ds = equilibrium_run_fl(rgi_ids)
