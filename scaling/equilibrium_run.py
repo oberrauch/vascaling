@@ -141,7 +141,8 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     ds = list()
     for suffix in suffixes:
         # compile the output for each run
-        ds_ = utils.compile_run_output(gdirs, filesuffix=suffix, path=False)
+        ds_ = utils.compile_run_output(np.atleast_1d(gdirs),
+                                       filesuffix=suffix, path=False)
         ds.append(ds_)
     # concat into one dataset with temperature bias as coordinate
     ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
@@ -159,9 +160,9 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
         if path is True:
             path = list()
             path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'run_output.nc'))
+                                     'run_output_fl.nc'))
             path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'normalized_output.nc'))
+                                     'normalized_output_fl.nc'))
 
         ds.to_netcdf(path[0])
         ds_normal.to_netcdf(path[1])
@@ -241,7 +242,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(flowline.run_random_climate, gdirs,
                                          **kwargs, temperature_bias=temp_bias,
-                                         output_filesuffix=suffixes[1])
+                                         output_filesuffix=suffix)
     else:
         # run RandomMassBalance model centered around t*, once without
         # temperature bias and once with positive and negative temperature bias
@@ -249,12 +250,13 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
                                          **kwargs, temperature_bias=temp_bias,
-                                         output_filesuffix=suffixes[1])
+                                         output_filesuffix=suffix)
 
     ds = list()
     for suffix in suffixes:
         # compile the output for each run
-        ds_ = utils.compile_run_output(gdirs, filesuffix=suffix, path=False)
+        ds_ = utils.compile_run_output(np.atleast_1d(gdirs),
+                                       filesuffix=suffix, path=False)
         ds.append(ds_)
     # concat into one dataset with temperature bias as coordinate
     ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
@@ -272,9 +274,9 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
         if path is True:
             path = list()
             path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'run_output.nc'))
+                                     'run_output_fl.nc'))
             path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'normalized_output.nc'))
+                                     'normalized_output_fl.nc'))
 
         ds.to_netcdf(path[0])
         ds_normal.to_netcdf(path[1])
