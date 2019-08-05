@@ -1,6 +1,7 @@
 # Local files and direcotries
 working_directories
 */per_glacier/
+*.nc
 
 # General
 .DS_Store

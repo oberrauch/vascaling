@@ -449,7 +449,7 @@ The following methods test different tasks related to the **$\mu^*$ calibration 
 
 **Note**: I'm not sure, wether such a unit test is the best way to control the functionality of my code. It seems as if the test runs the exact same calculation as the tested function, whereby the result is most obviously the same. But than on the other hand, I'm probably just not smart enough to see the power of unit testing...
 
-**Edit**: @TODO: bring stuff I discussed with Fabi about testing to paper
+**Edit**: @TODO: write down stuff I discussed with Fabi about testing 
 
 ### Setting up a test case
 
@@ -862,7 +862,7 @@ def get_monthly_climate(self, heights, year=None):
 The given float year is converted into an actual year/month pair. If the climate data is used in a circular fashion, the given year is converted into a valid year inside the actual climate period. If the given year lies outside the valid climate period, an error will be raised.
 
 ```python
-	# Read timeseries
+		# Read timeseries
     itemp = self.temp[pok] + self.temp_bias
     iprcp = self.prcp[pok] * self.prcp_bias
     igrad = self.grad[pok]
