@@ -1,20 +1,12 @@
-"""
-    Hereafter I'll try to set up one run with my new model.
-    This includes:
-    a) initialisation and calibration
-    b) the mass balance model
-    c) the 'dynamic' model
+""" Combines the `run_comparison.py` and `compare.py` script into one
+routine, which can be called with the RGI ID and the glacier name as
+parameters (hence is more universal).
 
-    Date: 18.01.2019
-
-    Update on January, 16: Run automated comparison between both models,
-    including initialization, computation, plots, ...
-    -> New features to implement thereby:
-        [ ] only RGI ID as input
-        [x] use 'vas_ref_tstars.csv'
-        [ ] compute starting area
+Note: The implementation is far from clean, could/should be revisited
+sometime...
 
 """
+
 # import externals libs
 import os
 import shutil
