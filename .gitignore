@@ -2,6 +2,7 @@
 working_directories
 */per_glacier/
 *.nc
+*.mat
 
 # General
 .DS_Store
