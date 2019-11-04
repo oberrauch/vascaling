@@ -31,11 +31,13 @@
 
 - ret_t_star_list.py
 
-- `run_ben.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
+- `run_vas.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
 
-  The results are stored under `run_ben.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_ben.png` in the `../plots/` directory. 
+  The results are stored under `run_vas.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_vas.png` in the `../plots/` directory. 
 
-- `run_comparison.py`: @WEITERMACHEN
+- `run_comparison.py`: Set up a full run with both evolution models, i.e. the volume/area scaling model and the OGGM flowline model, for the Upper Grindelwald Glacier. Both models run over the entire HistAlp period.
+
+  The results are stored under `run_comparison.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume (for both models on the same axes) and are stored under `length/area/volume.png` in the `../plots/` directory. 
 
 - `run_oggm.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
 

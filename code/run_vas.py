@@ -4,9 +4,9 @@ a) initialisation and calibration
 b) the mass balance model
 c) the 'dynamic' model
 
-The results are stored under `run_ben.csv` in the `../data/` directory.
+The results are stored under `run_vas.csv` in the `../data/` directory.
 The plots show the temporal evolution of glacier length, surface area
-and volume and are store under `length/area/volume_ben.png` in the
+and volume and are store under `length/area/volume_vas.png` in the
 `../plots/` directory. 
 """
 
@@ -30,7 +30,7 @@ from oggm.core import gis, climate, centerlines, vascaling
 # ---------------------
 
 # create test directory
-testdir = os.path.join(get_test_dir(), 'tmp_ben')
+testdir = os.path.join(get_test_dir(), 'tmp_vas')
 if not os.path.exists(testdir):
     os.makedirs(testdir)
 shutil.rmtree(testdir)
@@ -87,18 +87,19 @@ mbmod = vascaling.VAScalingMassBalance(gdir)
 a0 = gdir.rgi_area_m2
 # get reference year
 y0 = gdir.read_pickle('climate_info')['baseline_hydro_yr_0']
+y1 = 
 # get min and max glacier surface elevation
 h0, h1 = vascaling.get_min_max_elevation(gdir)
 
-ben_model = vascaling.VAScalingModel(year_0=y0, area_m2_0=a0,
+vas_model = vascaling.VAScalingModel(year_0=y0, area_m2_0=a0,
                                      min_hgt=h0, max_hgt=h1,
                                      mb_model=mbmod)
 
 # create a 'new' start glacier from a given start area
-# ben_model.create_start_glacier(area_m2_start=3086069, year_start=1802)
+# vas_model.create_start_glacier(area_m2_start=3086069, year_start=1802)
 
 # run the model
-diag_ds = ben_model.run_until_and_store(2003)
+diag_ds = vas_model.run_until_and_store(2003)
 
 # -----------------
 #  RESULTS & PLOTS
@@ -108,7 +109,7 @@ store = True
 if store:
     # define path and file names
     folder = '/Users/oberrauch/work/master/data/'
-    suffix = '_ben'
+    suffix = '_vas'
     names = ['length', 'area', 'volume']
     # combine glacier geometries into DataFrame
     df = diag_ds.to_dataframe()
@@ -122,7 +123,7 @@ if plot:
     unit_factor = 1e3
     # define path and file names
     folder = '/Users/oberrauch/work/master/plots/'
-    suffix = '_ben'
+    suffix = '_vas'
 
     plt.figure()
     plt.plot(diag_ds['area_m2']/unit_factor**2)

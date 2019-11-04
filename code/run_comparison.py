@@ -1,4 +1,12 @@
-"""
+""" Hereafter I set up a full run with both evolution models, i.e. the
+volume/area scaling model and the OGGM flowline model, for the Upper
+Grindelwald Glacier. Both models run over the entire HistAlp period.
+
+The results are stored under `run_comparison.csv` in the `../data/`
+directory. The plots show the temporal evolution of glacier length,
+surface area and volume (for both models on the same axes) and are
+stored under `length/area/volume.png` in the `../plots/` directory. 
+
 """
 # import externals libs
 import os
