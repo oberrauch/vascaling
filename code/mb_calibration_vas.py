@@ -1,23 +1,21 @@
-# Run the mass balance calibration
+""" Run the mass balance calibration for the VAS model. """
 
 # Python imports
 import json
 import os
 
-
 # Locals
-import oggm
 from oggm import cfg, utils, tasks, workflow
 from oggm.workflow import execute_entity_task
 from oggm.core import vascaling
 
 
 def mb_calibration(rgi_version, baseline):
-    """
+    """ Run the mass balance calibration for the VAS model. RGI version and
+    baseline cliamte must be given.
 
-    :param rgi_version:
-    :param baseline:
-    :return:
+    :param rgi_version: int, RGI version
+    :param baseline: str, baseline climate 'HISTALP' or 'CRU'
     """
 
     # initialize OGGM and set up the run parameters
@@ -132,9 +130,10 @@ def mb_calibration(rgi_version, baseline):
 
 
 if __name__ == '__main__':
-    """ Run the mass balance calibration for the given RGI version and
-    baseline climate file. `ref_tstars.csv` is store in
-    ~/tmp/OGGM/OGGM_ref_mb_xx_RGIVxx/ directory."""
+    """ Run the VAS model mass balance calibration for the given RGI version
+    and baseline climate file. `ref_tstars.csv` is store in
+    ~/tmp/OGGM/OGGM_ref_mb_xx_RGIVxx/ directory.
+    """
     # specify RGI Version and baseline climate
     rgi_version = '5'
     baseline = 'HISTALP'

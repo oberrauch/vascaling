@@ -1,21 +1,19 @@
-# Run the mass balance calibration
+"""Run the mass balance calibration for the VAS model, following the script
+from the OGGM documentation:
+
+https://docs.oggm.org/en/latest/run_examples/run_mb_calibration.html
+
+"""
 
 # Python imports
 import json
 import os
-
-# Libs
-import numpy as np
 
 # Locals
 import oggm
 from oggm import cfg, utils, tasks, workflow
 from oggm.workflow import execute_entity_task
 from oggm.core import vascaling
-from oggm.core import climate
-from oggm.core.massbalance import (ConstantMassBalance, PastMassBalance,
-                                   MultipleFlowlineMassBalance)
-
 
 # RGI Version
 rgi_version = '61'
@@ -54,6 +52,7 @@ cfg.PARAMS['continue_on_error'] = False
 
 if baseline == 'HISTALP':
     # other params: see https://oggm.org/2018/08/10/histalp-parameters/
+    # TODO: calibrate VAS/HistAlp hyper parameters
     cfg.PARAMS['baseline_y0'] = 1850
     cfg.PARAMS['prcp_scaling_factor'] = 1.75
     cfg.PARAMS['temp_melt'] = -1.75

@@ -18,11 +18,9 @@
 
 - matlab_comparison.py
 
-- mb_calibration.py
+- `mb_calibration_vas.py`: Run the mass balance calibration for the VAS model, whereby it is possible to specify the RGI version as well as the baseline climate (HistAlp or CRU).
 
-- mb_calibration_vas.py
-
-- mb_calibration_vas_RGI6_HISTALP.py
+- `mb_calibration_vas_RGI6_HISTALP.py`: Simple script which adapts the massbalance calibration from the OGGM documentation (https://docs.oggm.org/en/latest/run_examples/run_mb_calibration.html) for the VAS model. (Could be deleted...)
 
 - model_ben_matlab
 
