@@ -1,9 +1,11 @@
-# Equilibrium runs
-# --------------------
-# This script runs the VAS model for a single (or more) glacier(s) with a
-# constant or random massbalance model, performing equilibrium experiments.
-# An additional comparison with the OGGM flowline model is performed.
-# TODO
+""" Equilibrium runs
+--------------------
+
+This script runs the VAS and flowline model for a single (or more) glacier(s)
+with a constant or random massbalance model, performing equilibrium
+experiments.
+
+"""
 
 # import externals libraries
 import os
@@ -19,15 +21,16 @@ from oggm.core import gis, climate, flowline, vascaling
 
 
 def normalize_ds_with_start(ds, store_var_0=False):
-    """ Normalize all data variables with their respective first entry.
-    Return a new xarray.Dataset.
+    """ Normalize all data variables of the given xarray Dataset
+    with their respective first entry. Returns a new xarray.Dataset.
 
     Parameters
     ----------
-    ds: xarray.Dataset
+    ds: :py:class:`xarray.Dataset`
 
     Returns
     -------
+    Normalized xarray Dataset
 
     """
     # copy dataset
@@ -45,29 +48,53 @@ def normalize_ds_with_start(ds, store_var_0=False):
     return ds_norm
 
 
-def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
-                        temp_biases=(0, +0.5, -0.5),
-                        suffixes = ['_normal', '_bias_p', '_bias_n'],
+def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
+                        path=True, temp_biases=(0, +0.5, -0.5),
+                        suffixes=('_normal', '_bias_p', '_bias_n'),
                         tstar=None, **kwargs):
-    """
+    """ The routine runs all steps for the equilibrium experiments using the
+    volume/area scaling model:
+    - OGGM preprocessing, including initialization, GIS tasks, climate tasks and
+      massbalance tasks.
+    - Run model for all glaciers with constant (or random) massbalance model
+      over 3000 years (default value).
+    - Process the model output dataset(s), i.e. normalization, average/sum, ...
+
+    The final dataset containing all results is returned. Given a path is is
+    also stored to file.
 
     Parameters
     ----------
-    rgi_ids
-    use_random_mb
-    use_mean
-    path
-    temp_biases
-    kwargs
+    rgi_ids: array-like
+        List of RGI IDs for which the equilibrium experiments are performed.
+    use_random_mb: bool, optional, default=True
+        Choose between random massbalance model and constant massbalance model.
+    use_mean: bool, optional, default=True
+        Choose between the mean or summation over all glaciers
+    path: bool or str, optional, default=True
+        If a path is given (or True), the resulting dataset is stored to file.
+    temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+        List of temperature biases (float, in degC) for the mass balance model.
+    suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+        Descriptive suffixes corresponding to the given temperature biases.
+    tstar: float
+        'Equilibrium year' used for the mass balance calibration.
+    kwargs:
+        Additional key word arguments for the `run_random_climate` or
+        `run_constant_climate` routines of the vascaling module.
 
     Returns
     -------
+    Dataset containing yearly values of all glacier geometries.
 
     """
     # assert correct output file suffixes for temp biases
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
                            "corresponding suffix")
+
+    # OGGM preprocessing
+    # ------------------
 
     # compute RGI region and version from RGI IDs
     # assuming all they are all the same
@@ -119,6 +146,9 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     workflow.execute_entity_task(vascaling.local_t_star, gdirs,
                                  tstar=tstar, bias=0)
 
+    # Run model with constant/random mass balance model
+    # -------------------------------------------------
+
     # use t* as center year, even if specified differently
     kwargs['y0'] = tstar
     # run for 3000 years if not specified otherwise
@@ -130,7 +160,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
 
         # run RandomMassBalance model centered around t*, once without
         # temperature bias and once with positive and negative temperature bias
-        # of 0.5 °C each.
+        # of 0.5 °C each (per default).
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
                                          temperature_bias=temp_bias,
@@ -138,34 +168,44 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     else:
         # run ConstantMassBalance model centered around t*, once without
         # temperature bias and once with positive and negative temperature bias
-        # of 0.5 °C each.
+        # of 0.5 °C each (per default).
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
                                          temperature_bias=temp_bias,
                                          **kwargs, output_filesuffix=suffix)
 
+    # Process output dataset(s)
+    # -------------------------
+
+    # create empty container
     ds = list()
+    # iterate over all temperature biases/suffixes
     for suffix in suffixes:
         # compile the output for each run
         ds_ = utils.compile_run_output(np.atleast_1d(gdirs),
                                        filesuffix=suffix, path=False)
+        # add to container
         ds.append(ds_)
-    # concat into one dataset with temperature bias as coordinate
+
+    # concat the single output datasets into one,
+    # with temperature bias ascoordinate
     ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
     # add model type as coordinate
     ds.coords['model'] = 'vas'
     # add mb model type as coordinate
     ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-    # normalize with start value
+    # normalize glacier geometries (length/area/volume) with start value
     if use_mean:
+        # compute average over all glaciers
         ds_normal = normalize_ds_with_start(ds).mean(dim='rgi_id')
         ds = ds.mean(dim='rgi_id')
     else:
+        # compute sum over all glaciers
         ds_normal = normalize_ds_with_start(ds.sum(dim='rgi_id'))
         ds = ds.sum(dim='rgi_id')
 
-    # add coordinate destiguishing between normalized and absolute values
+    # add coordinate to distinguish between normalized and absolute values
     ds.coords['normalized'] = False
     ds_normal.coords['normalized'] = True
 
@@ -194,7 +234,34 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
                        temp_biases=(0, +0.5, -0.5),
                        suffixes=['_normal', '_bias_p', '_bias_n'],
                        tstar=None, **kwargs):
-    """"""
+    """ The routine runs all steps for the equilibrium experiments using the
+    flowline model. For details see docstring of `equilibrium_run_vas`.
+
+    Parameters
+    ----------
+    rgi_ids: array-like
+        List of RGI IDs for which the equilibrium experiments are performed.
+    use_random_mb: bool, optional, default=True
+        Choose between random massbalance model and constant massbalance model.
+    use_mean: bool, optional, default=True
+        Choose between the mean or summation over all glaciers
+    path: bool or str, optional, default=True
+        If a path is given (or True), the resulting dataset is stored to file.
+    temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+        List of temperature biases (float, in degC) for the mass balance model.
+    suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+        Descriptive suffixes corresponding to the given temperature biases.
+    tstar: float
+        'Equilibrium year' used for the mass balance calibration.
+    kwargs:
+        Additional key word arguments for the `run_random_climate` or
+        `run_constant_climate` routines of the vascaling module.
+
+    Returns
+    -------
+    Dataset containing yearly values of all glacier geometries.
+
+    """
     # assert correct output file suffixes for temp biases
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
@@ -329,20 +396,37 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
 def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
                     suffixes=['_normal', '_bias_p', '_bias_n'],
                     tstar=None, nyears=None, **kwargs):
-    """
+    """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
+    routines, without running the evolution (volume/area scaling) model.
+
+    Dataset containing yearly values of specific mass balance is returned.
+
+
 
     Parameters
     ----------
-    rgi_ids
-    path
-    temp_biases
-    suffixes
-    tstar
-    nyears
-    kwargs
+    rgi_ids: array-like
+        List of RGI IDs for which the equilibrium experiments are performed.
+    use_random_mb: bool, optional, default=True
+        Choose between random massbalance model and constant massbalance model.
+    use_mean: bool, optional, default=True
+        Choose between the mean or summation over all glaciers
+    path: bool or str, optional, default=True
+        If a path is given (or True), the resulting dataset is stored to file.
+    temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+        List of temperature biases (float, in degC) for the mass balance model.
+    suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+        Descriptive suffixes corresponding to the given temperature biases.
+    tstar: float
+        'Equilibrium year' used for the mass balance calibration.
+    nyears: int, optional, default=None
+        Number of years for which to compute the random mass balance
+    kwargs:
+        Additional key word arguments for massbalance model.
 
     Returns
     -------
+    Dataset containing yearly values of specific massbalance.
 
     """
     # assert correct output file suffixes for temp biases
@@ -470,6 +554,38 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
                    suffixes=['_normal', '_bias_p', '_bias_n'],
                    tstar=None, nyears=None, **kwargs):
+    """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
+    routines, without running the evolution (flowline) model.
+
+    Dataset containing yearly values of specific mass balance is returned.
+
+
+
+    Parameters
+    ----------
+    rgi_ids: array-like
+        List of RGI IDs for which the equilibrium experiments are performed.
+    use_random_mb: bool, optional, default=True
+        Choose between random massbalance model and constant massbalance model.
+    use_mean: bool, optional, default=True
+        Choose between the mean or summation over all glaciers
+    path: bool or str, optional, default=True
+        If a path is given (or True), the resulting dataset is stored to file.
+    temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+        List of temperature biases (float, in degC) for the mass balance model.
+    suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+        Descriptive suffixes corresponding to the given temperature biases.
+    tstar: float
+        'Equilibrium year' used for the mass balance calibration.
+    nyears: int, optional, default=None
+        Number of years for which to compute the random mass balance
+    kwargs:
+        Additional key word arguments for massbalance model.
+
+    Returns
+    -------
+    Dataset containing yearly values of specific massbalance.
+    """
 
     # assert correct output file suffixes for temp biases
     if len(temp_biases) != len(suffixes):
@@ -593,9 +709,11 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     return ds
 
 
-
-
 def eq_runs():
+    """ Calls the `equilibrium_run_...` routines for the Hintereisferner,
+    combines the resulting datasets for the VAS and flowline model and stores
+    it to file.
+    """
     # define RGI IDs
     rgi_ids = ['RGI60-11.00897']
     # fixate the equilibrium year t*
@@ -619,6 +737,10 @@ def eq_runs():
 
 
 def mb_runs():
+    """Calls the `climate_run_...` routines for the Hintereisferner,
+    combines the resulting datasets for the VAS and flowline model and stores
+    it to file.
+    """
     # define RGI IDs
     rgi_ids = ['RGI60-11.00897']
     # fixate the equilibrium year t*
@@ -634,6 +756,9 @@ def mb_runs():
 
 
 if __name__ == '__main__':
+    """ If script gets called, equilibrium run results (and corresponding
+    climate) for the Hintereisferner are computed and stored to file.
+    """
     mb_runs()
-    # eq_runs()
+    eq_runs()
 
