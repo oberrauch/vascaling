@@ -1,3 +1,7 @@
+""" Dead code walking: some routines which turned out to be unnecessary, but
+which couldn't be deleted yet (due to emotional attachments).
+"""
+
 def get_climatological_temp_prcp(gdir, time_range=None, year_range=None):
     """ Get the monthly climatological values around t* of solid precipitation and temperature.
     ATTENTION: Works, but should not be used for mu* calibration. TODO: Will/Should be deleted.

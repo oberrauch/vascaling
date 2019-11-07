@@ -16,21 +16,13 @@
 
 - `eval_eq_runs.py`: Combines run output datasets from different (vas vs. flowline) model types into one. (I don't know anymore if I need that or not...)
 
-- matlab_comparison.py
+- `matlab_comparison.py`: @TODO: 'cause now idea so far...
+
+- `matlab_model_marzeion/`: This directory contains the original Matlab code from Marzeion, et. al. (2012).
 
 - `mb_calibration_vas.py`: Run the mass balance calibration for the VAS model, whereby it is possible to specify the RGI version as well as the baseline climate (HistAlp or CRU).
 
-- `mb_calibration_vas_RGI6_HISTALP.py`: Simple script which adapts the massbalance calibration from the OGGM documentation (https://docs.oggm.org/en/latest/run_examples/run_mb_calibration.html) for the VAS model. (Could be deleted...)
-
-- model_ben_matlab
-
-- prepo_template.py
-
-- ret_t_star_list.py
-
-- `run_vas.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
-
-  The results are stored under `run_vas.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_vas.png` in the `../plots/` directory. 
+- `mb_calibration_vas_RGI6_HISTALP.py`: Simple script which adapts the massbalance calibration from the OGGM documentation (https://docs.oggm.org/en/latest/run_examples/run_mb_calibration.html) for the VAS model. (Could be deleted...) 
 
 - `run_comparison.py`: Set up a full run with both evolution models, i.e. the volume/area scaling model and the OGGM flowline model, for the Upper Grindelwald Glacier. Both models run over the entire HistAlp period.
 
@@ -38,14 +30,18 @@
 
 - `run_oggm.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
 
-  The results are stored under `run_oggm.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_oggm.png` in the `../plots/` directory. 
+  The results are stored under `run_oggm.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_oggm.png` in the `../plots/` directory.
 
-- seek_start_area.py
+- `run_vas.py`: Set up a full run with the volume/area scaling model from start to finish. This includes: a) initialisation and calibration, b) the mass balance model, c) the 'dynamic' model. 
 
-- set_up_run.py
+  The results are stored under `run_vas.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_vas.png` in the `../plots/` directory.
 
-- start_area.py
+- `seek_start_area.py`:
 
-- tmp.py
+- `set_up_run.py`:
 
-- unused_snippets.py
+- `start_area.py`:
+
+- `tmp.py`: Temporary sandbox.
+
+- `unused_snippets.py`: Dead code walking: some routines which turned out to be unnecessary, but which couldn't be deleted yet (due to emotional attachments).
