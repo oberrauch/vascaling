@@ -1,10 +1,15 @@
+""" First script working on the start area seeking task on the example of
+Hintereisferner.
+
+Note: Could be deleted now...
+"""
+
 # import externals libs
 import os
 import shutil
 import numpy as np
-import pandas as pd
 import geopandas as gpd
-from scipy.optimize import minimize, minimize_scalar
+from scipy.optimize import minimize_scalar
 
 # import the needed OGGM modules
 import oggm

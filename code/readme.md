@@ -16,7 +16,7 @@
 
 - `eval_eq_runs.py`: Combines run output datasets from different (vas vs. flowline) model types into one. (I don't know anymore if I need that or not...)
 
-- `matlab_comparison.py`: @TODO: 'cause now idea so far...
+- `matlab_comparison.py`: The script compares the results of the original Matlab model to the results of the OGGM VAS model, during the iterative process of seeking the start area for the Hintereisferner.
 
 - `matlab_model_marzeion/`: This directory contains the original Matlab code from Marzeion, et. al. (2012).
 
@@ -36,11 +36,9 @@
 
   The results are stored under `run_vas.csv` in the `../data/` directory. The plots show the temporal evolution of glacier length, surface area and volume and are store under `length/area/volume_vas.png` in the `../plots/` directory.
 
-- `seek_start_area.py`:
+- `seek_start_area.py`: First script working on the start area seeking task on the example of Hintereisferner. (Could be deleted now...)
 
-- `set_up_run.py`:
-
-- `start_area.py`:
+- `start_area.py`: Find model start areas (for 1851), using the iterative process from Marzeion, et.al. (2012). The routine includes all needed steps, only the RGI ID and the glacier's name must be specified. The script runs the task for all "reference" glaciers.
 
 - `tmp.py`: Temporary sandbox.
 

@@ -1,7 +1,9 @@
-# Run and find start ares
-# Set up an OGGM/VAS run from scratch and test the start area seeking tasks.
-# The only thing to specify ist the RGI ID and the glacier's name, the rest
-# should run without any adjustments...
+""" Find model start areas (for 1851), using the iterative process from Marzeion, et.
+al. (2012). The routine includes all needed steps, only the RGI ID and the
+glacier's name must be specified.
+
+The script runs the task for all 'reference' glaciers.
+"""
 
 ## Import section
 # import externals libs
@@ -19,14 +21,24 @@ from oggm.core import vascaling
 
 
 def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
-    """
+    """ Set up an VAS model from scratch and run/test the start area seeking
+    tasks. The result is a plot showing the modeled glacier area evolution for
+    different start values. The plots can be displayed and/or stored to file.
 
-    :param rgi_id:
-    :param name:
-    :param show:
-    :param path:
-    :param ref:
-    :return:
+    Parameters
+    ----------
+    rgi_id: string
+        RGI ID denoting the glacier on which to perform the tasks
+    name: string
+        Name og glacier, since it is not always given (or correct) in RGI
+    show: bool, optional, default=False
+        Flag deciding whether or not to show the created plots.
+    path: string, optional, default=''
+        Path under which the modeled area plot should be stored.
+    ref: float, optional, default=np.NaN
+        Historic (1851) reference area with which a reference model run is
+        performed.
+
     """
     ## Initialization
     # load parameter file
@@ -47,7 +59,6 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
     if show:
         plt.show()
     plt.clf()
-
 
     ## Glacier Directory
     # specify the working directory and define the glacier directory
@@ -142,7 +153,8 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
         spec_mb_list.append(best_guess_ds.spec_mb.to_dataframe()['spec_mb'])
 
     # create DataFrame
-    iteration_df = pd.DataFrame(iteration_list, index=['{:.2f}'.format(a/1e6) for a in area_guess])
+    iteration_df = pd.DataFrame(iteration_list, index=['{:.2f}'.format(a/1e6)
+                                                       for a in area_guess])
     iteration_df.index.name = 'Start Area [km$^2$]'
 
     # set up model with resulted starting area
@@ -179,11 +191,13 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
     # add legend
     handels, labels = ax.get_legend_handles_labels()
     labels[2:-1] = [r'{} km$^2$'.format(l) for l in labels[2:-1]]
-    leg = ax.legend(handels, labels, bbox_to_anchor=(1.025, 0.5), loc='center left')
+    leg = ax.legend(handels, labels, bbox_to_anchor=(1.025, 0.5),
+                    loc='center left')
     leg.set_title('Start area $A_0$', prop={'size': 12})
     leg._legend_box.align = 'left'
 
-    # replot best guess estimate and reference (in case it lies below another guess)
+    # replot best guess estimate and reference (in case it lies below another
+    # guess)
     ax.plot(best_guess_ds.time, best_guess_ds.area_m2 / 1e6, color='k',
             ls='--', lw=1.2)
     if ref:
@@ -193,7 +207,8 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
     ax.set_xlim([best_guess_ds.time.values[0], best_guess_ds.time.values[-1]])
     ax.set_xlabel('')
     ax.set_ylabel('Glacier area [km$^2$]')
-    fig.suptitle('Modeled glacier area - {}'.format(rgi_entity.Name), fontsize='14')
+    fig.suptitle('Modeled glacier area - {}'.format(rgi_entity.Name),
+                 fontsize='14')
 
     # save figure to file
     if path:
@@ -206,16 +221,19 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
 
 
 if __name__ == '__main__':
+    """ The script runs the task for all 'reference' glaciers. """
     # get list of demo glaciers and select those in the Alps/HistAlp domain
-    demo_glaciers = pd.read_csv('/Users/oberrauch/oggm-fork/oggm/data/demo_glaciers.csv', index_col=1)
+    path = '/Users/oberrauch/oggm-fork/oggm/data/demo_glaciers.csv'
+    demo_glaciers = pd.read_csv(path, index_col=1)
     demo_glaciers = demo_glaciers[demo_glaciers.RGIId.str.contains('11.')]
-    # add historic area from RGI/GLIMS
-    demo_glaciers['area_1850_km2'] = [15.4, 5.11, 105.61, np.NaN, np.NaN, 10.12, 33.41]
-    demo_glaciers
+    # manually add historic area from RGI/GLIMS
+    demo_glaciers['area_1850_km2'] = [15.4, 5.11, 105.61, np.NaN, np.NaN,
+                                      10.12, 33.41]
+
     for _, glacier in demo_glaciers.iterrows():
         fn = glacier.Name.lower().replace(' ', '_')
         fn = '/Users/oberrauch/work/master/plots/start_area/{}.pdf'.format(fn)
         seek_start_area(glacier.RGIId, glacier.Name, path=fn,
-                        ref=glacier.area_1850_km2)
+                        ref=glacier.area_1850_km2, show=True)
         break
 

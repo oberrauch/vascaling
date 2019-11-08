@@ -1,3 +1,16 @@
+""" Compares the results of the original Matlab model to the results of the
+OGGM VAS model, during the iterative process of seeking the start area.
+
+The *.mat files are produced by the original Matlab code from Marzeion, et. al.
+They contain yearly values for glacier geometries (length, area and volume),
+time scales for length and area change (tau_L and tau_A). One file corresponds
+to one iteration step.
+
+The corresponding values of the OGGM VAS model are computed during the
+iteration. Figures showing length, area and volume, and time scales for length
+and area change as functions of time for both models are plotted and displayed.
+
+"""
 # import externals libs
 import os
 import shutil
@@ -10,7 +23,7 @@ from oggm import cfg, utils
 from oggm.tests.funcs import get_test_dir
 from oggm.core import gis, climate, centerlines, vascaling
 
-# create test directory
+# create temporary working directory
 testdir = os.path.join(get_test_dir(), 'start_area')
 if not os.path.exists(testdir):
     os.makedirs(testdir)
@@ -30,7 +43,7 @@ cfg.PARAMS['border'] = 50
 cfg.PARAMS['baseline_climate'] = 'CRU'
 cfg.PARAMS['use_multiprocessing'] = True
 
-# get RGI entity
+# get RGI entity for Hintereisferner
 rgi_id = 'RGI60-11.00897'
 entity = utils.get_rgi_glacier_entities([rgi_id]).iloc[0]
 
@@ -64,15 +77,17 @@ mbmod = vascaling.VAScalingMassBalance(gdir)
 # ----------------
 #  DYNAMICAL PART
 # ----------------
-# get reference area
+# get reference area (from RGI entry)
 a0 = gdir.rgi_area_m2
-# get reference year
+# get reference year (start of climate records)
 y0 = gdir.read_pickle('climate_info')['baseline_hydro_yr_0']
-# get min and max glacier surface elevation
+# get min and max glacier surface elevation (based on RGI outline)
 h0, h1 = vascaling.get_min_max_elevation(gdir)
 
-# initialize counter variable
-k = 2
+# initialize iteration counter variable
+k = 1
+
+# start iteration process of "finding the start area"
 while True:
     # specify path to *.mat file and see if file exists
     mat_file = '../data/start_area_results/{:s}_iteration_{:02d}.mat'.format(rgi_id, k)
@@ -109,8 +124,8 @@ while True:
     # plot all parameters
     for mat, vas, label, f in zip(mat_params, vas_params, labels, factors):
         plt.figure()
-        plt.plot(mat_years, mat_file[mat][0, :102], label='BEN')
-        plt.plot(vas_years, diag_ds[vas] / f, label='VAS')
+        plt.plot(mat_years, mat_file[mat][0, :102], label='Marzeion Matlab')
+        plt.plot(vas_years, diag_ds[vas] / f, label='OGGM VAS')
         plt.legend()
         plt.xlabel('')
         plt.ylabel(label)
