@@ -23,7 +23,7 @@ from oggm.core import vascaling
 #  PREPROCESSING TASKS
 # ---------------------
 
-# create test directory
+# create temporary working directory
 testdir = os.path.join(get_test_dir(), 'tmp_comparison')
 if not os.path.exists(testdir):
     os.makedirs(testdir)

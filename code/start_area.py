@@ -7,6 +7,7 @@ The script runs the task for all 'reference' glaciers.
 
 ## Import section
 # import externals libs
+import os
 import sys
 import numpy as np
 import pandas as pd
@@ -62,7 +63,10 @@ def seek_start_area(rgi_id, name, show=False, path='', ref=np.NaN):
 
     ## Glacier Directory
     # specify the working directory and define the glacier directory
-    cfg.PATHS['working_dir'] = './'
+    wdir = '../working_directories/start_area/'
+    cfg.PATHS['working_dir'] = wdir
+    if not os.path.exists(wdir):
+        os.makedirs(wdir)
     gdir = oggm.GlacierDirectory(rgi_entity, reset=True)
 
     ## DEM and GIS tasks
