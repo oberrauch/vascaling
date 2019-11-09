@@ -11,8 +11,7 @@
 
 - `comparison_function.py`: Combines the `run_comparison.py` and `compare.py` script into one routine, which can be called with the RGI ID and the glacier name as parameters (hence is more universal).
 
-- `equilibrium_run.py`: This script runs the VAS and flowline model for a single (or more) glacier(s) with a constant (or random) massbalance model, performing equilibrium
-  experiments.
+- `equilibrium_run.py`: This script runs the VAS and flowline model for a single (or more) glacier(s) with a constant (or random) massbalance model, performing equilibrium experiments.
 
 - `eval_eq_runs.py`: Combines run output datasets from different (vas vs. flowline) model types into one. (I don't know anymore if I need that or not...)
 

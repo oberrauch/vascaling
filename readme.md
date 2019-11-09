@@ -9,7 +9,7 @@ This directory/repository contains all files related to my master thesis "Testin
 ## Content
 
 - `code`: Contains all the code (mainly python scripts) used to run the model and/or plot results. The code for the volume/area scaling model itself is already merged into the OGGM repository.
-- `data`: Stores produced results.
+- `data`: The directory contains produced results stored to file.
 - `flowchart`: Latex environment containing the visualization of the iterative nature of the volume/area scaling model.
 - `lit`: Contains relevant papers.
 - `notebooks`: Contains all Jupyter Notebooks
