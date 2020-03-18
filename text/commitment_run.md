@@ -89,9 +89,7 @@ utils.compile_glacier_statistics(gdirs)
 utils.write_centerlines_to_shape(gdirs)
 ```
 
-Lastly, the result is compiled...
-
-
+Lastly, the results are compiled...
 
 ## Run random climate
 

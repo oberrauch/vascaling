@@ -1,8 +1,17 @@
-# Implementation of Ben's model
+# Implementation of the volume/area scaling (VAS) model
 
 The idea was born at the *OGGM/ACINN Hacktoberfest* and is (hopefully) an essential part of my future Masters thesis.
 
 This serves me as some sort of scientific journal. Here I will note ideas, progress and problems in a more clear way than in my several notebooks, loose sheets of papers and used napkins.
+
+**Content:**
+
+1. Calibration of $\mu^*$
+2. Testing the $\mu_*$ calibration
+3. Mass balance model(s)
+4. Testing the mass balance model
+5. ... lot's of stuff that is missing (since I'm a lazy f*cker)
+6. Getting back into the saddle - Nov 19
 
 ## Calibration of $\mu^*$
 
@@ -1027,11 +1036,19 @@ The correlation of time series is visibly high. The magnitude of both mass balan
 
 The linear correlation with the OGGM mass balance as predictor yields a coefficient of determination of $r^2 = 0.76$.
 
-The cumulative specific mass balance over the 31-year climate period centred around $t^*$ must be zero, given a successful $\mu^*$ calibration. Thereby the mass balance bias $\beta^*$ is not applied. @ASK
+The cumulative specific mass balance over the 31-year climate period centred around $t^*$ must be zero, given a successful $\mu^*$ calibration. Thereby the mass balance bias $\beta^*$ is not applied (per definition of $\mu^*$).
 
 ![Yearly and cumulative specific mass balance over climate period](img/mb_cumulative.png)
 
 ### Unit tests
 
 @TODO: unit tests in `test_ben.py`
+
+
+
+##6. Getting back into the saddle - Nov 19
+
+**Nov, 11:** Once upon a time, in a faraway land... jokes aside, but I'm back (bitches). Some time has passed since the last entry in this *journal*, and the clumsily written code fragments from above turned into a fully functional and tested model (already merged into the OGGM codebase). Some other stuff happened as well, stuff of private and professional kind, and so here we are...
+
+Currently I'm trying to regain speed with the project. Given the circumstances it turns out to be quite difficult, but at least it makes more fun than anticipated (maybe because all the other shit is so boring). Anyway, I'm looking through all the file, plots and code snippets which accumulated over time. Adding some comments, deleting some stuff and so on... in essence I'm doing some housekeeping before (re)starting with the actual work.
 

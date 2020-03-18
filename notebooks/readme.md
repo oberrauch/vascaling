@@ -1,0 +1,22 @@
+# Notebooks
+
+- `comittment_run.ipynb`:
+- `constant_step.ipynb`
+- `equilibrium_hef.ipynb`
+- `equilibrium_rofental.ipynb`
+- `equilibrium_run_evaluation.ipynb`
+- `equilibrium_run_evaluation_new.ipynb`
+- `hackaton-testfile-workcopy.ipynb`
+- `hackaton-testfile.ipynb`
+- `linearity.ipynb`
+- `mb_calibration.ipynb`
+- `my_unit_test.ipynb`
+- `plot_spectrogram.ipynb`
+- `prepo_template.ipynb`
+- `read_matlab_data.ipynb`
+- `scipy_minimize.ipynb`
+- `sensitivity.ipynb`
+- `start_area.ipynb`
+- `t_star_ref_list.ipynb`
+- `test_run_until_and_store.ipynb`
+- `tmp.ipynb`

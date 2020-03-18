@@ -2,7 +2,7 @@
 
 Ok... lets see what I did and why it doesn't work.
 
-## Explaining the idea behind the code
+## Explaining the code and the idea behind it
 
 ```python
 # import externals libs
@@ -76,7 +76,7 @@ res = climate.t_star_from_refmb(gdir, mbdf=mbdf['ANNUAL_BALANCE'])
 t_star, bias = res['t_star'], res['bias']
 ```
 
-Preprocessing including the GIS tasks, climate tasks and center line tasks. The $t^*​$ and $\beta^*​$ are read from the reference mass balance table, in order to compute the $\mu^*​$.
+Preprocessing including the GIS tasks, climate tasks and center line tasks. The $t^*$ and $\beta^*$ are read from the reference mass balance table, in order to compute the $\mu^*$.
 
 ```python
 # --------------------
@@ -150,7 +150,7 @@ Accordingly, the specific mass balance (given in $\mathrm{mm\ w.e.\ yr^{-1}}$) i
 
 ![](../plots/iteration_spec_mb.png)
 
-**Attempting an explanation:** First I thought that those results are just plane wrong, since I'd expected the exact opposite. But while I'm writing this it occurs to me, that it is actually not so far off... The terminus elevation will increase given a smaller starting surface area, since the maximum elevation is held constant. Therefore the average surface temperature will be lower, which results in less energy input (in form of positive melting temperature) and comparatively more solid precipitation (or at least an equal amount). Less melting and more (or equal) snow fall, for short. Hence, higher (and positive) specific mass balance.
+**Attempting an explanation:** First I thought that those results are just plane wrong, since I'd expected the exact opposite. But while I'm writing this it occurs to me, that this is actually not so far off... The terminus elevation will increase given a smaller starting surface area, since the maximum elevation is held constant. Therefore the average surface temperature will be lower, which results in less energy input (in form of positive melting temperature) and comparatively more solid precipitation (or at least an equal amount). Less melting and more (or equal) snow fall, for short. Hence, higher (and positive) specific mass balance.
 
 ## Questions
 

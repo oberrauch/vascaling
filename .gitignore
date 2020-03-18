@@ -4,6 +4,10 @@ working_directories
 *.nc
 *.mat
 
+# Aux files
+.ask
+.todo
+
 # General
 .DS_Store
 .AppleDouble
