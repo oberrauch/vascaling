@@ -1,0 +1,89 @@
+%!TEX root = thesis.tex
+\chapter{Introduction}\label{chap1}
+\thispagestyle{plain}
+
+% ====SECTION 1 ================================================================
+\section{Motivation}
+The chapter Introduction leads the reader into the subject matter
+of the thesis. It is sometimes called
+Statement/Formulation/Definition/Presentation of the Problem. It may start with
+a so-called Motivation. It also contains the State of Knowledge or State
+of Research which is based on a literature survey (see section \ref{1sec:2}).
+Further, it contains the Scientific Questions and/or the Goals that are
+addressed in the main part of the thesis (see section \ref{1sec:3}). Finally,
+it provides an Outline of the science thesis (see end of section \ref{1sec:3}).
+
+
+% ==== SECTION 2 ===============================================================
+\section{State of Research}\label{1sec:2}
+
+Based on the literature survey, the writer draws a picture of the existing
+knowledge in a specific field and points to open questions. Hence, after this
+survey the Introduction will ultimately culminate in the formulation of specific
+scientific questions/goals addressed in the thesis (see section \ref{1sec:3}).
+
+To cite a certain source (e.g., a paper) use the citation commands
+\verb|\citet| and \verb|\citep| of the \verb|natbib|
+package.\footnote{
+\url{http://www.ctan.org/tex-archive/macros/latex/contrib/natbib/natnotes.pdf}}
+Together with the bibliography style \verb|ametsoc.bst|, which is
+included in the \LaTeX{} manuscript template for AMS journals\footnote{
+\url{http://www.ametsoc.org/PUBS/journals/AMS_Latex_V3.0.tar.gz}}, \verb|natbib|
+produces citations in the author-date format together with a list of
+references that fulfill the AMS citation standard.\footnote{
+\url{http://www.ametsoc.org/PUBS/journals/author_reference_guide.pdf}}
+
+As an example, you can cite papers like \citet{hann66Aag} and \citet{scha93Aag}
+which have to be specified in your BibTeX database file (in this case it is
+\verb|mybibfile.bib|). More than one article of the same author can be cited
+like here: \citet{hoin85Aag,hoin90Aag} studied foehn winds.
+
+You may want to split your review of the literature into several sections.
+Further, use paragraphs to structure your introduction. If you like to cite
+papers in brackets (\emph{passive citations}) you can do this
+as in the following sentence: Gap flows have been studied in the Strait
+of Gibraltar \citep{scor52Aag,dorm95Aag}, in the French Rh\^one Valley
+\citep{pett82Aag}, near Hokkaid\=o in Japan \citep{arak69Aag}, near
+Unimak Island in the Aleutian Chain \citep{pan-99Aag}, and in the Howe
+Sound of British Columbia \citep{jack94Aag,jack94Bag}. Citation of a
+Dissertation: The gap flow in the Wipp Valley has been studied by
+\citet{gohm03Aag}. Citation of a conference paper: \citet{gohm06Aag}
+investigated the boundary layer structure in the Inn Valley. Citation of an
+online document: The AMS provides a guideline for preparing citations and
+references \citep{ams-09Aag}.
+
+
+% ==== SECTION 3 ===============================================================
+\section{Goals and Outline}\label{1sec:3}
+
+After the literature survey the Introduction will ultimately culminate in the
+formulation of specific scientific questions, aims or \emph{goals}. Hence, near
+the end of the Introduction there will often appear sentences like:\\[1ex]
+\dots The goal of the investigation thus became trying to find out if \dots\\
+\dots For this reason it appeared reasonable to attempt \dots\\
+\dots It therefore became necessary to clarify whether \dots\\ 
+
+Instead of describing the goals in one paragraph, you may want to structure them
+with the \verb|itemize| command:
+\begin{itemize}
+\item[(1)] First goal.
+\item[(2)] Second goal.
+\item[(3)] Third goal.
+\end{itemize}
+
+The so-called SMART
+criteria\footnote{\url{http://en.wikipedia.org/wiki/SMART_criteria}} might be
+used as a guideline to define reasonable goals. Here, the acronym SMART
+describes the properties of ``good'' goals: \underline{s}pecific,
+\underline{m}easurable, \underline{a}ttainable, \underline{r}elevant,
+\underline{t}ime-bound.
+
+The introduction may also describe briefly the methodology chosen and the
+materials (e.g., data, instruments, etc.) used. However, a detailed description
+will follow in the main part (see chapter \ref{chap2}).
+
+Finally you should present an \emph{outline} of your science thesis. Explain
+what the reader will find in the following chapters. For example, chapter
+\ref{chap2} describes the methodology. The results are presented
+in chapter \ref{chap3}. A discussion is provided in chapter \ref{disc} and the
+conclusions are drawn in chapter \ref{concl}.

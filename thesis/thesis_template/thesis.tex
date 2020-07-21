@@ -1,0 +1,260 @@
+% ==== BEGIN OF PREAMBLE =======================================================
+% ---- document class (use appropriate driver for DIV to PS/PDF conversion):
+\documentclass[12pt,a4paper,dvipdfm]{book}
+
+
+% ---- graphicx package:
+\usepackage{graphicx}
+
+
+% ---- natbib package:
+\usepackage{natbib}
+\bibpunct{(}{)}{;}{a}{}{,}  % adjust author-year citation format 
+
+
+% ---- hyperref package for cross-references:
+\usepackage{hyperref}
+% -- USE BLACK LINKS IN PRINTOUT (uncomment the following lines if necessary):
+%\hypersetup{colorlinks,%
+%            linktocpage,%
+%            breaklinks,%
+%            citecolor=black,%
+%            filecolor=black,%
+%            linkcolor=black,%
+%            urlcolor=black,}
+% -- use color links in pdf version (comment the following lines if necessary):
+\hypersetup{colorlinks,
+            linktocpage,%  make page number, not text, be link on TOC, LOF & LOT
+            breaklinks,%
+            citecolor=blue,%
+            filecolor=blue,%
+            linkcolor=blue,%
+            urlcolor=blue,}
+
+
+% ---- caption package:
+\usepackage[font=small,labelfont=bf]{caption}
+
+
+% ---- subfigure package:
+\usepackage[tight,nooneline,FIGTOPCAP,bf]{subfigure}
+% \setlength{\subfigcaptopadj}{-6pt}  % vertical position of subfigure labels
+\renewcommand{\thesubfigure}{\alph{subfigure}}
+\makeatletter
+    \renewcommand{\@thesubfigure}{(\thesubfigure)}  % subfigure labels:     (a)
+    \renewcommand{\@@thesubfigure}{\thesubfigure}   % produced by \subref:   a
+    \renewcommand{\p@subfigure}{\thefigure}         % produced by \ref:   3.1a
+\makeatother
+
+
+% ---- fancyhdr package:
+\usepackage{fancyhdr}
+
+
+% ---- some other useful packages:
+% \usepackage{showkeys}  % show all keys (labels)
+% \usepackage{times}     % use times new roman instead of computer modern font
+
+
+% ---- page layout:
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{15cm}
+\setlength{\topmargin}{-0.9cm}
+\setlength{\headheight}{0.6cm}
+\setlength{\headsep}{1cm}
+\setlength{\footskip}{1cm}
+\setlength{\oddsidemargin}{9.1mm}
+\setlength{\evensidemargin}{-0.2mm}
+\setlength{\marginparwidth}{2cm}
+
+
+% ---- paragraph and line properties:
+\setlength{\parindent}{0.8cm}
+\setlength{\parskip}{0pt}
+\linespread{1.2}
+\sloppy % reduce number of word divisions and use more space between words
+
+
+% ---- header format: use fancyhdr page style:
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\slshape \small \rightmark}
+\fancyhead[RE]{\slshape \small \leftmark}
+\renewcommand{\headrulewidth}{0pt}
+
+
+% ---- define label format for equations, figures, and tables:
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\renewcommand{\thetable}{\thechapter.\arabic{table}}
+
+
+% ==== END OF PREAMBLE =========================================================
+
+
+% ==== BEGIN OF BODY ===========================================================
+\begin{document}
+
+
+% ==== START FRONT MATTER (use ROMAN numerals) =================================
+\frontmatter
+
+
+% ==== TITLE PAGE ==============================================================
+% ---- include tex-file (CHOOSE APPROPRIATE FILE):
+\include{titlepage_master}    % activate this line for Master's Thesis
+% \include{titlepage_diploma}   % activate this line for Diploma Thesis
+\newpage
+~\thispagestyle{empty}
+\newpage
+% ---- start page numbering again:
+\setcounter{page}{1}
+
+
+% ==== DEDICATION ==============================================================
+% ---- include tex-file:
+\include{dedication}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== PREFACE =================================================================
+% ---- include tex-file:
+\include{preface}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== ABSTRACT ================================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{abstract}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== TABLE OF CONTENTS =======================================================
+~
+\newpage
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents
+\newpage
+\thispagestyle{plain}
+
+
+% ==== START MAIN MATTER (use ARABIC numerals) =================================
+\mainmatter
+
+
+% ==== INTRODUCTION (CHAPTER 1) ================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{chapter1}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== CHAPTER 2 ===============================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{chapter2}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== CHAPTER 3 ===============================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{chapter3}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== DISCUSSION ==============================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{discussion}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== CONCLUSIONS =============================================================
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{conclusion}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== APPENDIX ================================================================
+% ---- start appendix:
+\appendix
+% ---- set some counters to zero:
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+% ---- include tex-file:
+\include{appendix}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== START BACK MATTER (this has no visual effect)============================
+\backmatter 
+
+
+% ==== BIBLIOGRAPHY ============================================================
+\addcontentsline{toc}{chapter}{Bibliography}
+% ---- use AMS reference format (use file ametsoc.bst included in ...
+%      ... http://www.ametsoc.org/pubs/journals/AMS_Latex_V3.0.tar.gz):s
+\bibliographystyle{./ametsoc}   % ametsoc.bst in local directory
+% ---- use BibTeX database file:
+\bibliography{./mybibfile}      % mybibfile.bib in local directory
+\newpage
+\thispagestyle{plain}
+
+
+% ==== ACKNOWLEDGMENTS =========================================================
+% ---- include tex-file:
+\include{thanks}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== CURRICULUM VITAE ========================================================
+% ---- include tex-file:
+\include{curricv}
+\newpage
+\thispagestyle{plain}
+
+
+% ==== EPILOGUE ================================================================
+% ---- include tex-file:
+\include{epilogue}
+\newpage
+\thispagestyle{plain}
+
+
+\end{document}
+% ==== END OF BODY =============================================================

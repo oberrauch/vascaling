@@ -4,7 +4,7 @@ First I'll deconstruct the commitment run with the Rofental glaciers, given in t
 
 Next I'll try to figure how to apply it to the VAS model.
 
-## 1. Preprocess a subset of an RGI region
+## Preprocess a subset of an RGI region
 
 This example shows how to run the first steps of the OGGM preprocessing chain for a subset of the Alps - the Rofental catchment in the Austrian Alps (see [docs.oggm.org](http://docs.oggm.org/en/latest/run_examples/run_rgi_region.html)).
 

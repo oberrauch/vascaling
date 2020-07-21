@@ -62,11 +62,11 @@ print('Area of {:.4} km2 corresponds a volume of {:.4} km3'.format(area_km2, vol
 
 # area and volume in m2 and m3, respectively
 area_m2 = 8036000.0
-volume_m3 = scale_volume(area_m3)
+volume_m3 = scale_volume(area_m2)
 print('Area of {:.4} m2 corresponds a volume of {:.4} m3'.format(area_m2, volume_m3))
 ```
 
-Das obige Code Snippet produziert folgenden Output, und $0.5969\ \mathrm{km^3} = 0.596\cdot{}10^9  \ \mathrm{m^3} $.
+Das obige Code Snippet produziert folgenden Output, und $0.5969\ \mathrm{km^3} \approx 0.5963\cdot{}10^9  \ \mathrm{m^3} $.
 
 ```python
 $> Area of 8.036 km2 corresponds a volume of 0.5969 km3

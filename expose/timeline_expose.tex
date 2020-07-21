@@ -1,0 +1,162 @@
+\documentclass[margin=10pt]{standalone}
+    \renewcommand{\familydefault}{\sfdefault}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+
+    \usepackage{tikz}
+        \usetikzlibrary{backgrounds,calc,calendar}
+    \usepackage{pgfgantt}
+    \usepackage{pgfcalendar}
+
+    \usepackage{xcolor}
+        \definecolor{flat-flesh}{HTML}{fad390}
+        \definecolor{melon-melody}{HTML}{f8c291}
+        \definecolor{iceland-poppy}{HTML}{fa983a}
+        \definecolor{tomato-red}{HTML}{eb2f06}
+        \definecolor{livid}{HTML}{6a89cc}
+        \definecolor{azraq-blue}{HTML}{4a69bd}
+        \definecolor{yue-guang-lan-blue}{HTML}{1e3799}
+        \definecolor{dark-sapphire}{HTML}{0c2461}
+        \definecolor{spray}{HTML}{82ccdd}
+        \definecolor{dupain}{HTML}{60a3bc}
+        \definecolor{good-samaritan}{HTML}{3c6382}
+        \definecolor{forest-blues}{HTML}{0a3d62}
+        %\definecolor{name}{HTML}{ffffff}
+
+
+    \usepackage{calc}
+    \usepackage{ifthen}
+
+    %\newcommand{\datenumber}[1]{% to compute the number of days between \startdate and a given date. Unused here
+    %   \pgfcalendardatetojulian{#1}{\dtnmbr}%
+    %   \advance\dtnmbr by -\mystrtdt%
+    %   \the\dtnmbr%
+    %}
+
+    % define start and end dates
+    \def\startdate{2020-4-16}
+    \def\enddate{2020-5-4}
+    
+    % get number representation of dates
+    \newcount\startdatecount
+    \newcount\enddatecount
+    \pgfcalendardatetojulian{\startdate}{\startdatecount}
+    \pgfcalendardatetojulian{\enddate}{\enddatecount}
+    
+    % compute number of days
+    \newcount\numberofdays
+    \numberofdays=\enddatecount
+    \advance\numberofdays by -\startdatecount
+
+    % compute number of weeks
+    \newcount\mynumberofweeks
+        \mynumberofweeks\numberofdays\relax
+        \advance \mynumberofweeks by -1\relax
+        \divide \mynumberofweeks by 7\relax
+
+    % include first/last day in count
+    \advance\numberofdays by 1
+
+    % define first week day
+    \newcount\firstweekday
+        \pgfcalendarjuliantoweekday{\startdatecount}{\firstweekday}
+
+    % compute shift of first week
+    \newcount\firstweekendshift
+        \firstweekendshift 5\relax
+        \advance\firstweekendshift by -\firstweekday\relax
+        % if the first day is a Sunday
+        \ifnum \firstweekendshift=-1 
+            % the first full weekend will thus begin one week after
+            \advance \firstweekendshift by 7\relax
+        \fi
+
+    % define units
+    \def\myxunit{1.5cm} % width of 1 day
+    \def\myyunittitle{.5cm} % height of 1 title line
+    \def\myyunitchart{1cm} % height of 1 chart line
+
+    % define the name of weekdays + formatting
+    \def\pgfcalendarweekdayletter#1{
+        \ifcase#1 Mo\or Th\or We\or Th\or Fr\or
+        \textbf{Sa}\or \textbf{So}\fi
+    }
+
+    % define function that prints weekday and day of month
+    \newcount\currentdatecount
+        \currentdatecount=\startdatecount
+        \newcount\weekday
+    \protected\def\zzz{{\pgfcalendarjuliantoweekday{\currentdatecount}{\weekday}\pgfcalendarweekdayletter{\weekday},
+        \pgfcalendarjuliantodate{\currentdatecount}{\year}{\month}{\day}\day. \global\advance\currentdatecount by 1}}
+    
+
+\begin{document}
+
+    \begin{ganttchart}[
+            hgrid,
+            vgrid,
+            x unit = \myxunit,
+            y unit title = \myyunittitle,
+            title height = .75,
+            y unit chart = \myyunitchart,
+            time slot format = isodate,
+            canvas/.append style = {fill opacity=.1},
+            bar/.append style={rounded corners=3pt}
+        ]{\startdate}{\enddate}
+
+            % Title lines
+            \gantttitle{\textbf{Expose}}{\numberofdays}\\
+            \gantttitlecalendar{month=name} \\
+            \gantttitlelist[
+                    title list options={var=\y, evaluate=\y as \x using "\zzz"}
+                ]{1,...,\numberofdays}{1} \\
+            
+            % set number of title lines
+            \def\numbttitlelines{3} 
+
+            % Chart lines
+            \ganttbar[bar/.append style={fill=livid}]
+                {\textcolor{black!50!livid}{Reserach Question}}{2020-4-17}{2020-4-22} \\
+            \ganttbar[bar/.append style={fill=azraq-blue}]
+                {\textcolor{black!50!azraq-blue}{Methodology}}{2020-4-21}{2020-4-26} \\
+            \ganttbar[bar/.append style={fill=yue-guang-lan-blue}]
+                {\textcolor{black!50!yue-guang-lan-blue}{State of the art}}{2020-4-25}{2020-05-01} \\
+            \ganttbar[bar/.append style={fill=dark-sapphire}]
+                {\textcolor{black!50!dark-sapphire}{Introduction}}{2020-4-28}{2020-05-03}
+            
+            % set number if chart lines
+            \def\numbtchartlines{4}
+
+            % display week-ends
+            \begin{scope}[on background layer]
+                % fill Saturdays
+                \foreach \i in {0,...,\the\mynumberofweeks}
+                \fill [flat-flesh!50]
+                    % on the x-absis: shift the number of days before the first Saturday + 7days*\i;
+                    % on the y-absis: shift down the number of title lines * their height
+                    (\firstweekendshift*\myxunit+\i*7*\myxunit,-\numbttitlelines*\myyunittitle)
+                    rectangle 
+                    % on the x-absis: add two days (the week-end);
+                    % on the y-absis: add the number of chartlines*their height
+                    (\firstweekendshift*\myxunit+\i*7*\myxunit+1*\myxunit,-\numbttitlelines*\myyunittitle -\numbtchartlines*\myyunitchart);
+                % fill Sundays
+                \foreach \i in {0,...,\the\mynumberofweeks}
+                \fill [melon-melody!50]
+                    % on the x-absis: shift the number of days before the first Sunday + 7days*\i;
+                    % on the y-absis: shift down the number of title lines * their height
+                    (\firstweekendshift*\myxunit+\i*7*\myxunit+1*\myxunit,-\numbttitlelines*\myyunittitle)
+                    rectangle 
+                    % on the x-absis: add two days (the week-end);
+                    % on the y-absis: add the number of chartlines*their height
+                    (\firstweekendshift*\myxunit+\i*7*\myxunit+2*\myxunit,-\numbttitlelines*\myyunittitle -\numbtchartlines*\myyunitchart);
+                % if the first day is a sunday, it is not grayed.
+                % so draw a rectangle for the first day of the chart.
+                \ifthenelse{\firstweekendshift=6}{
+                    \fill [red!10]
+                        (0,-\numbttitlelines*\myyunittitle)
+                        rectangle
+                        (1*\myxunit,-\numbttitlelines*\myyunittitle -\numbtchartlines*\myyunitchart);
+                }{}
+            \end{scope}
+    \end{ganttchart}
+\end{document}

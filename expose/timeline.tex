@@ -1,0 +1,169 @@
+\documentclass[margin=10pt]{standalone}
+    \renewcommand{\familydefault}{\sfdefault}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+
+    \usepackage{tikz}
+        \usetikzlibrary{backgrounds,calc,calendar}
+    \usepackage{pgfgantt}
+    \usepackage{pgfcalendar}
+
+    \usepackage{xcolor}
+        \definecolor{flat-flesh}{HTML}{fad390}
+        \definecolor{melon-melody}{HTML}{f8c291}
+        \definecolor{iceland-poppy}{HTML}{fa983a}
+        \definecolor{tomato-red}{HTML}{eb2f06}
+        \definecolor{livid}{HTML}{6a89cc}
+        \definecolor{azraq-blue}{HTML}{4a69bd}
+        \definecolor{yue-guang-lan-blue}{HTML}{1e3799}
+        \definecolor{dark-sapphire}{HTML}{0c2461}
+        \definecolor{spray}{HTML}{82ccdd}
+        \definecolor{dupain}{HTML}{60a3bc}
+        \definecolor{good-samaritan}{HTML}{3c6382}
+        \definecolor{forest-blues}{HTML}{0a3d62}
+        %\definecolor{name}{HTML}{ffffff}
+
+
+    \usepackage{calc}
+    \usepackage{ifthen}
+
+    %\newcommand{\datenumber}[1]{% to compute the number of days between \startdate and a given date. Unused here
+    %   \pgfcalendardatetojulian{#1}{\dtnmbr}%
+    %   \advance\dtnmbr by -\mystrtdt%
+    %   \the\dtnmbr%
+    %}
+
+    % define start and end dates
+    \def\startdate{2020-4-15}
+    \def\enddate{2020-9-18}
+    
+    % get number representation of dates
+    \newcount\startdatecount
+    \newcount\enddatecount
+    \pgfcalendardatetojulian{\startdate}{\startdatecount}
+    \pgfcalendardatetojulian{\enddate}{\enddatecount}
+    
+    % compute number of days
+    \newcount\numberofdays
+    \numberofdays=\enddatecount
+    \advance\numberofdays by -\startdatecount
+
+    % compute number of weeks
+    \newcount\mynumberofweeks
+        \mynumberofweeks\numberofdays\relax
+        \advance \mynumberofweeks by -1\relax
+        \divide \mynumberofweeks by 7\relax
+
+    % include first/last day in count
+    \advance\numberofdays by 1
+
+    % define first week day
+    \newcount\firstweekday
+        \pgfcalendarjuliantoweekday{\startdatecount}{\firstweekday}
+
+    % compute shift of first week
+    \newcount\firstweekendshift
+        \firstweekendshift 5\relax
+        \advance\firstweekendshift by -\firstweekday\relax
+        % if the first day is a Sunday
+        \ifnum \firstweekendshift=-1 
+            % the first full weekend will thus begin one week after
+            \advance \firstweekendshift by 7\relax
+        \fi
+
+    % define units
+    \def\myxunit{0.2cm} % width of 1 day
+    \def\myyunittitle{.5cm} % height of 1 title line
+    \def\myyunitchart{1cm} % height of 1 chart line
+
+    % define the name of weekdays + formatting
+    \def\pgfcalendarweekdayletter#1{
+        \ifcase#1 Mo\or Th\or We\or Th\or Fr\or
+        \textbf{Sa}\or \textbf{So}\fi
+    }
+
+    % define function that prints weekday and day of month
+    \newcount\currentdatecount
+        \currentdatecount=\startdatecount
+        \newcount\weekday
+    \protected\def\zzz{{\pgfcalendarjuliantoweekday{\currentdatecount}{\weekday}\pgfcalendarweekdayletter{\weekday},
+        \pgfcalendarjuliantodate{\currentdatecount}{\year}{\month}{\day}\day. \global\advance\currentdatecount by 1}}
+
+    % define new ganttllink
+    \newganttlinktype{rdr}{
+        \ganttsetstartanchor{on right=0.5}
+        \ganttsetendanchor{on right=0.5}
+        \draw [/pgfgantt/link]
+            % first segment right
+            (\xLeft, \yUpper) --
+            % second segment down
+            (\xLeft + \ganttvalueof{link bulge} * \ganttvalueof{y unit chart}, \yUpper) --
+            (\xLeft + \ganttvalueof{link bulge} * \ganttvalueof{y unit chart}, \yLower) --
+            % third segment left
+            (\xRight, \yLower);
+    }
+
+    \ganttset{calendar week text= \small {\startday.\startmonth}}
+
+    \advance\firstweekendshift by 1
+    \newcount\remainingweekdays
+    \remainingweekdays=6
+    \advance\remainingweekdays by -\firstweekendshift
+    
+
+\begin{document} 
+    \begin{ganttchart}[
+            vgrid = {*\firstweekendshift{draw=none}, dotted, *{\remainingweekdays}{draw=none}},
+            x unit = \myxunit,
+            title height = .75,
+            time slot format = isodate,
+            canvas/.append style = {fill opacity=.1},
+            bar/.append style={rounded corners=3pt}
+        ]{\startdate}{\enddate}
+
+        % Title lines
+        \gantttitle{\textbf{Master Thesis}}{\numberofdays}\\
+        \gantttitlecalendar{month=name, week=16} \\
+        
+        % set number of title lines
+        \def\numbttitlelines{3} 
+
+        % Chart lines
+        \ganttgroup{Exposé}{2020-4-15}{2020-5-03} \\
+            \ganttbar[bar/.append style={fill=livid}]
+                {\textcolor{black!50!livid}{Reserach Question}}{2020-4-17}{2020-4-22} \\
+            \ganttbar[bar/.append style={fill=azraq-blue}]
+                {\textcolor{black!50!azraq-blue}{Methodology}}{2020-4-21}{2020-4-26} \\
+            \ganttbar[bar/.append style={fill=yue-guang-lan-blue}]
+                {\textcolor{black!50!yue-guang-lan-blue}{State of the art}}{2020-4-25}{2020-05-01} \\
+            \ganttbar[bar/.append style={fill=dark-sapphire}]
+                {\textcolor{black!50!dark-sapphire}{Introduction}}{2020-4-28}{2020-05-03}\\
+        
+        \ganttgroup{Literature research}{2020-4-15}{2020-7-31} \\
+            \ganttbar{Overview}{2020-4-15}{2020-5-03} \\
+            \ganttbar{Introduction}{2020-4-15}{2020-5-03} \\
+
+        \ganttlink[link type=rdr]{elem6}{elem3}
+        \ganttlink[link type=rdr]{elem6}{elem4}
+
+        \ganttgroup{Model "Skill Scores"}{2020-5-1}{2020-5-31} \\
+
+
+        \ganttgroup{Regional Experiment}{2020-5-15}{2020-6-30} \\
+
+
+        \ganttgroup{Writing}{2020-6-15}{2020-8-14} \\
+            \ganttbar{Model and Methods}{2020-6-15}{2020-6-30} \\
+            \ganttbar{Results}{2020-7-1}{2020-7-14} \\
+            \ganttbar{Discussion and Conclusion}{2020-7-15}{2020-7-31} \\
+            \ganttbar{Introduction}{2020-8-1}{2020-8-14} \\
+            \ganttbar{Abstract}{2020-8-8}{2020-8-14} \\
+
+
+        \ganttgroup{Presentation}{2020-8-15}{2020-9-15} \\
+            \ganttbar{Slides}{2020-8-15}{2020-9-15} \\
+            \ganttbar{Talk}{2020-8-8}{2020-9-15}
+    
+
+    \end{ganttchart}
+\end{document}

@@ -1,0 +1,216 @@
+\documentclass[12pt, a4paper, abstract=off, oneside]{scrartcl}
+\usepackage{graphicx} % includegraphics
+\usepackage{epstopdf} % include *.eps figures in document
+\usepackage{textcomp} % text macros (textcelsius, etc.)
+%\usepackage{placeins} % forced display for floating objects
+\usepackage{indentfirst} % indent first line
+\usepackage{hyperref} % links for the table of content
+\usepackage{amsmath} % math package
+%\usepackage{subfigure} % subfigure package
+
+\usepackage[font=small,labelfont=bf, format=plain]{caption} % caption
+\usepackage[utf8]{inputenc} % encodierung
+\usepackage[english]{babel} % language
+%\usepackage[version=3,arrows=pgf-filled]{mhchem} % chemistry package
+%\usepackage{multirow} % multirow in tables
+%\usepackage{wrapfig} % enable text wrapping around figures
+
+\usepackage{natbib} % citation
+\bibpunct{(}{)}{;}{a}{}{,}  % adjust author-year citation format  
+
+
+% header and footers
+\usepackage{scrlayer-scrpage} % header and footer 
+\pagestyle{scrheadings}
+\ihead{Left Header} % left header text
+\ohead{Right Header} % right header text
+
+% underscripted equal sign
+\newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
+
+% define commands to display derivatives in math mode
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\dd}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+\newcommand{\dD}[2]{\frac{\mathrm{D} #1}{\mathrm{D} #2}}
+\newcommand{\dpar}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dDelta}[2]{\frac{\Delta #1}{\Delta #2}}
+
+% define commands to display units in math mode
+\newcommand{\unit}[1]{\mathrm{#1}}
+\newcommand{\unitb}[1]{\left[\mathrm{#1}\right]}
+\newcommand{\unitf}[2]{\mathrm{\frac{#1}{#2}}}
+\newcommand{\unitfb}[2]{\mathrm{\left[ \frac{#1}{#2} \right]}}
+\newcommand{\e}[1]{\cdot 10^{#1}}
+
+% commands for reference to floating objects
+\newcommand{\tab}[1]{Table \ref{#1}}
+\newcommand{\eqn}[1]{Equation (\ref{#1})}
+\newcommand{\fig}[1]{Figure \ref{#1}}
+\newcommand{\celsius}{\textdegree{}C}
+\newcommand{\cms}{$\unit{cms^{-1}}$}
+
+% -------------------------
+% start of the document
+% -------------------------
+
+\begin{document}
+
+	% title + intro: 
+	\title{Testing the importance of explicit glacier dynamics for future glacier evolution in the Alps}
+    \subtitle{A Master Thesis Exposé}
+	\author{Moritz Oberrauch}
+	\date{\today}
+
+    \thispagestyle{empty}
+	\maketitle
+    \pagebreak
+
+    \section*{Description}
+        In recent years there has been a growing interest in modelling glaciers at regional and global scales. The models have increased in complexity, and two of them now include an ice dynamics module \citep{Maussion2019, Huss2015}. This makes sense for large glacier complexes or for complex processes such as calving, but in the Alps the glaciers are small and likely to melt in the future decades.
+
+        This raises the question: how much complexity is really needed for projections of glacier evolution in the Alps?
+
+        In this thesis the Master Student will realize regional runs with the Open Global Glacier Model (www.oggm.org) and ask the research question above.
+
+        The tasks will include:
+        \begin{itemize}
+            \item the implementation of a simpler glacier evolution module in the OGGM codebase \citep{Marzeion2012a}
+            \item maybe: the implementation of an intermediate glacier evolution module \citep{Huss2015}
+            \item realize commitment and/or projection simulations in the Alps
+            \item analyse the results
+        \end{itemize}
+
+        I am looking for a motivated student, able to program in Python and interested in Alpine glaciology.
+
+    \section{Introduction} % (fold)
+    \label{sec:introduction}
+
+        % What makes my work interesting
+        % Catch readers' interest, include a hook at beginning
+
+        % Whats is the larger social context?!
+        % How does does my work tie into current debates
+
+        % What is the relevance of my work?!
+        % What contributions my work will make to these issues and how?!
+        
+        % Brief and clear idea of my research question, field, and methods (4-5 lines)
+        % Summary of the current research state, identifying the reasearch gap
+        % Summary of the approch/methodology
+
+    
+    % section introduction (end)
+
+    \section{State of the art} % (fold)
+    \label{sec:state_of_the_art}
+
+        % Thorough literature review
+        % Mapping the different lines of existing work
+        
+        % sea level rise through melting (mountinan) glaciers due to climate change
+        Glaciers form in areas where the amount of fallen solid precipiation exceeds its melt over the course of time i.e. where water mass in form of ice (and firn) accumulates. Thereby, glaciers act as low pass filters, smoothing the daily, monthly and yearly variablities of the climate system and making slow changes over decades visible to the eye. Hence, the constant retreat of glaciers over the last years is a clear sign of global warming. And while the amount of ice stored in glaciers is small compared to the ice stored in the Greenland and Antartic ice sheets, its contribution to the observed sea level rise is non neglibile. ?CITATION
+        % glacier modeling
+        Given the fact that direct runoff measurements for all glaciers are impossible, glacier modeling is frankly the only way to estimate glacier ice volume and its response to a changing climate. 
+
+        % glacier volume estimation
+        The ice volume is the most important glacier property and yet the least known about. Given that it is difficult and labourious to measure, it is necessary to infer parameters hidden within the glacier (e.g., ice thickness, basal velocities, ...) from surface values (e.g., surface area, surface velocities, ...). While a forward problem can be classified as using a model with given parameters to generate data, deducing the model parameters that produce the given data is refered to as an inverse problem. Inverse problems are quite common in the field of geophysics, where the goal is to determining geological structures from geophysical fields (i.e., gravitiational field, magnetic field, ...) \citep{Zhdanov2002}. However, such inverse problems with unbalanced boundary conditions are mostly ill-posed problems. Ill-posed problems are problem for which either no solution exists, the existing solution is not unique or unstable. Ice thickness inversion is a classic ill-posed problem. Given the fact that the glacier has a thickness, a solution will exist. The non-unique and unstable nature of a solution however, make intuitive sense. Glaciers with similar surface areas can have drastically different ice volumes, based on their basal topography and/or local climate. Furthermore, a glaciers surface does not reflect every irregularity of the bedrock. Hence, almost identical surface topographies can stem from a myriad of different basal topographies. Conversly, small changes in surface features may stem from drastically different basal conditions \citep{Bahr2014}. Luckily, ill-posed does not mean unsolvalble and there are many methods to determine glacier ice thickness and/or volume. 
+        The main problem the chaotically and exponential error groth, as shown by \cite{Bahr1994}
+
+        % volume area scaling
+
+        Scaling and similarity theory are widely used throughout science - Buckingham Pi Theorem
+
+
+        % Giving the reader a clear idea of my preception of the
+        % respective debate, hinting at how my work relates to it
+        While glacier volume-area scaling was initially introduced as empirical concept (Chem Omugura, Makarov, ...),
+        
+        \citet{Bahr2015} reviewed over 30 recent publications either concerned with or applying volume-area scaling techniques.
+
+        the following guidelines, some of which are directly beneficial to the Alps as study site:
+        \begin{itemize}
+            \item 
+            \item "Apply volume-area scaling to collections of many glaciers, not to individuals. Treat the resulting set of volumes as a probability distribution"
+            \item "Include time dependence by using response time scaling"
+            \item "Avoid applying volume-area scaling to glacier complexes"
+        \end{itemize}
+    
+    % section state_of_the_art (end)
+
+    \section{Research question} % (fold)
+    \label{sec:research_question}
+
+        % Main question
+            The main research question reads \textbf{"How much complexity is really needed for projections of glacier evolution in the Alps?"}
+
+            One would think, the more complex the model, the better its representation of reality and therefor the more reliable the produced outcome. However, there are some caveats with this proposition. First and most obviously, increasing model complexity increases the computational cost of a simulation. And while we live in times of exascale computing (\href{https://stats.foldingathome.org/os}{see Folding@Home}), unfortunately there is no iPhone app projecting global glacier evolution over decades just yet. Secondly, a model is by definition be a simplifaction of reality and thereby some uncertainties are introduced. And lastly, while glacier dynamics and their response to the climate system are generally well understood, the uncertanties arising from imperfect input data, or simply the lack thereof, have a considerable effect. At some point more data are adding noise much rather than information.
+            
+            as much as needed but as little as possible
+
+        % Sub-questions
+            Glacier volume-area scaling and glacier response 
+
+            \begin{enumerate}
+                \item How does the volume-area scaling model compare to the shallow ice flowline model?!
+                \item 
+            \end{enumerate}
+
+    
+    % section research_question (end)
+
+    \section{How I'm doing my research} % (fold)
+    \label{sec:how_i_m_doing_my_research}
+
+        % Convinving the reader that I am able to provide the relevant
+        % answers to these questions, and that the way how I'm going to
+        % to do so is well thought about/through
+
+        % theory and senitizing concepts
+        \subsection{Theory and sensitizing concepts} % (fold)
+        \label{sub:theory_and_sensitizing_concepts}
+
+            % explain which theories and concepts I will use to frame my work
+            % properly introducing new theories
+
+            % How does my theoretical framework help me to see and understand
+            % things which are relevant and innovative?!
+        
+        % subsection theory_and_sensitizing_concepts (end)
+
+        \subsection{Research field, data and methods of data collection} % (fold)
+        \label{sub:research_field_data_and_methods_of_data_collection}
+
+            % Describing my case or research field
+            % Adressing potential issues
+
+            % How the methods allow me to access certain dimensions of
+            % key concepts/issues of my research interest
+        
+        % subsection research_field_data_and_methods_of_data_collection (end)
+
+        \subsection{Methods used in data analysis} % (fold)
+        \label{sub:methods_used_in_data_analysis}
+
+            % What do I need to "dig out" of the material to answer my
+            % research question, and which methods best helps in doing that.
+        
+        % subsection methods_used_in_data_analysis (end)
+
+        \subsection{Timeline} % (fold)
+        \label{sub:timeline}
+
+            % A graphical time plan
+
+            % Beeing realistic
+            % Beeing precise
+        
+        % subsection timeline (end)
+
+    % section how_i_m_doing_my_research (end)
+
+	% bibliography
+	\bibliographystyle{ametsoc.bst}
+	\bibliography{master}
+
+\end{document}

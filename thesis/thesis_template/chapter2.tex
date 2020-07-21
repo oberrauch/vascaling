@@ -1,0 +1,74 @@
+%!TEX root = thesis.tex
+\chapter{Methodology}\label{chap2}
+\thispagestyle{plain}
+
+This chapter provides a detailed description of the methodology. It is
+sometimes called Experimental Section. Depending on the subject it is a
+``synonym'', e.g., for Theoretical Section, Computational Methods, Model
+Description and Setup, Field Work, and so on. Hence, this chapter contains a
+description of \emph{what has been done} in order to address the scientific
+question raised in the chapter Introduction. However, it does \emph{not} contain
+the results! 
+
+
+% ==== SECTION 1 ===============================================================
+\section{Experimental Set-up}\label{2sec:1}
+Depending on the topic of the science thesis, this chapter may contain a
+description of the experimental set-up, the field experiment,
+datasets, instruments, measurement procedures, analysis techniques, calibration
+and quality control, and other things. In case of a modeling study it may
+contain the formulation and derivation of model equations, the formulation of
+initial and boundary conditions, the data used to drive and validate the model,
+an overview of the model set-up (e.g., parameter set-up), modifications of the
+``original'' model code, a description of relevant parameterizations,
+a theoretical background needed for the interpretation of model results.
+
+
+% ==== SECTION 2 ===============================================================
+\section{Model Equations}\label{2sec:2}
+
+\subsection{Subsection}
+Use subsections to structure your thesis. The first and second component of the
+momentum equation is shown in equation (\ref{2equ:1}) and (\ref{2equ:2}),
+respectively. Together with (\ref{2equ:3}) they form the set of shallow-water
+equations implemented in a numerical model.
+
+\subsubsection{Subsubsection}
+You can also use ``subsubsections''. However, they do not carry a separate
+heading number and they do not appear in the Table of Contents.
+
+\subsection{Equation}
+As an example for the \verb|equation| environment, I show the equations used in
+the numerical shallow-water model (SWM) developed by
+\citet{scha93Aag,scha93Bag}:
+% ---- equation 1:
+\begin{equation}
+\frac{D\hat{u}}{D\hat{t}}+\frac{\partial(\hat{h}+\hat{H})}
+                               {\partial\hat{x}}=0,
+\label{2equ:1}
+\end{equation}
+% ---- equation 2:
+\begin{equation}
+\frac{D\hat{v}}{D\hat{t}}+\frac{\partial(\hat{h}+\hat{H})}
+                               {\partial\hat{y}}=0,
+\label{2equ:2}
+\end{equation}
+% ---- equation 3:
+\begin{equation}
+\frac{\partial\hat{H}}{\partial\hat{t}}+\frac{\partial(\hat{u}\hat{H})}
+                                             {\partial\hat{x}}
+                                       +\frac{\partial(\hat{v}\hat{H})}
+                                             {\partial\hat{y}}
+                                                =0,
+\label{2equ:3}
+\end{equation}
+with the non-dimensional variables (henceforth generally labelled with hats)
+$\hat{u}$ and $\hat{v}$ as the two horizontal velocity components, $\hat{H}$ and
+$\hat{h}$ as fluid layer depth and terrain height, respectively,
+$\hat{Z}=\hat{h}+\hat{H}$ as fluid layer height, and $\hat{t}$ as time.
+Equations~(\ref{2equ:1})--(\ref{2equ:3}) are non-dimensionalized with the
+following scales: a typical length $L$ for the horizontal length scale, the
+initial far-upstream depth of the fluid layer $H_{\infty}$ (with $h_{\infty}=0$)
+for the vertical length scale, the phase speed of linear gravity waves
+$\sqrt{g^*H_{\infty}}$ for the velocity scale, and the time scale
+$L/\sqrt{g^*H_{\infty}}$.

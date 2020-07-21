@@ -2,6 +2,7 @@
 
 - `comittment_run.ipynb`:
 - `constant_step.ipynb`
+- `delta_h.ipynb`: Minimal working example of the $\Delta h$ method of glacier geometry change presented in [Huss et al. (2010)](https://www.frontiersin.org/articles/10.3389/feart.2015.00054/full#B30).
 - `equilibrium_hef.ipynb`
 - `equilibrium_rofental.ipynb`
 - `equilibrium_run_evaluation.ipynb`
@@ -11,9 +12,11 @@
 - `linearity.ipynb`
 - `mb_calibration.ipynb`
 - `my_unit_test.ipynb`
+- `one_stage_model.ipynb`: Implementation of the linear one stage glacier model following [Roe and Baker, 2014](https://doi.org/10.3189/2014jog14j016)
 - `plot_spectrogram.ipynb`
 - `prepo_template.ipynb`
 - `read_matlab_data.ipynb`
+- `scaling_constants_HEF.ipynb`: Determine scaling constants $c_L$ and $c_A$ for volume/length and volume/area scaling, respectively, for Hintereisferner.
 - `scipy_minimize.ipynb`
 - `sensitivity.ipynb`
 - `start_area.ipynb`

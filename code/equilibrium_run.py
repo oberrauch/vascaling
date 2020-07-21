@@ -50,8 +50,8 @@ def normalize_ds_with_start(ds, store_var_0=False):
 
 def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
                         path=True, temp_biases=(0, +0.5, -0.5),
-                        suffixes=('_normal', '_bias_p', '_bias_n'),
-                        tstar=None, **kwargs):
+                        suffixes=('_normal', '_bias_p', '_bias_n'), tstar=None,
+                        vas_c_length_m=None, vas_c_area_m2=None, **kwargs):
     """ The routine runs all steps for the equilibrium experiments using the
     volume/area scaling model:
     - OGGM preprocessing, including initialization, GIS tasks, climate tasks and
@@ -77,8 +77,12 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         List of temperature biases (float, in degC) for the mass balance model.
     suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
         Descriptive suffixes corresponding to the given temperature biases.
-    tstar: float
+    tstar: float, optional, default=None
         'Equilibrium year' used for the mass balance calibration.
+    vas_c_length_m: float, optional, default=None
+        Scaling constant for volume/length scaling
+    vas_c_area_m2: float, optional, default=None
+        Scaling constant for volume/area scaling
     kwargs:
         Additional key word arguments for the `run_random_climate` or
         `run_constant_climate` routines of the vascaling module.
@@ -123,6 +127,11 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     # set the mb hyper parameters accordingly
     cfg.PARAMS['prcp_scaling_factor'] = 1.75
     cfg.PARAMS['temp_melt'] = -1.75
+    # change scaling constants for lenght and area
+    if vas_c_length_m:
+        cfg.PARAMS['vas_c_length_m'] = vas_c_length_m
+    if vas_c_area_m2:
+        cfg.PARAMS['vas_c_area_m2'] = vas_c_area_m2
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
     cfg.PARAMS['use_bias_for_run'] = False
@@ -718,6 +727,7 @@ def eq_runs():
     rgi_ids = ['RGI60-11.00897']
     # fixate the equilibrium year t*
     tstar = 1927
+
     # perform equilibrium experiments for random and constant climate
     ds = list()
     for use_random_mb in [True]:
@@ -733,7 +743,7 @@ def eq_runs():
 
     # store to file
     path = '/Users/oberrauch/work/master/data/eq_runs/hef_eq_1e4.nc'
-    ds.to_netcdf(path)
+    vas_ds.to_netcdf(path)
 
 
 def mb_runs():

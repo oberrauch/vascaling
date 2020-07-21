@@ -1,5 +1,11 @@
 # Read me
 
+**Intersting/important files:**
+
+- equilibrium_runs.md
+
+
+
 
 
 - `asking_slack.md`: Lists of questions to all OGGM members (though they were mainly aimed at Ben), regarding the following topics:
@@ -10,13 +16,13 @@
 
   By questions I mean a longer explanation of the problem, including comments from Slack and a subsequential attempt of an answer.
 
-- bens_matlab_model.md
+- `bens_matlab_model.md`: decomposition of Ben's original Matlab code, with focus on the scaling parameters and time scales.
 
-- `commitment_run.md`: First I'll deconstruct the commitment run with the Rofental glaciers, given in the [OGGM documentation](http://docs.oggm.org/en/latest/run.html). This includes the `run_random_climate()` task from the `oggm.climate` module. Next I'll try to figure how to apply it to the VAS model.
+- `commitment_run.md`: First I'll deconstruct the commitment run for the Rofental glaciers, given in the [OGGM documentation](http://docs.oggm.org/en/latest/run.html). This includes the `run_random_climate()` task from the `oggm.climate` module. Next I'll try to figure how to apply it to the VAS model.
 
 - `continuous_integration.md`: During the process of merging the VAS model into the OGGM codebase, I stumbled upon Travis CI and coveralls.io. Since I had no idea what I'm doing, I tried to understand the concept of CI in general and the use of Travis and Coveralls. (Turns out, I still don't...)
 
-- equilibrium_runs.md
+- `equilibrium_runs.md`: comparing equilibrium runs with constant and random climate scenarios between the flowline model and the VAS model.
 
 - glacier_volume.png
 

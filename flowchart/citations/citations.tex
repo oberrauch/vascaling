@@ -1,0 +1,55 @@
+%!TEX program = lualatex
+
+\documentclass[portrait, a4paper]{article}
+\usepackage{lmodern} % latin modern font family
+
+\usepackage{tikz} % Tikz ist kein Zeichenprogramm
+\usepgfmodule{oo}
+\usetikzlibrary{shapes.geometric, decorations, decorations.pathmorphing}
+
+% drawing settings
+\tikzset{pencil draw/.style={
+    draw,
+    decorate,
+    decoration={random steps,segment length=3mm,amplitude=0.2mm}
+  }
+}
+
+\pgfooclass{module}{
+
+  % class attributes
+  \attribute text;
+  \attribute text width=3.0cm;
+  \attribute label;
+  \attribute width=3.5cm;
+  \attribute height=1.5cm;
+
+  % constructor method
+  \method module() {
+  }
+
+  % define a rectangular node
+  \method draw(#1,#2) {
+  \node [rectangle,
+    thick,
+    pencil draw,
+    align=center,
+    text width=\pgfoovalueof{text width},
+    minimum width=\pgfoovalueof{width},
+    minimum height=\pgfoovalueof{height},
+    font=\cmcsans
+    ] (\pgfoovalueof{label}) at (#1,#2) {\pgfoovalueof{text}};
+  }
+}
+
+
+
+\begin{document}
+  % empty page
+  \thispagestyle{empty}
+
+  \begin{tikzpicture}
+
+  \end{tikzpicture}
+
+\end{document}

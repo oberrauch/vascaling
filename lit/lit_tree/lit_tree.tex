@@ -1,0 +1,267 @@
+\documentclass[border=10pt]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,decorations.pathmorphing,shapes,external}
+\usepgfmodule{oo}
+% define pencil style lines
+\tikzset{pencil draw/.style={
+    draw,
+    decorate,
+    decoration={random steps,segment length=3mm,amplitude=0.2mm}
+  }
+}
+
+% define a new class which displays a paper reference
+\pgfooclass{paper}{
+
+  % text attributes
+  \attribute author;
+  \attribute year;
+  \attribute title;
+  % label as attribute
+  \attribute label;
+  % geometry attributes
+  \attribute text width=6cm;
+  \attribute width=3.5cm;
+  \attribute height=1.5cm;
+
+  % constructor method
+  \method paper(){
+  }
+
+  % setter methods
+  \method set author(#1) {
+    \pgfooset{author}{#1}
+  }
+
+  \method set year(#1) {
+    \pgfooset{year}{#1}
+  }
+
+  \method set title(#1) {
+    \pgfooset{title}{#1}
+  }
+
+  \method set text(#1, #2, #3) {
+    % set author, year and title
+    \pgfoothis.set author(#1);
+    \pgfoothis.set year(#2);
+    \pgfoothis.set title(#3);
+  }
+
+  \method set text width(#1) {
+    \pgfooset{text width}{#1}
+  }
+
+  \method set label(#1) {
+    \pgfooset{label}{#1}
+  }
+
+  \method set width(#1) {
+    \pgfooset{width}{#1}
+  }
+
+  \method set height(#1) {
+    \pgfooset{height}{#1}
+  }
+
+  \method set dimensions(#1, #2, #3) {
+    % shortcut method to easily set the dimensions
+    \pgfoothis.set width(#1)
+    \pgfoothis.set height(#2)
+    \pgfoothis.set text width(#3)
+  }
+
+  % private methods
+  \method format text(){
+    % format and arange text
+    % Author(s) and year bold, year in parenthesis
+    % Title in new line
+    \textbf{\pgfoovalueof{author} (\pgfoovalueof{year})}\\\pgfoovalueof{title}
+  }
+
+  % graphic methods
+
+  \method draw(#1, #2) {
+    % draw node at position (#1, #2)
+    \node [
+      % options
+      rectangle,
+      thick,
+      pencil draw,
+      align=center,
+      text width=\pgfoovalueof{text width},
+      minimum width=\pgfoovalueof{width},
+      minimum height=\pgfoovalueof{height}
+      ]
+      % label
+      (\pgfoovalueof{label}) at (#1, #2)
+      % text
+      {\pgfoothis.format text()};
+  }
+
+  \method place(#1) {
+    % draw node and place in relation to existing node
+    \node [
+      % options
+      rectangle,
+      thick,
+      pencil draw,
+      align=center,
+      text width=\pgfoovalueof{text width},
+      minimum width=\pgfoovalueof{width},
+      minimum height=\pgfoovalueof{height},
+      #1
+      ]
+      % label
+      (\pgfoovalueof{label})
+      % text
+      {\pgfoothis.format text()};
+  }
+
+  \method set(#1, #2, #3, #4) {
+    % set label (#1) and text (#2: author, #3: year, #4 title)
+    \pgfoothis.set label(#1)
+    \pgfoothis.set text(#2, #3, #4)
+  }
+
+  \method set and draw(#1, #2, #3, #4, #5, #6) {
+    % set label (#1) and text (#2: author, #3: year, #4 title)
+    % and draw node at position (#5, #6)
+    \pgfoothis.set label(#1)
+    \pgfoothis.set text(#2, #3, #4)
+    \pgfoothis.draw(#5, #6)
+  }
+
+  \method set and place(#1, #2, #3, #4, #5) {
+    % set label (#1) and text (#2: author, #3: year, #4 title)
+    % and place node in relation to existing node (#5)
+    \pgfoothis.set label(#1)
+    \pgfoothis.set text(#2, #3, #4)
+    \pgfoothis.place(#5)
+  }
+
+
+  \method connect(#1,#2) {
+    \draw[-stealth,pencil draw,thick,decorate] (#1)--(#2);
+  }
+
+  \method connect annotate(#1,#2,#3) {
+    \draw[-stealth,pencil draw,thick,decorate] (#1)--(#2) node[anchor=west, midway, right=4pt, text width = 3cm]{#3};
+  }
+
+  \method connect around1(#1,#2) {
+    \draw[-stealth,pencil draw,thick,decorate] (#1)|- +(-3.75,0) -- (#2);
+  }
+
+  \method connect around2(#1,#2) {
+    \draw[-stealth,pencil draw,thick,decorate] (#1)|- +(3.75,0) -- (#2);
+  }
+  
+  \method connect around3(#1.#2){
+    \draw[-stealth,pencil draw,thick,decorate,dotted] (#1)-- +(1.5,0) |- +(-1.9,-5) --(#2);
+  }
+
+}
+
+
+\begin{document}
+\begin{tikzpicture}
+  \pgfoonew \paper = new paper()
+
+  %% Volume/Area/Length Scaling methods
+  % -----------------------------------
+  \def\xscaling{3.5}
+  \def\yscaling{8.2}
+
+  % group the papers about scaling
+  \draw[pencil draw, thick, decorate, dashed] (-7.5,1.5) -- (-3,1.5) node(scaling){} -- (0,1.5) -- (0,4.4) -- 
+    (7.5,4.4) -- (7.5,9.5) -- (-7.5,9.5) -- (-7.5,1.5);
+  \node [anchor=west] (scaling_text) at (-7.2, 1.8) {Scaling power laws};
+
+  % bahr_1997a
+  \paper.set and draw(bahr_1997a, {{Bahr}}, 1997, {Width and length scaling of glaciers}, -\xscaling, \yscaling)
+
+  % bahr_1997b
+  \paper.set and draw(bahr_1997b, {{Bahr}}, 1997, {Global distributions of glacier properties: A stochastic scaling paradigm}, \xscaling, \yscaling)
+
+  % bahr_meier_peckham_1997
+  \paper.set and place(bahr_meier_peckham_1997, {{Bahr, Meier, Peckham}}, 1997, {The physical basis of glacier volume-area scaling}, below = 1cm of bahr_1997a)
+
+  % bahr_pfeffer_kaser_2015
+  \paper.set and place(bahr_pfeffer_kaser_2015, {{Bahr, Pfeffer, Kaser}}, 2015, {A review of volume-area scaling of glaciers}, below = 1cm of bahr_meier_peckham_1997)
+
+  % hock_oerleman_radic_2008
+  \paper.set and place(hock_oerleman_radic_2008, {{Hock, Oerlemans, Radic}}, 2008, {Analysis of scaling methods in deriving future volume evolution of valley glaciers}, right = 0.8cm of bahr_meier_peckham_1997)
+  
+  %% VAS Model, OGGM, ...
+  % ---------------------
+
+  % marzeion_etal_2012
+  \paper.set and place(marzeion_etal_2012, Marzeion et. al., 2012, {A minimal model for reconstructing interannual mass balance variability of glaciers in the European Alps}, right = 0.8cm of bahr_pfeffer_kaser_2015)
+
+  % marzeion_jarosch_hofer_2012
+  \paper.set and draw(marzeion_jarosch_hofer_2012, {{Marzeion, Jarosch, Hofer}}, 2012, {Past and future sea level changes from surface mass balance of glaciers}, 0, -1)
+
+  % hutter_1983
+  \paper.set and place(hutter_1983, Hutter, 1893, {Theoretical glaciology}, right = 0.8cm of marzeion_etal_2012)
+
+  % maussion_etal_2019
+  \paper.set and place(maussion_etal_2019, {{Maussion et. al.}}, 2019, {The Open Global Glacier Model {(OGGM)} v1.1}, right = 1cm of marzeion_jarosch_hofer_2012)
+
+  \def\belowoggm{2}
+  \def\besideoggm{2.5}
+
+  % goose_etal_2018
+  \paper.set and place(goose_etal_2018, {{Goose et. al.}}, 2018, {Testing the consistency between changes in simulated climate and alpine glacier length over the past millenium}, below = 1cm of maussion_etal_2019)
+  
+  % mackintosh_etal_2017
+  \paper.set and place(mackintosh_etal_2017, {{Mackintosh et. al.}}, 2017, {Reconstructing climate from glaciers}, below left = 1.5cm of maussion_etal_2019)
+
+  %% GloGEM by Huss
+  % ---------------
+
+  % group
+  \draw[pencil draw, thick, decorate, dashed] (-12,-5.5) rectangle (-4.5,0.5);
+  \node [anchor=west] (glogem_text) at (-11.8, -5.2) {GloGEM};
+
+  % huss_etal_2010
+  \paper.set and place(huss_etal_2010, Huss et. al., 2010, {Future high mountain hydrology: a new parametrization of glacier retreat}, left = 2cm of marzeion_jarosch_hofer_2012)
+
+  % huss_hock_2015
+  \paper.set and place(huss_hock_2015, Huss and Hock, 2015, {A new model for glacier change and sea level rise}, below = 1cm of huss_etal_2010)
+  
+
+  %% Linear one-stage and three stage model
+  % ---------------------------------------
+  
+  % group
+  \draw[pencil draw, thick, decorate, dashed] (11.7,-5.5) rectangle (19.3,0.5);
+  \node [anchor=west] (linmod_text) at (11.9, -5.2) {Linear models};
+
+  %roe_oneal_2009
+  \paper.set and place(roe_oneal_2009, {{Roe and O'Neal}}, 2009, {The response of glaciers to intrinsic climate variability: Observations and models of late holocene variations in the Pacific northwest}, right = 2cm of maussion_etal_2019)
+
+  % roe_baker_2014
+  \paper.set and place(roe_baker_2014, {{Roe and Baker}}, 2014, {Glacier response to climate perturbations: an accurate linear geometric model}, below = 0.8cm of roe_oneal_2009)
+
+  %% Connections
+  % ------------
+
+  % Marzeion's mass balance model and Scaling to Marzeion's glacier model
+  \paper.connect(marzeion_etal_2012, marzeion_jarosch_hofer_2012)
+  \paper.connect(scaling, marzeion_jarosch_hofer_2012)
+
+  % Marzeion, Jarosch, Hofer (2012) to OGGM
+  % inlcuding SIA (e.g., Hutter 1983)
+  \paper.connect annotate(marzeion_etal_2012, maussion_etal_2019, mass balance)  
+  \paper.connect annotate(hutter_1983, maussion_etal_2019, { shallow ice\\ approximation})  
+
+  % publications using the OGGM
+  \paper.connect(maussion_etal_2019, goose_etal_2018)  
+  \paper.connect(maussion_etal_2019.south west, mackintosh_etal_2017.north east)
+
+  
+\end{tikzpicture}
+
+\end{document}
