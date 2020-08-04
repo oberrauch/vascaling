@@ -1,149 +1,217 @@
-""" Temporary sandbox. """
+""" The routine runs all steps for the equilibrium experiments using the
+volume/area scaling model:
+- OGGM preprocessing, including initialization, GIS tasks, climate tasks and
+  massbalance tasks.
+- Run model for all glaciers with constant (or random) massbalance model
+  over 3000 years (default value).
+- Process the model output dataset(s), i.e. normalization, average/sum, ...
 
-# Python imports
-import json
+The final dataset containing all results is returned. Given a path is is
+also stored to file.
+
+Parameters
+----------
+rgi_ids: array-like
+    List of RGI IDs for which the equilibrium experiments are performed.
+use_random_mb: bool, optional, default=True
+    Choose between random massbalance model and constant massbalance model.
+use_mean: bool, optional, default=True
+    Choose between the mean or summation over all glaciers
+path: bool or str, optional, default=True
+    If a path is given (or True), the resulting dataset is stored to file.
+temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+    List of temperature biases (float, in degC) for the mass balance model.
+suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+    Descriptive suffixes corresponding to the given temperature biases.
+tstar: float, optional, default=None
+    'Equilibrium year' used for the mass balance calibration.
+vas_c_length_m: float, optional, default=None
+    Scaling constant for volume/length scaling
+vas_c_area_m2: float, optional, default=None
+    Scaling constant for volume/area scaling
+kwargs:
+    Additional key word arguments for the `run_random_climate` or
+    `run_constant_climate` routines of the vascaling module.
+
+Returns
+-------
+Dataset containing yearly values of all glacier geometries.
+
+"""
+
+
+# import externals libraries
 import os
-
-# Libs
+import shutil
 import numpy as np
+import pandas as pd
+import xarray as xr
+import matplotlib.pyplot as plt
 
-# Locals
-import oggm
-from oggm import cfg, utils, tasks, workflow
-from oggm.workflow import execute_entity_task
-from oggm.core.massbalance import (ConstantMassBalance, PastMassBalance,
-                                   MultipleFlowlineMassBalance)
+# import the needed OGGM modules
+from oggm import cfg, utils, workflow
+from oggm.core import gis, climate, flowline, vascaling
 
-# Module logger
-import logging
-log = logging.getLogger(__name__)
+rgi_ids = ''
+use_random_mb=True
+use_mean=True
+path=True
+temp_biases=(0, +0.5, -0.5)
+suffixes=('_normal', '_bias_p', '_bias_n')
+tstar=None,
+vas_c_length_m=None
+vas_c_area_m2=None
 
-# RGI Version
-rgi_version = '61'
+kwargs=list()
 
-# CRU or HISTALP?
-baseline = 'HISTALP'
 
-# Initialize OGGM and set up the run parameters
+# assert correct output file suffixes for temp biases
+if len(temp_biases) != len(suffixes):
+    raise RuntimeError("Each given temperature bias must have its "
+                       "corresponding suffix")
+
+# OGGM preprocessing
+# ------------------
+
+# compute RGI region and version from RGI IDs
+# assuming all they are all the same
+rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
+rgi_version = (rgi_ids[0].split('-')[0])[-2:]
+
+# load default parameter file
 cfg.initialize()
 
-# Local paths (where to write the OGGM run output)
-dirname = 'OGGM_ref_mb_{}_RGIV{}_OGGM{}'.format(baseline, rgi_version,
-                                                oggm.__version__)
-WORKING_DIR = utils.gettempdir(dirname, home=True)
-utils.mkdir(WORKING_DIR, reset=True)
-cfg.PATHS['working_dir'] = WORKING_DIR
+plt.set_xtick(rotation=90)
 
-# We are running the calibration ourselves
-cfg.PARAMS['run_mb_calibration'] = True
+# create working directory
+wdir = '/Users/oberrauch/work/master/working_directories/'
+wdir += 'tmp'
+if not os.path.exists(wdir):
+    os.makedirs(wdir)
+# shutil.rmtree(wdir)
+# os.makedirs(wdir)
+# set path to working directory
+cfg.PATHS['working_dir'] = wdir
+# set RGI verion and region
+cfg.PARAMS['rgi_version'] = rgi_version
+# define how many grid points to use around the glacier,
+# if you expect the glacier to grow large use a larger border
+cfg.PARAMS['border'] = 80
+# we use HistAlp climate data
+cfg.PARAMS['baseline_climate'] = 'HISTALP'
+# set the mb hyper parameters accordingly
+cfg.PARAMS['prcp_scaling_factor'] = 1.75
+cfg.PARAMS['temp_melt'] = -1.75
+# change scaling constants for lenght and area
+if vas_c_length_m:
+    cfg.PARAMS['vas_c_length_m'] = vas_c_length_m
+if vas_c_area_m2:
+    cfg.PARAMS['vas_c_area_m2'] = vas_c_area_m2
+# the bias is defined to be zero during the calibration process,
+# which is why we don't use it here to reproduce the results
+cfg.PARAMS['use_bias_for_run'] = False
 
-# We are using which baseline data?
-cfg.PARAMS['baseline_climate'] = baseline
+# read RGI entry for the glaciers as DataFrame
+# containing the outline area as shapefile
+rgidf = utils.get_rgi_glacier_entities(rgi_ids)
 
-# Use multiprocessing?
-cfg.PARAMS['use_multiprocessing'] = True
+# get and set path to intersect shapefile
+intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
+cfg.set_intersects_db(intersects_db)
 
-# Set to True for operational runs - here we want all glaciers to run
-cfg.PARAMS['continue_on_error'] = False
-
-if baseline == 'HISTALP':
-    # Other params: see https://oggm.org/2018/08/10/histalp-parameters/
-    cfg.PARAMS['baseline_y0'] = 1850
-    cfg.PARAMS['prcp_scaling_factor'] = 1.75
-    cfg.PARAMS['temp_melt'] = -1.75
-
-# Get the reference glacier ids (they are different for each RGI version)
-rgi_dir = utils.get_rgi_dir(version=rgi_version)
-df, _ = utils.get_wgms_files()
-rids = df['RGI{}0_ID'.format(rgi_version[0])]
-
-# We can't do Antarctica
-rids = [rid for rid in rids if not ('-19.' in rid)]
-
-# For HISTALP only RGI reg 11.01 (ALPS)
-if baseline == 'HISTALP':
-    rids = [rid for rid in rids if '-11.01' in rid]
-
-# Make a new dataframe with those (this takes a while)
-log.info('Reading the RGI shapefiles...')
-rgidf = utils.get_rgi_glacier_entities(rids, version=rgi_version)
-log.info('For RGIV{} we have {} candidate reference '
-         'glaciers.'.format(rgi_version, len(rgidf)))
-
-# We have to check which of them actually have enough mb data.
-# Let OGGM do it:
-gdirs = workflow.init_glacier_regions(rgidf)
-
-# We need to know which period we have data for
-log.info('Process the climate data...')
-if baseline == 'CRU':
-    execute_entity_task(tasks.process_cru_data, gdirs, print_log=False)
-elif baseline == 'HISTALP':
-    cfg.PARAMS['continue_on_error'] = True  # Some glaciers are not in Alps
-    execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
-    cfg.PARAMS['continue_on_error'] = False
-
-gdirs = utils.get_ref_mb_glaciers(gdirs)
-
-# Keep only these
-rgidf = rgidf.loc[rgidf.RGIId.isin([g.rgi_id for g in gdirs])]
-
-# Save
-log.info('For RGIV{} and {} we have {} reference glaciers.'.format(rgi_version,
-                                                                   baseline,
-                                                                   len(rgidf)))
-rgidf.to_file(os.path.join(WORKING_DIR, 'mb_ref_glaciers.shp'))
-
-# Sort for more efficient parallel computing
+# sort by area for more efficient parallel computing
 rgidf = rgidf.sort_values('Area', ascending=False)
+cfg.PARAMS['use_multiprocessing'] = False
 
-# Go - initialize glacier directories
+# initialize the GlacierDirectory
 gdirs = workflow.init_glacier_regions(rgidf)
 
-# Prepro tasks
-task_list = [
-    tasks.glacier_masks,
-    tasks.compute_centerlines,
-    tasks.initialize_flowlines,
-    tasks.catchment_area,
-    tasks.catchment_intersections,
-    tasks.catchment_width_geom,
-    tasks.catchment_width_correction,
-]
-for task in task_list:
-    execute_entity_task(task, gdirs)
+# define the local grid and glacier mask
+workflow.execute_entity_task(gis.glacier_masks, gdirs)
+# process the given climate file
+workflow.execute_entity_task(climate.process_histalp_data, gdirs)
+# compute local t* and the corresponding mu*
+workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                             tstar=tstar, bias=0)
 
-# Climate tasks
-tasks.compute_ref_t_stars(gdirs)
-execute_entity_task(tasks.local_t_star, gdirs)
-execute_entity_task(tasks.mu_star_calibration, gdirs)
+# Run model with constant/random mass balance model
+# -------------------------------------------------
 
-# We store the associated params
-mb_calib = gdirs[0].read_pickle('climate_info')['mb_calib_params']
-with open(os.path.join(WORKING_DIR, 'mb_calib_params.json'), 'w') as fp:
-    json.dump(mb_calib, fp)
+# use t* as center year, even if specified differently
+kwargs['y0'] = tstar
+# run for 3000 years if not specified otherwise
+kwargs.setdefault('nyears', 3000)
 
-# And also some statistics
-utils.compile_glacier_statistics(gdirs)
+if use_random_mb:
+    # set random seed to get reproducible results
+    kwargs.setdefault('seed', 12)
 
-# Tests: for all glaciers, the mass-balance around tstar and the
-# bias with observation should be approx 0
-for gd in gdirs:
+    # run RandomMassBalance model centered around t*, once without
+    # temperature bias and once with positive and negative temperature bias
+    # of 0.5 °C each (per default).
+    for suffix, temp_bias in zip(suffixes, temp_biases):
+        workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
+                                     temperature_bias=temp_bias,
+                                     output_filesuffix=suffix, **kwargs)
+else:
+    # run ConstantMassBalance model centered around t*, once without
+    # temperature bias and once with positive and negative temperature bias
+    # of 0.5 °C each (per default).
+    for suffix, temp_bias in zip(suffixes, temp_biases):
+        workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
+                                     temperature_bias=temp_bias,
+                                     output_filesuffix=suffix, **kwargs)
 
-    mb_mod = MultipleFlowlineMassBalance(gd,
-                                         mb_model_class=ConstantMassBalance,
-                                         use_inversion_flowlines=True,
-                                         bias=0)  # bias=0 because of calib!
-    mb = mb_mod.get_specific_mb()
-    np.testing.assert_allclose(mb, 0, atol=5)  # atol for numerical errors
+# Process output dataset(s)
+# -------------------------
 
-    mb_mod = MultipleFlowlineMassBalance(gd, mb_model_class=PastMassBalance,
-                                         use_inversion_flowlines=True)
+# create empty container
+ds = list()
+# iterate over all temperature biases/suffixes
+for suffix in suffixes:
+    # compile the output for each run
+    ds_ = utils.compile_run_output(np.atleast_1d(gdirs),
+                                   filesuffix=suffix, path=False)
+    # add to container
+    ds.append(ds_)
 
-    refmb = gd.get_ref_mb_data().copy()
-    refmb['OGGM'] = mb_mod.get_specific_mb(year=refmb.index)
-    np.testing.assert_allclose(refmb.OGGM.mean(), refmb.ANNUAL_BALANCE.mean(),
-                               atol=5)  # atol for numerical errors
+# concat the single output datasets into one,
+# with temperature bias as coordinate
+ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
+# add model type as coordinate
+ds.coords['model'] = 'vas'
+# add mb model type as coordinate
+ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-# Log
-log.info('Calibration is done!')
+# normalize glacier geometries (length/area/volume) with start value
+if use_mean:
+    # compute average over all glaciers
+    ds_normal = normalize_ds_with_start(ds).mean(dim='rgi_id')
+    ds = ds.mean(dim='rgi_id')
+else:
+    # compute sum over all glaciers
+    ds_normal = normalize_ds_with_start(ds.sum(dim='rgi_id'))
+    ds = ds.sum(dim='rgi_id')
+
+# add coordinate to distinguish between normalized and absolute values
+ds.coords['normalized'] = False
+ds_normal.coords['normalized'] = True
+
+# combine datasets
+ds = xr.concat([ds, ds_normal], 'normalized')
+
+# store datasets
+if path:
+    if path is True:
+        path = list()
+        mb = 'random' if use_random_mb else 'constant'
+        path.append(os.path.join(cfg.PATHS['working_dir'],
+                                 'run_output_{}_vas.nc'.format(mb)))
+        # path.append(os.path.join(cfg.PATHS['working_dir'],
+        #                          'run_output_{}_vas.nc'.format(mb)))
+        # path.append(os.path.join(cfg.PATHS['working_dir'],
+        #                          'normalized_output_{}_vas.nc'.format(mb)))
+    ds.to_netcdf(path[0])
+    # ds_normal.to_netcdf(path[1])
+
+

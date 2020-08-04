@@ -146,7 +146,7 @@ The *raw* results are compiled into a single `pandas` data frame, which allows f
 
 ![](../plots/iteration_surf_area.png)
 
-Accordingly, the specific mass balance (given in $\mathrm{mm\ w.e.\ yr^{-1}}$) is higher (and positive) for smaller glacier and lower (and negative) for the bigger ones. After about 150 years, all models show similar values for their respective specific mass balance.
+Accordingly, the specific mass balance (given in mm w.e. yr^-1^) is higher (and positive) for smaller glacier and lower (and negative) for the bigger ones. After about 150 years, all models show similar values for their respective specific mass balance.
 
 ![](../plots/iteration_spec_mb.png)
 

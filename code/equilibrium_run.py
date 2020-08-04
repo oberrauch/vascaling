@@ -9,11 +9,9 @@ experiments.
 
 # import externals libraries
 import os
-import shutil
 import numpy as np
 import pandas as pd
 import xarray as xr
-import matplotlib.pyplot as plt
 
 # import the needed OGGM modules
 from oggm import cfg, utils, workflow
@@ -110,7 +108,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
 
     # create working directory
     wdir = '/Users/oberrauch/work/master/working_directories/'
-    wdir += 'equilibrium_vas_wdir'
+    wdir += 'equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     # shutil.rmtree(wdir)
@@ -121,7 +119,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 80
+    cfg.PARAMS['border'] = 120
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -144,8 +142,12 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
     cfg.set_intersects_db(intersects_db)
 
+    # sort by area for more efficient parallel computing
+    rgidf = rgidf.sort_values('Area', ascending=False)
+    cfg.PARAMS['use_multiprocessing'] = True
+
     # initialize the GlacierDirectory
-    gdirs = workflow.init_glacier_regions(rgidf)
+    gdirs = workflow.init_glacier_regions(rgidf, reset=True, force=True)
 
     # define the local grid and glacier mask
     workflow.execute_entity_task(gis.glacier_masks, gdirs)
@@ -173,7 +175,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(vascaling.run_random_climate, gdirs,
                                          temperature_bias=temp_bias,
-                                         **kwargs, output_filesuffix=suffix)
+                                         output_filesuffix=suffix, **kwargs)
     else:
         # run ConstantMassBalance model centered around t*, once without
         # temperature bias and once with positive and negative temperature bias
@@ -181,7 +183,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(vascaling.run_constant_climate, gdirs,
                                          temperature_bias=temp_bias,
-                                         **kwargs, output_filesuffix=suffix)
+                                         output_filesuffix=suffix, **kwargs)
 
     # Process output dataset(s)
     # -------------------------
@@ -197,7 +199,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
         ds.append(ds_)
 
     # concat the single output datasets into one,
-    # with temperature bias ascoordinate
+    # with temperature bias as coordinate
     ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
     # add model type as coordinate
     ds.coords['model'] = 'vas'
@@ -224,18 +226,12 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, use_mean=True,
     # store datasets
     if path:
         if path is True:
-            path = list()
             mb = 'random' if use_random_mb else 'constant'
-            path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'run_output_{}_vas.nc'.format(mb)))
-            # path.append(os.path.join(cfg.PATHS['working_dir'],
-            #                          'run_output_{}_vas.nc'.format(mb)))
-            # path.append(os.path.join(cfg.PATHS['working_dir'],
-            #                          'normalized_output_{}_vas.nc'.format(mb)))
-        ds.to_netcdf(path[0])
-        # ds_normal.to_netcdf(path[1])
+            path = os.path.join(cfg.PATHS['working_dir'],
+                                'run_output_{}_vas.nc'.format(mb))
 
-    # return ds, ds_normal
+        ds.to_netcdf(path)
+
     return ds
 
 
@@ -244,7 +240,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
                        suffixes=['_normal', '_bias_p', '_bias_n'],
                        tstar=None, **kwargs):
     """ The routine runs all steps for the equilibrium experiments using the
-    flowline model. For details see docstring of `equilibrium_run_vas`.
+    flowline model. For details see docstring of `sensitivity_run_vas`.
 
     Parameters
     ----------
@@ -286,7 +282,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
 
     # create working directory
     wdir = '/Users/oberrauch/work/master/working_directories/'
-    wdir += 'equilibrium_fl_wdir'
+    wdir += 'equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     # shutil.rmtree(wdir)
@@ -297,7 +293,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 80
+    cfg.PARAMS['border'] = 120
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -315,8 +311,12 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
     cfg.set_intersects_db(intersects_db)
 
+    # sort by area for more efficient parallel computing
+    rgidf = rgidf.sort_values('Area', ascending=False)
+    cfg.PARAMS['use_multiprocessing'] = True
+
     # initialize the GlacierDirectory
-    gdirs = workflow.init_glacier_regions(rgidf)
+    gdirs = workflow.init_glacier_regions(rgidf, reset=True, force=True)
 
     # run gis tasks
     workflow.gis_prepro_tasks(gdirs)
@@ -334,6 +334,9 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     kwargs['y0'] = tstar
     # run for 3000 years if not specified otherwise
     kwargs.setdefault('nyears', 3000)
+    # disregard glaciers exceeding their domain boundaries
+    # to not dirsupt the entire run
+    kwargs.setdefault('check_for_boundaries', True)
 
     if use_random_mb:
         # set random seed to get reproducible results
@@ -344,16 +347,16 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
         # of 0.5 °C each.
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(flowline.run_random_climate, gdirs,
-                                         **kwargs, temperature_bias=temp_bias,
-                                         output_filesuffix=suffix)
+                                         temperature_bias=temp_bias,
+                                         output_filesuffix=suffix, **kwargs, )
     else:
         # run RandomMassBalance model centered around t*, once without
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 °C each.
         for suffix, temp_bias in zip(suffixes, temp_biases):
             workflow.execute_entity_task(flowline.run_constant_climate, gdirs,
-                                         **kwargs, temperature_bias=temp_bias,
-                                         output_filesuffix=suffix)
+                                         temperature_bias=temp_bias,
+                                         output_filesuffix=suffix, **kwargs, )
 
     ds = list()
     for suffix in suffixes:
@@ -386,19 +389,12 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, use_mean=True, path=True,
     # store datasets
     if path:
         if path is True:
-            path = list()
             mb = 'random' if use_random_mb else 'constant'
-            path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'run_output_{}_fl.nc'.format(mb)))
-            # path.append(os.path.join(cfg.PATHS['working_dir'],
-            #                          'run_output_{}_fl.nc'.format(mb)))
-            # path.append(os.path.join(cfg.PATHS['working_dir'],
-            #                          'normalized_output_{}_fl.nc'.format(mb)))
+            path = os.path.join(cfg.PATHS['working_dir'],
+                                'run_output_{}_fl.nc'.format(mb))
 
-        ds.to_netcdf(path[0])
-        # ds_normal.to_netcdf(path[1])
+        ds.to_netcdf(path)
 
-    # return ds, ds_normal
     return ds
 
 
@@ -409,8 +405,6 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     routines, without running the evolution (volume/area scaling) model.
 
     Dataset containing yearly values of specific mass balance is returned.
-
-
 
     Parameters
     ----------
@@ -453,7 +447,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
     # create working directory
     wdir = '/Users/oberrauch/work/master/working_directories/'
-    wdir += 'equilibrium_vas_wdir'
+    wdir += 'equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     # shutil.rmtree(wdir)
@@ -464,7 +458,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 80
+    cfg.PARAMS['border'] = 120
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -483,7 +477,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.set_intersects_db(intersects_db)
 
     # initialize the GlacierDirectory
-    gdirs = workflow.init_glacier_regions(rgidf)
+    gdirs = workflow.init_glacier_regions(rgidf, reset=True, force=True)
 
     # define the local grid and glacier mask
     workflow.execute_entity_task(gis.glacier_masks, gdirs)
@@ -495,9 +489,9 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
     # use t* as center year, even if specified differently
     kwargs['y0'] = tstar
-    # run for 3000 years if not specified otherwise
+    # run for 10'000 years if not specified otherwise
     if nyears is None:
-        nyears = 10000
+        nyears = 1e4
     years = np.arange(0, nyears + 1)
 
     # create dataset
@@ -550,10 +544,8 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # store datasets
     if path:
         if path is True:
-            path = list()
-            path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'mb_output_vas.nc'))
-        ds.to_netcdf(path[0])
+            path = os.path.join(cfg.PATHS['working_dir'], 'mb_output_vas.nc')
+        ds.to_netcdf(path)
         # ds_normal.to_netcdf(path[1])
 
     # return ds, ds_normal
@@ -567,8 +559,6 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     routines, without running the evolution (flowline) model.
 
     Dataset containing yearly values of specific mass balance is returned.
-
-
 
     Parameters
     ----------
@@ -611,7 +601,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
     # create working directory
     wdir = '/Users/oberrauch/work/master/working_directories/'
-    wdir += 'equilibrium_vas_wdir'
+    wdir += 'equilibrium_wdir'
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     # shutil.rmtree(wdir)
@@ -622,7 +612,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['rgi_version'] = rgi_version
     # define how many grid points to use around the glacier,
     # if you expect the glacier to grow large use a larger border
-    cfg.PARAMS['border'] = 80
+    cfg.PARAMS['border'] = 120
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
@@ -641,7 +631,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.set_intersects_db(intersects_db)
 
     # initialize the GlacierDirectory
-    gdirs = workflow.init_glacier_regions(rgidf)
+    gdirs = workflow.init_glacier_regions(rgidf, reset=True, force=True)
 
     # run gis tasks
     workflow.gis_prepro_tasks(gdirs)
@@ -708,10 +698,8 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # store datasets
     if path:
         if path is True:
-            path = list()
-            path.append(os.path.join(cfg.PATHS['working_dir'],
-                                     'mb_output_fl.nc'))
-        ds.to_netcdf(path[0])
+            path = os.path.join(cfg.PATHS['working_dir'], 'mb_output_fl.nc')
+        ds.to_netcdf(path)
         # ds_normal.to_netcdf(path[1])
 
     # return ds, ds_normal
@@ -724,17 +712,28 @@ def eq_runs():
     it to file.
     """
     # define RGI IDs
-    rgi_ids = ['RGI60-11.00897']
+    rgidf = pd.read_csv('../data/rofental_rgi.csv', index_col=0)
+    rgi_ids = [rgi_id for rgi_id in rgidf.RGIId]
+
     # fixate the equilibrium year t*
     tstar = 1927
 
     # perform equilibrium experiments for random and constant climate
     ds = list()
-    for use_random_mb in [True]:
+    for use_random_mb in [False, True]:
+        if use_random_mb:
+            # run for 10'000 under random climate
+            nyears = 1e4
+        else:
+            # run foe 1'000 years under constant climate
+            nyears = 1e3
+
         vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=use_random_mb,
-                                     tstar=tstar, path=False, nyears=1e4)
+                                     tstar=tstar, path=True, nyears=nyears,
+                                     use_mean=False)
         fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
-                                   tstar=tstar, path=False, nyears=1e4)
+                                   tstar=tstar, path=True, nyears=nyears,
+                                   use_mean=False)
         # concat datasets by model
         ds.append(xr.concat([vas_ds, fl_ds], 'model'))
 
@@ -742,8 +741,8 @@ def eq_runs():
     ds = xr.concat(ds, 'mb_model')
 
     # store to file
-    path = '/Users/oberrauch/work/master/data/eq_runs/hef_eq_1e4.nc'
-    vas_ds.to_netcdf(path)
+    path = '/Users/oberrauch/work/master/data/eq_runs/eq_rofental.nc'
+    ds.to_netcdf(path)
 
 
 def mb_runs():
@@ -752,7 +751,7 @@ def mb_runs():
     it to file.
     """
     # define RGI IDs
-    rgi_ids = ['RGI60-11.00897']
+    rgi_ids = ['RGI60-11.00897', ]
     # fixate the equilibrium year t*
     t_star = 1927
 
@@ -769,6 +768,6 @@ if __name__ == '__main__':
     """ If script gets called, equilibrium run results (and corresponding
     climate) for the Hintereisferner are computed and stored to file.
     """
-    mb_runs()
+    # mb_runs()
     eq_runs()
 

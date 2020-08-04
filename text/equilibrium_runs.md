@@ -14,7 +14,7 @@ How do the models differ and why?
 
 - [ ] Best case scenario: the two models produces comparable results, corresponding with expectations/observations/knowledge... Therefore I would not have to argue/find explanations. Very unlikely, though...
 - [ ] Most likely scenario: The model results differ in a coherent and explainable fashion. Only thing to do is to find said explanations.
-- [ ] Worst case scenario: There is no discernible pattern in the model behaviour and no explanations can be found.
+- [ ] Worst case scenario: There is no discernible pattern in the model behavior and no explanations can be found.
 
 ## Mass balance models
 
@@ -78,19 +78,28 @@ The following section tries to explain the model behavior. The plots show a comp
 **Overall findings:**
 
 1. Both model behave as expected and produce the same qualitative results. The glacier stays in an equilibrium state using the climate around $t^*$ and decreases/increases in size for a positive/negative temperature bias. Plots with absolute values can be found in the appendix. (@TODO)
-2. The glacier size changes (dramatically) less under the VAS model than under the flowline model (true for length, area, and volume). However, volume estimations from volume/area scaling of a single glaciers must be considered as order of magnitude result. The scaling constant $c$ is a random variable which varies (drastically) from glacier to glacier. Apparently, the global mean value of $c=0.034\ \mathrm{km^{3-2\gamma}}$ is a bad fit for the characteristics of Hintereisferner.
-3. The glacier length of the VAS model has to be seen more as a model parameter, rather than as an actual glacier property. The VAS glacier length decreases/increases only by about 8 percent compared to its initial value, for a positive/negative temperature bias of 0.5 °C. This correspond to an absolute length change of less than 400 m, which is very little compared to the 3 to 4 km in length change (~40% of the initial value) produced by the flowline model. (May change with different $c$ parameter)
+
+2. The glacier size changes (dramatically) less under the VAS model than under the flowline model (true for length, area, and volume).
+
+   *Note*: However, volume estimations from volume/area scaling of a single glaciers must be considered as order of magnitude result. The scaling constant $c$ is a random variable which varies (drastically) from glacier to glacier. Apparently, the global mean value of $c=0.034\ \mathrm{km^{3-2\gamma}}$ is a bad fit for the characteristics of Hintereisferner.
+
+   *Second Note*: Changing the scaling constants changes the absolute values of ice volume (as well as surface area and glacier length). A higher volume/area scaling constant results in a larger initial ice volume. Subjected to the same climate perturbation (temperature step change), an initially larger glacier will gain/loose more ice and reach a higher equilibrium ice volume than a smaller one. However, when normalized with initial ice volume there are no more discernible differences in the magnitude of ice volume change. The temporal evolution, i.e., the oscillation behavior, is comparable, even if smaller glaciers react faster than larger ones (which is to be expected).
+
+   *TL;DR; Turns out, the scaling constant does not change the magnitude of the normalized volume change.* 
+
+3. The glacier length of the VAS model has to be seen more as a model parameter, rather than as an actual glacier property. The VAS glacier length decreases/increases only by about 8 percent compared to its initial value, for a positive/negative temperature bias of 0.5 °C. This correspond to an absolute length change of less than 400 m, which is very little compared to the 3 to 4 km in length change (~40% of the initial value) produced by the flowline model. (*Note*: May change with different $c$ parameter. *Second note*: Turns out, it does not when normalized with initial length.)
+
 4. The result of VAS model under a constant climate scenario with a non-zero temperature bias reminds of a damped oscillating signal. The modeled length reaches its maximum after ~200 years, overshooting the equilibrium result by more than 1%. Followed by two minor but still discernible peaks until the new equilibrium is reached. Both, glacier surface area and glacier volume reach their maximum earlier and overshoot by more.
 
 #### Constant climate scenario
 
-**Equilibrium climate:** While the VAS model glacier stays absolutely the same under equilibrium climate, the flowline model seem not be in equilibrium from the get go. The volume of the flowline glacier increases by about 8% over the first 750 years, before it reaches a new equilibrium. The volume change is accompanied by a corresponding change in glacier surface area and glacier length, however both are showing an initial negative swerve.
+**Equilibrium climate:** While the VAS model glacier stays absolutely the same under equilibrium climate, the flowline model seems not be in equilibrium from the get go. The volume of the flowline glacier increases by about 8% over the first 750 years, before it reaches a new equilibrium. The volume change is accompanied by a corresponding change in glacier surface area and glacier length, however both are showing an initial negative swerve.
 
-**Positive and negative mass balance:** The VAS model produces almost perfectly symmetric results for the positive and negative mass balance scenario, compared to the equilibrium run. Given the linear nature of the underlying equations, this behavior is expected. Both runs show a damped oscillating behavior, with a first positive/negative overshoot. Compared to the flowline model the change in length, area and volume are much smaller, ranging between 10% and 30% with respect to the initial value. The flowline model reacts stronger to the positive mass balance (negative temperature bias), than to the negative mass balance (positive temperature bias). A negative temperature bias of 0.5°C results in a volume increase of about 74% (from 0.76 km$^3$ to 1.33 km$^3$), while a positive temperature bias of 0.5°C results in a volume decrease of about 36% (from 0.76 km$^3$ to 0.49 km$^3$). Given that the OGGM considers the actual glacier geometry, a stepwise mass balance change triggers a positive feedback loop. A more positive mass balance will result in a greater accumulation area, which itself increases the mass balance furthermore, explaining the asymmetrical behaviour.
-
-![](../plots/eq_runs/length_norm_comparison_constant.pdf)
+**Positive and negative mass balance:** ~~The VAS model produces almost perfectly symmetric results for the positive and negative mass balance scenario, compared to the equilibrium run. Given the linear nature of the underlying equations, this behavior is expected.~~ Both VAS runs show a damped oscillating behavior, with an initial positive/negative overshoot. Compared to the flowline model the changes in length, area and volume are much smaller, ranging between 10% and 30% with respect to the initial value. For the flowline model, a negative temperature bias of 0.5°C results in a volume increase of about 74% (from 0.76 km$^3$ to 1.33 km$^3$), while a positive temperature bias of 0.5°C results in a volume decrease of about 36% (from 0.76 km$^3$ to 0.49 km$^3$). Both models react stronger to the positive mass balance (negative temperature bias) than to the negative mass balance (positive temperature bias), while it is more distinct for the flowline model. Given that the OGGM considers the actual glacier geometry, a stepwise mass balance change triggers a positive feedback loop. A positive mass balance perturbation results in a greater accumulation area, which itself increases the mass balance furthermore, explaining the asymmetrical behavior.
 
 ![](../plots/eq_runs/volume_norm_comparison_constant.pdf)
+
+![](../plots/eq_runs/length_norm_comparison_constant.pdf)
 
 #### Random climate scenario
 
@@ -139,7 +148,7 @@ The spectral analysis of the equilibrium run and the negative mass balance run a
 **Time series:**
 
 - [ ] Underestimation of the overall/longterm length/area/volume change by the VAS model, but more high frequency variability?!
-- [ ] Explain damped oscillating behaviour...!
+- [ ] Explain damped oscillating behavior...!
 
 **Auto correlation function:**
 

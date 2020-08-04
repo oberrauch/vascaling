@@ -20,39 +20,44 @@ import matplotlib.pyplot as plt
 
 # import the needed OGGM modules
 import oggm
-from oggm import cfg
-from oggm.utils import get_demo_file
-from oggm.tests.funcs import get_test_dir
+from oggm import cfg, utils
 from oggm.core import gis, climate, centerlines, vascaling
 
 # ---------------------
 #  PREPROCESSING TASKS
 # ---------------------
 
+# define glacier by RGI ID
+rgi_id = 'RGI60-11.00737'
+# compute RGI region and version from RGI IDs
+# assuming all they are all the same
+rgi_region = (rgi_id.split('-')[-1]).split('.')[0]
+rgi_version = (rgi_id.split('-')[0])[-2:]
+
 # create test directory
-testdir = os.path.join(get_test_dir(), 'tmp_vas')
-if not os.path.exists(testdir):
-    os.makedirs(testdir)
-shutil.rmtree(testdir)
-os.makedirs(testdir)
+wdir = utils.get_temp_dir('tmp_vas')
+if not os.path.exists(wdir):
+    os.makedirs(wdir)
+shutil.rmtree(wdir)
+os.makedirs(wdir)
 
 # load default parameter file
 cfg.initialize()
-cfg.set_intersects_db(get_demo_file('rgi_intersect_oetztal.shp'))
-cfg.PATHS['working_dir'] = testdir
-cfg.PATHS['dem_file'] = get_demo_file('hef_srtm.tif')
-# cfg.PATHS['climate_file'] = get_demo_file('histalp_merged_hef.nc')
+# specify some needed parameters and paths
+cfg.PATHS['working_dir'] = wdir
 cfg.PARAMS['border'] = 50
-# cfg.PARAMS['run_mb_calibration'] = True
 cfg.PARAMS['baseline_climate'] = 'HISTALP'
 cfg.PARAMS['use_multiprocessing'] = True
 
-# read the Hintereisferner DEM
-hef_file = get_demo_file('Hintereisferner_RGI5.shp')
-entity = gpd.read_file(hef_file).iloc[0]
+# get and set path to intersect shapefile
+intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
+cfg.set_intersects_db(intersects_db)
+
+# get RGI entity
+entity = utils.get_rgi_glacier_entities([rgi_id])[0]
 
 # initialize the GlacierDirectory
-gdir = oggm.GlacierDirectory(entity, base_dir=testdir)
+gdir = oggm.GlacierDirectory(entity, base_dir=wdir)
 # define the local grid and glacier mask
 gis.define_glacier_region(gdir, entity=entity)
 gis.glacier_masks(gdir)
@@ -75,7 +80,8 @@ centerlines.catchment_width_correction(gdir)
 # --------------------
 
 # compute local t* and the corresponding mu*
-vascaling.local_t_star(gdir)
+tstar = 1927
+vascaling.local_t_star(gdir, tstar=tstar)
 
 # instance the mass balance models
 mbmod = vascaling.VAScalingMassBalance(gdir)
@@ -87,7 +93,7 @@ mbmod = vascaling.VAScalingMassBalance(gdir)
 a0 = gdir.rgi_area_m2
 # get reference year
 y0 = gdir.read_pickle('climate_info')['baseline_hydro_yr_0']
-y1 = 
+y1 = gdir.read_pickle('climate_info')['baseline_hydro_yr_1']
 # get min and max glacier surface elevation
 h0, h1 = vascaling.get_min_max_elevation(gdir)
 
