@@ -37,8 +37,8 @@ Yes, I think so. From now on I'll use this reference list instead of the one shi
 
 ### Todo's:
 
-- [ ] Store file somewhere more sensible, rather than on my desktop.
-- [ ] Add to `cfg.initialize()` and ship with sample data?!
+- [x] Store file somewhere more sensible, rather than on my desktop.
+- [x] Add to `cfg.initialize()` and ship with sample data?!
 
 
 

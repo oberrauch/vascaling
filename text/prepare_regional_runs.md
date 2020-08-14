@@ -1,7 +1,7 @@
 # ToDo’s until Tuesday 4th of August
 
-- [ ]  Log into Bremen cluster
-- [ ]  Prepare equilibrium runs for constant and random climate for Rofental
+- [x]  Log into Bremen cluster
+- [x]  Prepare equilibrium runs for constant and random climate for Rofental
 - [ ]  Create (empty) structure/layout of thesis in Latex
 
 ## Cluster Bremen:
