@@ -15,6 +15,23 @@
 
     \subsection{Temperature index model} % (fold)
     \label{sub:temperature_index_model}
+
+        In a nutshell, a glaciers (annual specific surface) mass balance $B$ is the difference between accumulation (i.e., gained mass by snowfall, avalanches, snow drift, \ldots) and ablation (i.e., lossed mass via ice melt, sublimation, ) over the course of a year. Accumulation refers to mass gain, by snowfall, avalanches, snow drift, etc. Ablation refers to, mass loss via ice melt, sublimation, calving, etc. The temperature index mass balance model used by the \vas{} model relies solely on the monthly solid precipitation onto the glacier surface $P_i^{\text{solid}}$ and the monthly mean air temperature $T_i^{\text{}}$ as input. Hereby, the index $i$ denotes the month of the year. The details and differences between the \vas{} and flowline implementation will be explained later. 
+        \begin{align} \label{eq:mass-balance}
+        B = \left[\sum_{i=1}^{12}\left[
+                    P_{i}^{\text{solid}} 
+                    - \mu^* \cdot
+                            \max\left(T_{i}^{\text{}}
+                            - T_{\text{melt}},\ 0\right)
+            \right]\right] - \beta^*
+        \end{align}
+        Hereby, $\mu^*$ is the glacier specific temperature sensitivity, $\beta^*$ is the mass balance residual (compared to observations) and $T_{\text{melt}}$ the mean air temperature above which ice melt occurs. So per definition, $\mu^*$ is the temperature sensitivity to keep the glacier in equilibrium over the 31-year climate period centered around the \textit{equilibrium year} $t^*$ while neglecting a potential mass balance residual $\beta^*$.
+
+        \subsubsection*{Differences between the flowline mass balance model and the \vas{} mass balance model}
+
+        The flowline model requires a point mass balance value for every grid point of the flowline (i.e., for each elevation band). Therefore, the mass balance is a function of elevation and the elevation of the grid points must be supplied. Solid precipitation and air temperature are then computed for the given elevation.
+
+        The \vas{} mass balance model, on the other hand, computes an average mass balance value for the entire glacier. The mass balance model requires only the minimal and maximal glacier elevation as additional input parameters, to compute the terminus temperature and the area averaged amount of solid precipitation.
     
     % subsection temperature_index_model (end)
 
@@ -23,6 +40,36 @@
 % ==== SECTION 2 ===============================================================
 \section{Implementation} % (fold)
 \label{sec:implementation}
+
+    \subsection{Mass balance models} % (fold)
+    \label{sub:mass_balance_models}
+
+        \subsubsection{Constant climate scenario} % (fold)
+        \label{ssub:constant_climate_scenario}
+            The \lstinline`ConstantMassBalance` model simulates a constant climate based on the observations averaged over a 31-year period centered on a given year \lstinline`y0`. Hence, the specific mass balance does not change from year to year. The task \lstinline`run_constant_climate` takes an additional temperature bias (and a possible precipitation bias, for that matter) as parameters, to alter the observed \textit{climatic} conditions.
+
+            The same idea of a constant climate is used during the mass balance calibration, solving the mass balance equation (Equation~\ref{eq:mass-balance}) for the temperature sensitivity $\mu^*$. The temperature sensitivity $\mu^*$ is calibrated, in order to keep the model glacier in equilibrium under a constant climate centered on $t^*$.
+            \begin{align}\label{eq:mb-calibration}
+                \mu^* = \frac{P_{\text{clim. avg}}^{\text{solid}}}
+                        {\max(T_{\text{clim. avg}}^{\text{}} - T_{\text{melt},}\ 0)},            
+            \end{align}
+            whereby $P_{\text{clim. avg}}^{\text{solid}}$ and $T_{\text{clim. avg}}^{\text{}}$ are the average yearly solid precipitation amount and average yearly air temperature during the climatological period centered on $t^*$, respectively. Consequentially, a \lstinline`ConstantMassBalance` model with \lstinline`y0` = $t^*$ keeps the glacier in equilibrium.
+            
+        
+        % subsubsection constant_climate_scenario (end)
+
+        \subsubsection{Random climate scenario} % (fold)
+        \label{ssub:random_climate_scenario}
+
+            The \lstinline`RandomMassBalance` model takes the climate information from a randomly chosen year within a 31-year period centered on a given year `y0` to compute the specific mass balance. Hence, the model runs on a synthetic (pseudo random) climate scenario based on actual observations.
+
+            Similar to the \lstinline`ConstantMassBalance` model, the \lstinline`RandomMassBalance` model is based on a 31-year period centered on a given year `y0`. However, the model uses the temperature and precipitation records from a randomly selected year out of that period. The specific mass balance is then computed using temperature and precipitation records. Hence, the model runs on a synthetic (pseudo random) climate scenario based on actual observations.
+
+            Using the climatological period around the \textit{equilibrium year} $t^*$, the model glacier should stay in an equilibrium state, while underlying minor fluctuations. In analogy to the \lstinline`ConstantMassBalance` model, the \lstinline`run_random_climate` task takes a temperature bias as parameter. Increasing/decreasing the temperature of the equilibrium period will result in a retreating/advancing model glacier, reaching a new equilibrium after some years.
+        
+        % subsubsection random_climate_scenario (end)
+    
+    % subsection mass_balance_models (end)
 
 
 % section implementation (end)
@@ -33,3 +80,25 @@
 \label{sec:problems}
 
 % section problems (end)
+
+% ==== SECTION 4 ===============================================================
+\section{Experimental setup} % (fold)
+\label{sec:experimental_setup}
+
+    \subsection{Equilibrium experiments} % (fold)
+    \label{sub:equilibrium_experiments}
+
+        The equilibrium experiments are performed on all alpine glaciers using the HISTALP dataset \citep{Auer2007} as climatic input data, with the corresponding hyper parameters (see \href{https://oggm.org/2018/08/10/histalp-parameters/}{Mass-balance model calibration for the Alps} on the OGGM blog for more information).
+
+        The needed preprocessing includes GIS tasks (computing a local grid using the SRTM DEM and the RGI outline, computing centerlines), climate tasks (preparing the HISTALP data), mass balance calibration (computing the temperature sensitivity $\mu^*$) as well as the inversion tasks (estimating a bed topography) for the flowline model.
+
+        As explained above, the mass balance model calibration depends on the chosen \textit{equilibrium year} $t^*$.
+
+        Hence, $t^*$ must be equal for both evolution models since we want to use the same climatic period. Rather than relying on the reference tables, which are different for the different evolution models, the temperature sensitivity $\mu^*$ is computed using $t^* = 1927$ as equilibrium year and no mass balance residual ($\beta^*$ = 0). This corresponds to the reference year for the flowline model and is not too far off from the reference year for the VAS model (which is 1905). 
+
+        Both evolution models run for 3'000 years with the `ConstantMassBalance` model and for 10'000 years with the `RandomMassBalance` model, both initialized around $t^*$. Furthermore, each climate scenario runs with three different temperature biases of 0°C, +0.5°C and -0.5°C resulting in an equilibrium run, a negative and a positive mass balance run, respectively.
+
+        The yearly geometric properties (length, area and volume) of the model glacier are stored to allow further investigations. In addition to the absolute values, a dataset with normalized values (with respect to the initial value) is produced, allowing better comparability.
+    % subsection equilibrium_experiments (end)
+
+% section experimental_setup (end)

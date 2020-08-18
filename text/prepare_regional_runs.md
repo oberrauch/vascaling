@@ -2,7 +2,7 @@
 
 - [x]  Log into Bremen cluster
 - [x]  Prepare equilibrium runs for constant and random climate for Rofental
-- [ ]  Create (empty) structure/layout of thesis in Latex
+- [x]  Create (empty) structure/layout of thesis in Latex
 
 ## Cluster Bremen:
 

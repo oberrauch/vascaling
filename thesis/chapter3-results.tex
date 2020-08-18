@@ -5,6 +5,11 @@
 % ==== SECTION 1 ===============================================================
 \section{Equilibrium experiments} % (fold)
 \label{sec:equilibrium_experiments}
+    Equilibrium runs are a useful tool to asses the behavior of glacier models. The OGGM provides two convenient mass balance models (or rather climate scenarios) for equilibrium experiment, the \lstinline`ConstantMassBalance` model and the \lstinline`RandomMassBalance` model. The implementation and workings of both mass balance models are described in Section~\ref{sec:implementation}.
+
+    The experiments are performed on all alpine glaciers using the HISTALP dataset \citep{Auer2007} as climatic input data. Thereby, each mass balance model runs three times. One run is under equilibrium conditions, i.e., using the climatic conditions around the \textit{equilibrium year} $t^*$ for each glacier. The other two runs are under a positve and negative mass balance perturbation, accomplished by a temperature bias of \SI{-0.5}{\celsius} and \SI[retain-explicit-plus]{+0.5}{\celsius}, respectively.
+
+    The first qualitative conclusions are drawn from the temporal evolution of glacier length, surface area and ice volume. We are looking at selected single glaciers as well as at the regional scale, i.e. at the sum over all glaciers. Scaling methods applied to a single glacier give only an order of magnitude estimation \citep[section 8.5][cf.]{Bahr2015}, which is accounted for in the following analysis. More quantitative results are drawn from an autocorrelation analysis and a power spectral density analysis, inspired by \citet{Roe2014}.
     
     \subsection{Constant climate scenario} % (fold)
     \label{sub:constant_climate_scenario}

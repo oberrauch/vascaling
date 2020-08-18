@@ -201,37 +201,38 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
 
     # concat the single output datasets into one,
     # with temperature bias as coordinate
-    ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
-    # add model type as coordinate
-    ds.coords['model'] = 'vas'
-    # add mb model type as coordinate
-    ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
+    if ds:
+        ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
+        # add model type as coordinate
+        ds.coords['model'] = 'vas'
+        # add mb model type as coordinate
+        ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-    # compute mean and sum over all glaciers
-    ds_mean = ds.mean(dim='rgi_id')
-    ds_mean.coords['rgi_id'] = 'mean'
-    ds_sum = ds.sum(dim='rgi_id')
-    ds_sum.coords['rgi_id'] = 'sum'
-    # add to dataset
-    ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+        # compute mean and sum over all glaciers
+        ds_mean = ds.mean(dim='rgi_id')
+        ds_mean.coords['rgi_id'] = 'mean'
+        ds_sum = ds.sum(dim='rgi_id')
+        ds_sum.coords['rgi_id'] = 'sum'
+        # add to dataset
+        ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
 
-    # normalize glacier geometries (length/area/volume) with start value
-    ds_normal = normalize_ds_with_start(ds)
-    # add coordinate to distinguish between normalized and absolute values
-    ds.coords['normalized'] = int(False)
-    ds_normal.coords['normalized'] = int(True)
+        # normalize glacier geometries (length/area/volume) with start value
+        ds_normal = normalize_ds_with_start(ds)
+        # add coordinate to distinguish between normalized and absolute values
+        ds.coords['normalized'] = int(False)
+        ds_normal.coords['normalized'] = int(True)
 
-    # combine datasets
-    ds = xr.concat([ds, ds_normal], 'normalized')
+        # combine datasets
+        ds = xr.concat([ds, ds_normal], 'normalized')
 
-    # store datasets
-    if path:
-        if path is True:
-            mb = 'random' if use_random_mb else 'constant'
-            path = os.path.join(cfg.PATHS['working_dir'],
-                                'run_output_{}_vas.nc'.format(mb))
+        # store datasets
+        if path:
+            if path is True:
+                mb = 'random' if use_random_mb else 'constant'
+                path = os.path.join(cfg.PATHS['working_dir'],
+                                    'run_output_{}_vas.nc'.format(mb))
 
-        ds.to_netcdf(path)
+            ds.to_netcdf(path)
 
     return ds
 
@@ -362,38 +363,40 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
         ds_ = utils.compile_run_output(np.atleast_1d(gdirs),
                                        input_filesuffix=suffix, path=False)
         ds.append(ds_)
+
     # concat into one dataset with temperature bias as coordinate
-    ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
-    # add model type as coordinate
-    ds.coords['model'] = 'fl'
-    # add mb model type as coordinate
-    ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
+    if ds:
+        ds = xr.concat(ds, pd.Index(temp_biases, name='temp_bias'))
+        # add model type as coordinate
+        ds.coords['model'] = 'fl'
+        # add mb model type as coordinate
+        ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-    # compute mean and sum over all glaciers
-    ds_mean = ds.mean(dim='rgi_id')
-    ds_mean.coords['rgi_id'] = 'mean'
-    ds_sum = ds.sum(dim='rgi_id')
-    ds_sum.coords['rgi_id'] = 'sum'
-    # add to dataset
-    ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+        # compute mean and sum over all glaciers
+        ds_mean = ds.mean(dim='rgi_id')
+        ds_mean.coords['rgi_id'] = 'mean'
+        ds_sum = ds.sum(dim='rgi_id')
+        ds_sum.coords['rgi_id'] = 'sum'
+        # add to dataset
+        ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
 
-    # normalize glacier geometries (length/area/volume) with start value
-    ds_normal = normalize_ds_with_start(ds)
-    # add coordinate to distinguish between normalized and absolute values
-    ds.coords['normalized'] = int(False)
-    ds_normal.coords['normalized'] = int(True)
+        # normalize glacier geometries (length/area/volume) with start value
+        ds_normal = normalize_ds_with_start(ds)
+        # add coordinate to distinguish between normalized and absolute values
+        ds.coords['normalized'] = int(False)
+        ds_normal.coords['normalized'] = int(True)
 
-    # combine datasets
-    ds = xr.concat([ds, ds_normal], 'normalized')
+        # combine datasets
+        ds = xr.concat([ds, ds_normal], 'normalized')
 
-    # store datasets
-    if path:
-        if path is True:
-            mb = 'random' if use_random_mb else 'constant'
-            path = os.path.join(cfg.PATHS['working_dir'],
-                                'run_output_{}_fl.nc'.format(mb))
+        # store datasets
+        if path:
+            if path is True:
+                mb = 'random' if use_random_mb else 'constant'
+                path = os.path.join(cfg.PATHS['working_dir'],
+                                    'run_output_{}_fl.nc'.format(mb))
 
-        ds.to_netcdf(path)
+            ds.to_netcdf(path)
 
     return ds
 
@@ -727,7 +730,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
 
 def eq_runs(rgi_ids, tstar=None):
-    """ Calls the `equilibrium_run_...` routines for the Hintereisferner,
+    """ Calls the `equilibrium_run_...` routines for the given RGI IDs,
     combines the resulting datasets for the VAS and flowline model and stores
     it to file.
     """
@@ -743,23 +746,23 @@ def eq_runs(rgi_ids, tstar=None):
 
         vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=use_random_mb,
                                      tstar=tstar, path=True, nyears=nyears)
-        fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
-                                   tstar=tstar, path=True, nyears=nyears)
+        # fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
+        #                            tstar=tstar, path=True, nyears=nyears)
         # concat datasets by model
-        ds.append(xr.concat([vas_ds, fl_ds], 'model'))
+        # ds.append(xr.concat([vas_ds, fl_ds], 'model'))
 
     # concat datasets by mass balance model
-    ds = xr.concat(ds, 'mb_model')
+    # ds = xr.concat(ds, 'mb_model')
 
     # Local working directory (where OGGM works)
-    WORKING_DIR = os.environ["WORKDIR"]
-    utils.mkdir(WORKING_DIR)
+    # WORKING_DIR = os.environ["WORKDIR"]
+    # utils.mkdir(WORKING_DIR)
     # store to file
-    ds.to_netcdf(os.path.join(WORKING_DIR, 'eq_runs.nc'))
+    # ds.to_netcdf(os.path.join(WORKING_DIR, 'eq_runs.nc'))
 
 
 def mb_runs(rgi_ids, tstar=None):
-    """Calls the `climate_run_...` routines for the Hintereisferner,
+    """Calls the `climate_run_...` routines for the given RGI IDs,
     combines the resulting datasets for the VAS and flowline model and stores
     it to file.
     """
@@ -778,8 +781,12 @@ def mb_runs(rgi_ids, tstar=None):
 
 if __name__ == '__main__':
     """ If script gets called, equilibrium run results (and corresponding
-    climate) for the Hintereisferner are computed and stored to file.
+    climate) for the all glaciers in the HISTALP domain are computed and stored
+    to file.
     """
+    # start logger with OGGM settings
+    cfg.set_logging_config()
+
     # specify RGI region and version
     rgi_region = '11'
     rgi_version = '61'
@@ -810,6 +817,6 @@ if __name__ == '__main__':
     # rgi_ids = np.delete(rgi_ids, np.searchsorted(rgi_ids, rgi_ids_error))
 
     # start runs
-    mb_runs(rgi_ids)
-    # eq_runs(rgi_ids)
+    # mb_runs(rgi_ids)
+    eq_runs(rgi_ids)
 

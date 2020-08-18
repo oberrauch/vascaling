@@ -1,4 +1,4 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{3}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -8,88 +8,21 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
 
-\bibitem[{{American Meteorological Society}(cited 2009)}]{ams-09Aag}
-{American Meteorological Society}, cited 2009: Author reference and citation
-  guide,
-  \urlprefix\url{http://www.ametsoc.org/PUBS/journals/author_reference_guide.pdf}.
+\bibitem[{Auer and B{\"{o}}hm(2007)}]{Auer2007}
+Auer, I. and R.~B{\"{o}}hm, 2007: {HISTALP – historical instrumental
+  climatological surface time series of the Greater Alpine Region}.
+  \textit{INTERNATIONAL JOURNAL OF CLIMATOLOGY}, \textbf{27},
+  \doi{10.1002/joc.1377}.
 
-\bibitem[{Arakawa(1969)}]{arak69Aag}
-Arakawa, S., 1969: Climatological and dynamical studies on the local strong
-  winds, mainly in {H}okkaid\=o, {J}apan. \textit{Geophys. Mag.}, \textbf{34},
-  359--425.
+\bibitem[{Bahr et~al.(2015)Bahr, Pfeffer, and Kaser}]{Bahr2015}
+Bahr, D.~B., W.~T. Pfeffer, and G.~Kaser, 2015: {A review of volume-area
+  scaling of glaciers}. \textit{Reviews of Geophysics}, \textbf{53~(1)},
+  95--140, \doi{10.1002/2014RG000470},
+  \urlprefix\url{http://doi.org/10.1002/2014RG000470}.
 
-\bibitem[{Dorman et~al.(1995)Dorman, Beardsley, and Limeburner}]{dorm95Aag}
-Dorman, C.~E., R.~C. Beardsley, and R.~Limeburner, 1995: Winds in the {S}trait
-  of {G}ibraltar. \textit{Quart. J. Roy. Meteor. Soc.}, \textbf{121},
-  1903--1921.
-
-\bibitem[{Gohm(2003)}]{gohm03Aag}
-Gohm, A., 2003: Contributions to the dynamics of south foehn: A gap flow study
-  during the {M}esoscale {A}lpine {P}rogramme. Dissertation, University of
-  Innsbruck, 111 pp.
-
-\bibitem[{Gohm et~al.(2006)Gohm, Harnisch, and Fix}]{gohm06Aag}
-Gohm, A., F.~Harnisch, and A.~Fix, 2006: Boundary layer structure in the {I}nn
-  {V}alley during high air pollution {(INNAP)}. \textit{Extended Abstract, 12th
-  Conference on Mountain Meteorology}, Santa Fe, NM, Amer. Meteor. Soc.,
-  \urlprefix\url{http://ams.confex.com/ams/pdfpapers/114458.pdf}.
-
-\bibitem[{Hann(1866)}]{hann66Aag}
-Hann, J., 1866: Zur {F}rage \"uber den {U}rsprung des {F}\"ohn. \textit{Z.
-  \"Osterr. Ges. Meteor.}, \textbf{1~(17)}, 257--263.
-
-\bibitem[{Hoinka(1985)}]{hoin85Aag}
-Hoinka, K.~P., 1985: Observation of the airflow over the {A}lps during a foehn
-  event. \textit{Quart. J. Roy. Meteor. Soc.}, \textbf{111}, 199--224.
-
-\bibitem[{Hoinka(1990)}]{hoin90Aag}
-Hoinka, K.~P., 1990: Untersuchung der alpinen {G}ebirgs\"uberstr\"omung bei
-  {S}\"udf\"ohn. {DLR}-{F}orschungsbericht 90-30, 186 pp., DLR
-  Oberpfaffenhofen, Germany.
-
-\bibitem[{Jackson and Steyn(1994{\natexlab{a}})}]{jack94Aag}
-Jackson, P.~L. and D.~G. Steyn, 1994{\natexlab{a}}: Gap winds in a fjord. {Part
-  I}: Observations and numerical simulation. \textit{Mon. Wea. Rev.},
-  \textbf{122}, 2645--2665.
-
-\bibitem[{Jackson and Steyn(1994{\natexlab{b}})}]{jack94Bag}
-Jackson, P.~L. and D.~G. Steyn, 1994{\natexlab{b}}: Gap winds in a fjord. {Part
-  II}: Hydraulic analog. \textit{Mon. Wea. Rev.}, \textbf{122}, 2666--2676.
-
-\bibitem[{Kopka and Daly(1999)}]{kopk99Aag}
-Kopka, H. and P.~W. Daly, 1999: \textit{A Guide to {LATEX}}. 3d ed.,
-  Addison-Wesley, 600 pp.
-
-\bibitem[{Oetiker et~al.(2008)Oetiker, Partl, Hyna, and Schlegl}]{oeti08Aag}
-Oetiker, T., H.~Partl, I.~Hyna, and E.~Schlegl, 2008: \textit{The Not So Short
-  Introduction to LATEX 2$\epsilon$}. CTAN,
-  \urlprefix\url{http://www.ctan.org/pub/tex-archive/info/lshort/english/lshort.pdf}.
-
-\bibitem[{Pan and Smith(1999)}]{pan-99Aag}
-Pan, F. and R.~B. Smith, 1999: Gap winds and wakes: {SAR} observations and
-  numerical simulations. \textit{J. Atmos. Sci.}, \textbf{56}, 905--923.
-
-\bibitem[{Pettre(1982)}]{pett82Aag}
-Pettre, P., 1982: On the problem of violent valley winds. \textit{J. Atmos.
-  Sci.}, \textbf{39}, 542--554.
-
-\bibitem[{Russey et~al.(2006)Russey, Ebel, and Bliefert}]{russ06Aag}
-Russey, W.~E., H.~F. Ebel, and C.~Bliefert, 2006: \textit{How to Write a
-  Successful Science Thesis: The Concise Guide for Students}. Wiley-VHC, 223
-  pp.
-
-\bibitem[{Sch\"ar and Smith(1993{\natexlab{a}})}]{scha93Aag}
-Sch\"ar, C. and R.~B. Smith, 1993{\natexlab{a}}: Shallow-water flow past
-  isolated topography. {Part I}: Vorticity production and wake formation.
-  \textit{J. Atmos. Sci.}, \textbf{50}, 373--1400.
-
-\bibitem[{Sch\"ar and Smith(1993{\natexlab{b}})}]{scha93Bag}
-Sch\"ar, C. and R.~B. Smith, 1993{\natexlab{b}}: Shallow-water flow past
-  isolated topography. {Part II}: Transition to vortex shedding. \textit{J.
-  Atmos. Sci.}, \textbf{50}, 1401--1412.
-
-\bibitem[{Scorer(1952)}]{scor52Aag}
-Scorer, R.~S., 1952: Mountain-gap winds; a study of surface wind at
-  {G}ibraltar. \textit{Quart. J. Roy. Meteor. Soc.}, \textbf{78}, 53--61.
+\bibitem[{Roe and Baker(2014)}]{Roe2014}
+Roe, G.~H. and M.~B. Baker, 2014: {Glacier response to climate perturbations:
+  an accurate linear geometric model}. \textit{Journal of Glaciology},
+  \textbf{60~(222)}, 670--684, \doi{https://doi.org/10.3189/2014jog14j016}.
 
 \end{thebibliography}

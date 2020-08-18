@@ -13,6 +13,9 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
+import logging
+log = logging.getLogger('equilibrium-runs')
+
 # import the needed OGGM modules
 from oggm import cfg, utils, workflow
 from oggm.core import gis, climate, flowline
@@ -634,6 +637,8 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
     cfg.set_intersects_db(intersects_db)
 
+    log.info('Test in __climate_run_fl__')
+
     # initialize the GlacierDirectory
     gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
 
@@ -745,6 +750,10 @@ def mb_runs(rgi_ids, tstar=None):
     combines the resulting datasets for the VAS and flowline model and stores
     it to file.
     """
+
+    # logger message
+    log.info('Test in __mb_runs__')
+
     fl_ds = climate_run_fl(rgi_ids, tstar=tstar)
     vas_ds = climate_run_vas(rgi_ids, tstar=tstar)
 
@@ -758,6 +767,9 @@ if __name__ == '__main__':
     """ If script gets called, equilibrium run results (and corresponding
     climate) for the Hintereisferner are computed and stored to file.
     """
+    # start logger with OGGM settings
+    cfg.set_logging_config()
+
     # select the 4 largest glaciers in the Rofental basin
     rgidf = pd.read_csv('../data/rofental_rgi.csv', index_col=0)
     rgidf.sort_values('Area', ascending=False)
