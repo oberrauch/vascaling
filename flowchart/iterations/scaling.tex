@@ -196,16 +196,16 @@
 \mod.set height(2cm)
 
 % volume change and new volume
-\mod.set and place(volume, VOLUME CHANGE {$dV(t)$} and NEW VOLUME {$V(t+1)$}, below = 1cm of specmb)
+\mod.set and place(volume, VOLUME CHANGE {$\Delta V(t)$} and NEW VOLUME {$V(t+1)$}, below = 1cm of specmb)
 % area and length change placed below left and right of volume change, resp.
-\mod.set and place(area, AREA CHANGE {$dA(t)$} and NEW AREA {$A(t+1)$}, below left = 1cm of volume)
-\mod.set and place(length, LENGTH CHANGE {$dL(t)$} and NEW LENGTH {$L(t+1)$}, below right = 1cm of volume)
+\mod.set and place(area, AREA CHANGE {$\Delta A(t)$} and NEW AREA {$A(t+1)$}, below left = 1cm of volume)
+\mod.set and place(length, LENGTH CHANGE {$\Delta L(t)$} and NEW LENGTH {$L(t+1)$}, below right = 1cm of volume)
 
 \mod.set width(5cm)
 \mod.set text width(4cm)
 \mod.set height(2cm)
 
-\mod.set and place(min_hgt, NEW TERMINUS ELEVATION {$z_{term}(t+1)$}, below = 1cm of length)
+\mod.set and place(min_hgt, NEW TERMINUS ELEVATION {$z_{terminus}(t+1)$}, below = 1cm of length)
 
 \mod.set width(4.5cm)
 \mod.set text width(4cm)
@@ -213,21 +213,21 @@
 
 % start values for length, min and max elevation
 \mod.set and place(length_0, START LENGTH {$L_0$}, below right = 0.5cm and 1.5cm of min_hgt)
-\mod.set and place(min_hgt_0, START TERMINUS ELEVATION {$z_{term, 0}$}, right = 1.5 of min_hgt)
+\mod.set and place(min_hgt_0, START TERMINUS ELEVATION {$z_{terminus, 0}$}, right = 1.5 of min_hgt)
 \mod.set and place(max_hgt, MAXIMUM ELEVATION {$z_{max}$}, above right = 0.5cm and 1.5cm of min_hgt)
 % terminus elevation
-\mod.set and place(min_hgt_t, TERMINUS ELEVATION {$z_{term}(t)$}, right = 7.75cm of specmb)
+\mod.set and place(min_hgt_t, TERMINUS ELEVATION {$z_{terminus}(t)$}, right = 7.75cm of specmb)
 
 \mod.set width(8cm)
 \mod.set text width(7.5cm)
 \mod.set height(2cm)
 % climatological precipitation
-\mod.set and place(prcp_clim, AVG. SOLID PRECIPIATION over climate period {$P_{clim}^{solid}(t*)$}, above right = 2cm and 5.5 of timescales)
+\mod.set and place(prcp_clim, AVG. SOLID PRECIPIATION over equilibrium climate period {$P_{clim}^{solid}(t^*)$}, above right = 2cm and 5.5 of timescales)
 
 \mod.set width(7cm)
 \mod.set text width(6.5cm)
 \mod.set height(2cm)
-\mod.set and place2(iteration, COMPUTATION OF GEOMETRIC PARAMETERS FOR YEAR $t+1$, below = 2cm of area)
+\mod.set and place2(iteration, COMPUTATION OF GLACIER GEOMETRY FOR YEAR $t+1$, below = 2cm of area)
 
 % ----------------
 %   Connections

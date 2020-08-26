@@ -11,7 +11,10 @@
 \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
 \lstset{language=Python, basicstyle=\ttm}
 \usepackage{amsmath}  % standard math package
+\usepackage{mathtools}
 \usepackage{siunitx}  % display numbers and units
+\sisetup{per-mode = reciprocal}
+\DeclareSIUnit\year{yr}
 
 % ---- graphicx package:
 \usepackage{graphicx}
@@ -110,6 +113,10 @@
 
 % ---- my commands
 \newcommand{\vas}{volume/area scaling}
+\newcommand{\Vas}{Volume/area scaling}
+\newcommand{\tstar}{$t^*$}
+\newcommand{\mustar}{$\mu^*$}
+\newcommand{\bias}{$\beta^*$}
 
 
 % ==== START FRONT MATTER (use ROMAN numerals) =================================

@@ -51,7 +51,7 @@ def normalize_ds_with_start(ds, store_var_0=False):
 
 
 def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
-                        temp_biases=(0, +0.5, -0.5),
+                        temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
                         suffixes=('_bias_zero', '_bias_p', '_bias_n'),
                         tstar=None, vas_c_length_m=None, vas_c_area_m2=None,
                         **kwargs):
@@ -135,7 +135,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
         cfg.PARAMS['vas_c_area_m2'] = vas_c_area_m2
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -242,7 +242,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
 
 
 def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
-                       temp_biases=(0, +0.5, -0.5),
+                       temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
                        suffixes=['_bias_zero', '_bias_p', '_bias_n'],
                        tstar=None, **kwargs):
     """ The routine runs all steps for the equilibrium experiments using the
@@ -305,7 +305,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -407,6 +407,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
 
 
 def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
+                    use_bias_for_run=False,
                     suffixes=['_bias_zero', '_bias_p', '_bias_n'],
                     tstar=None, nyears=None, **kwargs):
     """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
@@ -470,7 +471,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
@@ -561,6 +562,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
 
 def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
+                   use_bias_for_run=False,
                    suffixes=['_bias_zero', '_bias_p', '_bias_n'],
                    tstar=None, nyears=None, **kwargs):
     """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
@@ -624,7 +626,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
@@ -636,8 +638,6 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # get and set path to intersect shapefile
     intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
     cfg.set_intersects_db(intersects_db)
-
-    log.info('Test in __climate_run_fl__')
 
     # initialize the GlacierDirectory
     gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
@@ -731,9 +731,11 @@ def eq_runs(rgi_ids, tstar=None):
             nyears = 1e3
 
         vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=use_random_mb,
-                                     tstar=tstar, path=True, nyears=nyears)
+                                     tstar=tstar, path=True, nyears=nyears,
+                                     use_bias_for_run=True)
         fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
-                                   tstar=tstar, path=True, nyears=nyears)
+                                   tstar=tstar, path=True, nyears=nyears,
+                                   use_bias_for_run=True)
         # concat datasets by model
         ds.append(xr.concat([vas_ds, fl_ds], 'model'))
 
@@ -751,11 +753,8 @@ def mb_runs(rgi_ids, tstar=None):
     it to file.
     """
 
-    # logger message
-    log.info('Test in __mb_runs__')
-
-    fl_ds = climate_run_fl(rgi_ids, tstar=tstar)
-    vas_ds = climate_run_vas(rgi_ids, tstar=tstar)
+    fl_ds = climate_run_fl(rgi_ids, tstar=tstar, use_bias_for_run=True)
+    vas_ds = climate_run_vas(rgi_ids, tstar=tstar, use_bias_for_run=True)
 
     # concat datasets by evolution balance model
     ds = xr.concat([vas_ds, fl_ds], pd.Index(['vas', 'fl'], name='model'))
@@ -770,16 +769,9 @@ if __name__ == '__main__':
     # start logger with OGGM settings
     cfg.set_logging_config()
 
-    # select the 4 largest glaciers in the Rofental basin
-    rgidf = pd.read_csv('../data/rofental_rgi.csv', index_col=0)
-    rgidf.sort_values('Area', ascending=False)
-    rgidf = rgidf.iloc[:2]
     # get RGI IDs
     rgi_ids = [rgi_id for rgi_id in rgidf.RGIId]
 
-    # select single RGI that made problems on the cluster
-    rgi_ids = ['RGI60-11.03295']
-
     mb_runs(rgi_ids)
-    # eq_runs(rgi_ids)
+    eq_runs(rgi_ids)
 

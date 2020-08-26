@@ -1,0 +1,61 @@
+This is BibTeX, Version 0.99d (TeX Live 2020)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: thesis.aux
+A level-1 auxiliary file: titlepage_master.aux
+A level-1 auxiliary file: dedication.aux
+A level-1 auxiliary file: abstract.aux
+A level-1 auxiliary file: chapter1-introduction.aux
+A level-1 auxiliary file: chapter2-methods.aux
+A level-1 auxiliary file: chapter3-results.aux
+A level-1 auxiliary file: chapter4-discussion.aux
+A level-1 auxiliary file: chapter5-conclusion.aux
+A level-1 auxiliary file: appendix.aux
+The style file: ./ametsoc.bst
+A level-1 auxiliary file: thanks.aux
+A level-1 auxiliary file: curricv.aux
+A level-1 auxiliary file: epilogue.aux
+Database file #1: ./master.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--missing publisher in WGMS2017
+You've used 11 entries,
+            3488 wiz_defined-function locations,
+            779 strings with 7739 characters,
+and the built_in function-call counts, 10559 in all, are:
+= -- 1238
+> -- 293
+< -- 6
++ -- 169
+- -- 72
+* -- 586
+:= -- 1102
+add.period$ -- 22
+call.type$ -- 11
+change.case$ -- 79
+chr.to.int$ -- 11
+cite$ -- 12
+duplicate$ -- 1095
+empty$ -- 615
+format.name$ -- 109
+if$ -- 2142
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 107
+newline$ -- 43
+num.names$ -- 44
+pop$ -- 434
+preamble$ -- 1
+purify$ -- 66
+quote$ -- 0
+skip$ -- 632
+stack$ -- 0
+substring$ -- 493
+swap$ -- 881
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 99
+warning$ -- 1
+while$ -- 53
+width$ -- 0
+write$ -- 141
+(There was 1 warning)

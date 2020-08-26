@@ -80,6 +80,7 @@ load cru_grid lon_cru lat_cru elev_cru
 load cru_clim
 load cru_anom_401
 
+% applying the precipitation scaling factor to the climate model data
 precip_cru_clim=precip_cru_clim.*2.5;
 
 time_cru=(1901+(1/24)):(1/12):(2017-(1/24));

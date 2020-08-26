@@ -4,31 +4,64 @@
 
 % ==== SECTION 1 ===============================================================
 \section{Equilibrium experiments} % (fold)
-\label{sec:equilibrium_experiments}
-    Equilibrium runs are a useful tool to asses the behavior of glacier models. The OGGM provides two convenient mass balance models (or rather climate scenarios) for equilibrium experiment, the \lstinline`ConstantMassBalance` model and the \lstinline`RandomMassBalance` model. The implementation and workings of both mass balance models are described in Section~\ref{sec:implementation}.
+\label{sec:equilibrium_experiments_results}
+    Equilibrium experiment are a useful tool to asses the behavior of glacier models. The OGGM provides two climate scenarios for such equilibrium experiment, the \lstinline`ConstantMassBalance` model and the \lstinline`RandomMassBalance` model. The implementation and workings of both mass balance models are described in Subsection~\ref{sub:mass_balance_models_implementation}.
 
-    The experiments are performed on all alpine glaciers using the HISTALP dataset \citep{Auer2007} as climatic input data. Thereby, each mass balance model runs three times. One run is under equilibrium conditions, i.e., using the climatic conditions around the \textit{equilibrium year} $t^*$ for each glacier. The other two runs are under a positve and negative mass balance perturbation, accomplished by a temperature bias of \SI{-0.5}{\celsius} and \SI[retain-explicit-plus]{+0.5}{\celsius}, respectively.
+    The experiments are performed on all alpine glaciers using the HISTALP dataset \citep{Auer2007} as climatic input data. The baseline climate for each glacier comes from a 31-year period centered around the \textit{equilibrium year} \tstar. An additional temperature bias of \SI{0}{\celsius}, \SI{-0.5}{\celsius} and \SI[retain-explicit-plus]{+0.5}{\celsius} results in a neutral, positive and negative step change in mass balance, respectively. The detailed experimental setup can be found in Section~\ref{sub:equilibrium_experiments_setup}
 
-    The first qualitative conclusions are drawn from the temporal evolution of glacier length, surface area and ice volume. We are looking at selected single glaciers as well as at the regional scale, i.e. at the sum over all glaciers. Scaling methods applied to a single glacier give only an order of magnitude estimation \citep[section 8.5][cf.]{Bahr2015}, which is accounted for in the following analysis. More quantitative results are drawn from an autocorrelation analysis and a power spectral density analysis, inspired by \citet{Roe2014}.
+    The first qualitative conclusions are drawn from the temporal evolution of glacier length, surface area and ice volume. We are looking at selected single glaciers as well as at the regional scale, i.e. at the sum over all glaciers in the HISTALP domain. Scaling methods applied to a single glacier give only an order of magnitude estimation \citep[section 8.5][cf.]{Bahr2015}, which is accounted for in the following analysis. More quantitative results are drawn from an autocorrelation analysis and a power spectral density analysis, inspired by \citet{Roe2014}.
     
+    \subsection{Time series} % (fold)
+    \label{sub:time_series_results}
+
+      The following section tries to explain the model behavior using the temporal evolution of the glacier length, surface area and ice volume. The plots show a comparison between the \vas{} model and the flowline model time series, both for the constant and random climate scenario. Since the \vas{} model derives the initial glacier geometry from the surface area, absolute values of initial length and volume differ between the \vas{} model and the flowline model. The results are therefore normalized with respect to their initial values for better comparability. 
+
+      \subsubsection*{Overall findings}
+
+      \begin{itemize}
+        \item Both evolution models behave as expected and produce the same qualitative results. The model glaciers stay in an approximate equilibrium state using the climate around \tstar and decreases/increases in size (length, area, volume) for a positive/negative temperature bias. Plots with absolute values can be found in the appendix % TODO
+        \item The glacier size (length, area, volume) changes drastically less (i.e., between two to eight times less) with the \vas{} model than with the flowline model.
+        However, volume estimations from volume/area scaling of a single glaciers must be considered as order of magnitude result. The scaling constant $c$ is a random variable which can vary drastically from glacier to glacier. Apparently, the global mean value of $c=0.034\ \mathrm{km^{3-2\gamma}}$ is a bad fit for the characteristics of Hintereisferner.
+      \end{itemize}
+      
+
+      1. 
+
+      2. The glacier size changes (dramatically) less under the VAS model than under the flowline model (true for length, area, and volume).
+
+         *Note*: However, volume estimations from volume/area scaling of a single glaciers must be considered as order of magnitude result. The scaling constant $c$ is a random variable which varies (drastically) from glacier to glacier. Apparently, the global mean value of $c=0.034\ \mathrm{km^{3-2\gamma}}$ is a bad fit for the characteristics of Hintereisferner.
+
+         *Second Note*: Changing the scaling constants changes the absolute values of ice volume (as well as surface area and glacier length). A higher volume/area scaling constant results in a larger initial ice volume. Subjected to the same climate perturbation (temperature step change), an initially larger glacier will gain/loose more ice and reach a higher equilibrium ice volume than a smaller one. However, when normalized with initial ice volume there are no more discernible differences in the magnitude of ice volume change. The temporal evolution, i.e., the oscillation behavior, is comparable, even if smaller glaciers react faster than larger ones (which is to be expected).
+
+         *TL;DR; Turns out, the scaling constant does not change the magnitude of the normalized volume change.* 
+
+      3. The glacier length of the VAS model has to be seen more as a model parameter, rather than as an actual glacier property. The VAS glacier length decreases/increases only by about 8 percent compared to its initial value, for a positive/negative temperature bias of 0.5 °C. This correspond to an absolute length change of less than 400 m, which is very little compared to the 3 to 4 km in length change (~40% of the initial value) produced by the flowline model. (*Note*: May change with different $c$ parameter. *Second note*: Turns out, it does not when normalized with initial length.)
+
+      4. The result of VAS model under a constant climate scenario with a non-zero temperature bias reminds of a damped oscillating signal. The modeled length reaches its maximum after ~200 years, overshooting the equilibrium result by more than 1%. Followed by two minor but still discernible peaks until the new equilibrium is reached. Both, glacier surface area and glacier volume reach their maximum earlier and overshoot by more.
+    
+    % subsection time_series (end)
+
     \subsection{Constant climate scenario} % (fold)
-    \label{sub:constant_climate_scenario}
+    \label{sub:constant_climate_scenario_results}
+
     
     % subsection constant_climate_scenario (end)
 
     \subsection{Random climate scenario} % (fold)
-    \label{sub:random_climate_scenario}
+    \label{sub:random_climate_scenario_results}
     
     % subsection random_climate_scenario (end)
 
 % section equilibrium_experiments (end)
 
+% ==== SECTION 2 ===============================================================
 \section{Sensitivity experiments} % (fold)
-\label{sec:sensitivity_experiments}
+\label{sec:sensitivity_experiments_results}
 
 % section sensitivity_experiments (end)
 
+% ==== SECTION 3 ===============================================================
 \section{Future projection} % (fold)
-\label{sec:future_projection}
+\label{sec:future_projection_results}
 
 % section future_projection (end)

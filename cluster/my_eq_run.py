@@ -14,6 +14,9 @@ import pandas as pd
 import geopandas as gpd
 import xarray as xr
 
+import logging
+log = logging.getLogger('equilibrium-runs')
+
 # import the needed OGGM modules
 from oggm import cfg, utils, workflow
 from oggm.core import gis, climate, flowline
@@ -49,9 +52,10 @@ def normalize_ds_with_start(ds, store_var_0=False):
 
 
 def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
-                        temp_biases=(0, +0.5, -0.5),
+                        temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
                         suffixes=('_bias_zero', '_bias_p', '_bias_n'),
                         tstar=None, vas_c_length_m=None, vas_c_area_m2=None,
+                        store_individual_glaciers=True, store_mean_sum=True,
                         **kwargs):
     """ The routine runs all steps for the equilibrium experiments using the
     volume/area scaling model:
@@ -129,7 +133,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
         cfg.PARAMS['vas_c_area_m2'] = vas_c_area_m2
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -142,7 +146,6 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     # sort by area for more efficient parallel computing
     rgidf = rgidf.sort_values('Area', ascending=False)
     cfg.PARAMS['use_multiprocessing'] = True
-
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
 
@@ -155,7 +158,8 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     # process the given climate file
     workflow.execute_entity_task(climate.process_climate_data, gdirs)
     # compute local t* and the corresponding mu*
-    workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+    ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+    workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df,
                                  tstar=tstar, bias=0)
 
     # Run model with constant/random mass balance model
@@ -208,13 +212,28 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
         # add mb model type as coordinate
         ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-        # compute mean and sum over all glaciers
-        ds_mean = ds.mean(dim='rgi_id')
-        ds_mean.coords['rgi_id'] = 'mean'
-        ds_sum = ds.sum(dim='rgi_id')
-        ds_sum.coords['rgi_id'] = 'sum'
-        # add to dataset
-        ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+        # fill NaN values (which happen for vanished glaciers) with zero
+        ds = ds.fillna(0)
+
+        if store_individual_glaciers:
+            if store_mean_sum:
+                # compute mean and sum over all glaciers
+                ds_mean = ds.mean(dim='rgi_id')
+                ds_mean.coords['rgi_id'] = 'mean'
+                ds_sum = ds.sum(dim='rgi_id')
+                ds_sum.coords['rgi_id'] = 'sum'
+                # add to dataset
+                ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+            else:
+                pass
+        else:
+            # compute mean and sum over all glaciers
+            ds_mean = ds.mean(dim='rgi_id')
+            ds_mean.coords['rgi_id'] = 'mean'
+            ds_sum = ds.sum(dim='rgi_id')
+            ds_sum.coords['rgi_id'] = 'sum'
+            # add to dataset
+            ds = xr.concat([ds_mean, ds_sum], dim='rgi_id')
 
         # normalize glacier geometries (length/area/volume) with start value
         ds_normal = normalize_ds_with_start(ds)
@@ -238,8 +257,9 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
 
 
 def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
-                       temp_biases=(0, +0.5, -0.5),
+                       temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
                        suffixes=['_bias_zero', '_bias_p', '_bias_n'],
+                       store_individual_glaciers=True, store_mean_sum=True,
                        tstar=None, **kwargs):
     """ The routine runs all steps for the equilibrium experiments using the
     flowline model. For details see docstring of `sensitivity_run_vas`.
@@ -297,7 +317,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -310,7 +330,6 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     # sort by area for more efficient parallel computing
     rgidf = rgidf.sort_values('Area', ascending=False)
     cfg.PARAMS['use_multiprocessing'] = True
-
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
 
@@ -321,7 +340,8 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     workflow.gis_prepro_tasks(gdirs)
     # run climate tasks
     workflow.execute_entity_task(climate.process_climate_data, gdirs)
-    workflow.execute_entity_task(climate.local_t_star, gdirs,
+    ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+    workflow.execute_entity_task(climate.local_t_star, gdirs, ref_df=ref_df,
                                  tstar=tstar, bias=0)
     workflow.execute_entity_task(climate.mu_star_calibration, gdirs)
     # run inversion tasks
@@ -372,13 +392,28 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
         # add mb model type as coordinate
         ds.coords['mb_model'] = 'random' if use_random_mb else 'constant'
 
-        # compute mean and sum over all glaciers
-        ds_mean = ds.mean(dim='rgi_id')
-        ds_mean.coords['rgi_id'] = 'mean'
-        ds_sum = ds.sum(dim='rgi_id')
-        ds_sum.coords['rgi_id'] = 'sum'
-        # add to dataset
-        ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+        # fill NaN values (which happen for vanished glaciers) with zero
+        ds = ds.fillna(0)
+
+        if store_individual_glaciers:
+            if store_mean_sum:
+                # compute mean and sum over all glaciers
+                ds_mean = ds.mean(dim='rgi_id')
+                ds_mean.coords['rgi_id'] = 'mean'
+                ds_sum = ds.sum(dim='rgi_id')
+                ds_sum.coords['rgi_id'] = 'sum'
+                # add to dataset
+                ds = xr.concat([ds, ds_mean, ds_sum], dim='rgi_id')
+            else:
+                pass
+        else:
+            # compute mean and sum over all glaciers
+            ds_mean = ds.mean(dim='rgi_id')
+            ds_mean.coords['rgi_id'] = 'mean'
+            ds_sum = ds.sum(dim='rgi_id')
+            ds_sum.coords['rgi_id'] = 'sum'
+            # add to dataset
+            ds = xr.concat([ds_mean, ds_sum], dim='rgi_id')
 
         # normalize glacier geometries (length/area/volume) with start value
         ds_normal = normalize_ds_with_start(ds)
@@ -402,6 +437,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
 
 
 def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
+                    use_bias_for_run=False,
                     suffixes=['_bias_zero', '_bias_p', '_bias_n'],
                     tstar=None, nyears=None, **kwargs):
     """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
@@ -461,7 +497,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
@@ -483,7 +519,8 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # process the given climate file
     workflow.execute_entity_task(climate.process_climate_data, gdirs)
     # compute local t* and the corresponding mu*
-    workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+    ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+    workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df,
                                  tstar=tstar, bias=0)
 
     # use t* as center year, even if specified differently
@@ -562,6 +599,7 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
 
 def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
+                   use_bias_for_run=False,
                    suffixes=['_bias_zero', '_bias_p', '_bias_n'],
                    tstar=None, nyears=None, **kwargs):
     """Computes 'only' the massbalance in analogy to the `equilibrium_run_...`
@@ -621,7 +659,7 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.PARAMS['temp_melt'] = -1.75
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
-    cfg.PARAMS['use_bias_for_run'] = False
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
 
     # operational run, all glaciers should run
     cfg.PARAMS['continue_on_error'] = True
@@ -641,7 +679,8 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     workflow.gis_prepro_tasks(gdirs)
     # run climate tasks
     workflow.execute_entity_task(climate.process_climate_data, gdirs)
-    workflow.execute_entity_task(climate.local_t_star, gdirs,
+    ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+    workflow.execute_entity_task(climate.local_t_star, gdirs, ref_df=ref_df,
                                  tstar=tstar, bias=0)
     workflow.execute_entity_task(climate.mu_star_calibration, gdirs)
     # run inversion tasks
@@ -746,19 +785,17 @@ def eq_runs(rgi_ids, tstar=None):
 
         vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=use_random_mb,
                                      tstar=tstar, path=True, nyears=nyears)
-        # fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
-        #                            tstar=tstar, path=True, nyears=nyears)
+        fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=use_random_mb,
+                                   tstar=tstar, path=True, nyears=nyears)
         # concat datasets by model
-        # ds.append(xr.concat([vas_ds, fl_ds], 'model'))
+        ds.append(xr.concat([vas_ds, fl_ds], 'model'))
 
     # concat datasets by mass balance model
-    # ds = xr.concat(ds, 'mb_model')
+    ds = xr.concat(ds, 'mb_model')
 
-    # Local working directory (where OGGM works)
-    # WORKING_DIR = os.environ["WORKDIR"]
-    # utils.mkdir(WORKING_DIR)
     # store to file
-    # ds.to_netcdf(os.path.join(WORKING_DIR, 'eq_runs.nc'))
+    dir_path = '/home/users/moberrauch/run_output/'
+    ds.to_netcdf(os.path.join(dir_path, 'eq_runs.nc'))
 
 
 def mb_runs(rgi_ids, tstar=None):
@@ -766,17 +803,15 @@ def mb_runs(rgi_ids, tstar=None):
     combines the resulting datasets for the VAS and flowline model and stores
     it to file.
     """
-    # vas_ds = climate_run_vas(rgi_ids, tstar=tstar)
+    vas_ds = climate_run_vas(rgi_ids, tstar=tstar)
     fl_ds = climate_run_fl(rgi_ids, tstar=tstar)
-    #
-    # # concat datasets by evolution balance model
-    # ds = xr.concat([vas_ds, fl_ds], pd.Index(['vas', 'fl'], name='model'))
-    #
-    # # local working directory (where OGGM works)
-    # WORKING_DIR = os.environ["WORKDIR"]
-    # utils.mkdir(WORKING_DIR)
-    # # store to file
-    # ds.to_netcdf(os.path.join(WORKING_DIR, 'mb_runs.nc'))
+
+    # concat datasets by evolution balance model
+    ds = xr.concat([vas_ds, fl_ds], pd.Index(['vas', 'fl'], name='model'))
+
+    # store to file
+    dir_path = '/home/users/moberrauch/run_output/'
+    ds.to_netcdf(os.path.join(dir_path, 'mb_output.nc'))
 
 
 if __name__ == '__main__':
@@ -784,39 +819,12 @@ if __name__ == '__main__':
     climate) for the all glaciers in the HISTALP domain are computed and stored
     to file.
     """
-    # start logger with OGGM settings
-    cfg.set_logging_config()
-
-    # specify RGI region and version
-    rgi_region = '11'
-    rgi_version = '61'
-    # get RGI dataframe
-    rgi_fpath = utils.get_rgi_region_file(rgi_region, rgi_version)
-    rgidf = gpd.read_file(rgi_fpath)
-
-
-    # get rid of nominal glaciers (glaciers with area but without outline)
-    # denoted by RGI.Status 2
-    rgidf = rgidf[rgidf.Status != 2]
-
     # get RGI IDs
-    rgi_ids = [rgi_id for rgi_id in rgidf[rgidf.O2Region == '1'].RGIId]
-
-    # specify other glaciers which produces errors
-    # rgi_ids_error = ['RGI60-11.02770', 'RGI60-11.02894', 'RGI60-11.02903',
-    #                  'RGI60-11.02923', 'RGI60-11.02933', 'RGI60-11.02941',
-    #                  'RGI60-11.02942', 'RGI60-11.03295', 'RGI60-11.02617',
-    #                  'RGI60-11.02622', 'RGI60-11.00863', 'RGI60-11.00763',
-    #                  'RGI60-11.00215', 'RGI60-11.00363', 'RGI60-11.01410',
-    #                  'RGI60-11.01709', 'RGI60-11.01801', 'RGI60-11.01867',
-    #                  'RGI60-11.02243', 'RGI60-11.02343', 'RGI60-11.02728',
-    #                  'RGI60-11.02885', 'RGI60-11.03039', 'RGI60-11.03009',
-    #                  'RGI60-11.03008', 'RGI60-11.02919', 'RGI60-11.02666',
-    #                  'RGI60-11.01519', 'RGI60-11.01511', 'RGI60-11.01480',
-    #                  'RGI60-11.01461']
-    # rgi_ids = np.delete(rgi_ids, np.searchsorted(rgi_ids, rgi_ids_error))
+    fpath = '/home/users/moberrauch/data/showcase_glaciers.csv'
+    showcase_glaciers = pd.read_csv(fpath)
+    rgi_ids = showcase_glaciers.rgi_id.values
 
     # start runs
-    # mb_runs(rgi_ids)
+    mb_runs(rgi_ids)
     eq_runs(rgi_ids)
 
