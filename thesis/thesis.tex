@@ -2,6 +2,9 @@
 % ---- document class (use appropriate driver for DIV to PS/PDF conversion):
 \documentclass[12pt,a4paper]{book}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
 % ---- my packages
 \usepackage{datetime}
 \newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
@@ -13,8 +16,10 @@
 \usepackage{amsmath}  % standard math package
 \usepackage{mathtools}
 \usepackage{siunitx}  % display numbers and units
-\sisetup{per-mode = reciprocal}
+\sisetup{per-mode = reciprocal, retain-explicit-plus = true}
 \DeclareSIUnit\year{yr}
+
+\setcounter{secnumdepth}{2} % specify depths of section numbering
 
 % ---- graphicx package:
 \usepackage{graphicx}
@@ -46,18 +51,13 @@
 
 
 % ---- caption package:
-\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{caption}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
 
 
-% ---- subfigure package:
-\usepackage[tight,nooneline,FIGTOPCAP,bf]{subfigure}
-% \setlength{\subfigcaptopadj}{-6pt}  % vertical position of subfigure labels
-\renewcommand{\thesubfigure}{\alph{subfigure}}
-\makeatletter
-    \renewcommand{\@thesubfigure}{(\thesubfigure)}  % subfigure labels:     (a)
-    \renewcommand{\@@thesubfigure}{\thesubfigure}   % produced by \subref:   a
-    \renewcommand{\p@subfigure}{\thefigure}         % produced by \ref:   3.1a
-\makeatother
+% ---- subcaption package:
+\usepackage{subcaption}
+\captionsetup[subfigure]{justification=justified, singlelinecheck=false}
 
 
 % ---- fancyhdr package:

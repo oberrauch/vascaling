@@ -1,4 +1,4 @@
-\begin{thebibliography}{11}
+\begin{thebibliography}{12}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -19,6 +19,13 @@ Bahr, D.~B., W.~T. Pfeffer, and G.~Kaser, 2015: {A review of volume-area
   scaling of glaciers}. \textit{Reviews of Geophysics}, \textbf{53~(1)},
   95--140, \doi{10.1002/2014RG000470},
   \urlprefix\url{http://doi.org/10.1002/2014RG000470}.
+
+\bibitem[{Dusch(2018)}]{Dusch2018}
+Dusch, M., 2018: Mass-balance model calibration for the alps. OGGM Blog,
+  \urlprefix\url{"https://oggm.org/2018/08/10/histalp-parameters/"}, posted on
+  August 10, 2018,
+  \urlprefix\url{"https://oggm.org/2018/08/10/histalp-parameters/"}, posted on
+  August 10, 2018.
 
 \bibitem[{Giesen and Oerlemans(2012)}]{Giesen2012}
 Giesen, R.~H. and J.~Oerlemans, 2012: {Calibration of a surface mass balance

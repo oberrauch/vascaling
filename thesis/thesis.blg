@@ -17,45 +17,45 @@ A level-1 auxiliary file: epilogue.aux
 Database file #1: ./master.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--missing publisher in WGMS2017
-You've used 11 entries,
+You've used 12 entries,
             3488 wiz_defined-function locations,
-            779 strings with 7739 characters,
-and the built_in function-call counts, 10559 in all, are:
-= -- 1238
-> -- 293
-< -- 6
-+ -- 169
-- -- 72
-* -- 586
-:= -- 1102
-add.period$ -- 22
-call.type$ -- 11
-change.case$ -- 79
-chr.to.int$ -- 11
-cite$ -- 12
-duplicate$ -- 1095
-empty$ -- 615
-format.name$ -- 109
-if$ -- 2142
+            787 strings with 7901 characters,
+and the built_in function-call counts, 11053 in all, are:
+= -- 1281
+> -- 304
+< -- 7
++ -- 173
+- -- 75
+* -- 615
+:= -- 1172
+add.period$ -- 24
+call.type$ -- 12
+change.case$ -- 87
+chr.to.int$ -- 12
+cite$ -- 13
+duplicate$ -- 1142
+empty$ -- 662
+format.name$ -- 113
+if$ -- 2247
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 107
-newline$ -- 43
-num.names$ -- 44
-pop$ -- 434
+missing$ -- 116
+newline$ -- 46
+num.names$ -- 48
+pop$ -- 456
 preamble$ -- 1
-purify$ -- 66
+purify$ -- 71
 quote$ -- 0
-skip$ -- 632
+skip$ -- 649
 stack$ -- 0
-substring$ -- 493
-swap$ -- 881
+substring$ -- 508
+swap$ -- 897
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 99
+type$ -- 108
 warning$ -- 1
-while$ -- 53
+while$ -- 56
 width$ -- 0
-write$ -- 141
+write$ -- 155
 (There was 1 warning)

@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{lmodern}
+\usepackage{amsmath}
 \usepackage[paperwidth=250mm, paperheight=215mm, margin=5mm]{geometry}
 
 %\newcommand*{\cmcsans}{\fontfamily{comic}\selectfont}
@@ -205,7 +206,7 @@
 \mod.set text width(4cm)
 \mod.set height(2cm)
 
-\mod.set and place(min_hgt, NEW TERMINUS ELEVATION {$z_{terminus}(t+1)$}, below = 1cm of length)
+\mod.set and place(min_hgt, NEW TERMINUS ELEVATION {$z_\text{min}(t+1)$}, below = 1cm of length)
 
 \mod.set width(4.5cm)
 \mod.set text width(4cm)
@@ -213,16 +214,16 @@
 
 % start values for length, min and max elevation
 \mod.set and place(length_0, START LENGTH {$L_0$}, below right = 0.5cm and 1.5cm of min_hgt)
-\mod.set and place(min_hgt_0, START TERMINUS ELEVATION {$z_{terminus, 0}$}, right = 1.5 of min_hgt)
-\mod.set and place(max_hgt, MAXIMUM ELEVATION {$z_{max}$}, above right = 0.5cm and 1.5cm of min_hgt)
+\mod.set and place(min_hgt_0, START TERMINUS ELEVATION {$z_{\text{min}, 0}$}, right = 1.5 of min_hgt)
+\mod.set and place(max_hgt, MAXIMUM ELEVATION {$z_\text{max}$}, above right = 0.5cm and 1.5cm of min_hgt)
 % terminus elevation
-\mod.set and place(min_hgt_t, TERMINUS ELEVATION {$z_{terminus}(t)$}, right = 7.75cm of specmb)
+\mod.set and place(min_hgt_t, TERMINUS ELEVATION {$z_\text{min}(t)$}, right = 7.75cm of specmb)
 
 \mod.set width(8cm)
 \mod.set text width(7.5cm)
 \mod.set height(2cm)
 % climatological precipitation
-\mod.set and place(prcp_clim, AVG. SOLID PRECIPIATION over equilibrium climate period {$P_{clim}^{solid}(t^*)$}, above right = 2cm and 5.5 of timescales)
+\mod.set and place(prcp_clim, AVG. SOLID PRECIPIATION over equilibrium climate period {$P_\text{clim}^\text{solid}(t^*)$}, above right = 2cm and 5.5 of timescales)
 
 \mod.set width(7cm)
 \mod.set text width(6.5cm)

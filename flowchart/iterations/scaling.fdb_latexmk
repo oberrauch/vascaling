@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1598264558 "scaling.tex" "scaling.pdf" "scaling" 1598265469
+["pdflatex"] 1599723827 "scaling.tex" "scaling.pdf" "scaling" 1599723831
   "/usr/local/texlive/2020basic/texmf-dist/fonts/type1/public/lm/lmmi7.pfb" 1254269338 30789 be3ebdf20b6442cc4aaf81a81e17daf4 ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/generic/iftex/iftex.sty" 1583617216 6501 4011d89d9621e0b0901138815ba5ff29 ""
@@ -86,6 +86,11 @@
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/adjustbox/adjustbox.sty" 1597957823 56912 8e897e69259d91e3f48a398c5d3ba08f ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/adjustbox/tc-pgf.def" 1597957823 3234 e59b9615f4e7f2e62f2018c95efc4c3d ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/adjustbox/trimclip.sty" 1597957823 7250 a32c09a7494ab7f6b44688804f84e5d6 ""
+  "/usr/local/texlive/2020basic/texmf-dist/tex/latex/amsmath/amsbsy.sty" 1523134290 2211 ca7ce284ab93c8eecdc6029dc5ccbd73 ""
+  "/usr/local/texlive/2020basic/texmf-dist/tex/latex/amsmath/amsgen.sty" 1523134290 4161 7f6eb9092061a11f87d08ed13515b48d ""
+  "/usr/local/texlive/2020basic/texmf-dist/tex/latex/amsmath/amsmath.sty" 1580683321 85660 baee036978c7a91f4e2bba43f05e5945 ""
+  "/usr/local/texlive/2020basic/texmf-dist/tex/latex/amsmath/amsopn.sty" 1523134290 4116 32e6abd27229755a83a8b7f18e583890 ""
+  "/usr/local/texlive/2020basic/texmf-dist/tex/latex/amsmath/amstext.sty" 1523134290 2432 8ff93b1137020e8f21930562a874ae66 ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/atveryend/atveryend.sty" 1576191570 19336 ce7ae9438967282886b3b036cfad1e4d ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/base/article.cls" 1580683321 20023 e427dd9e17e239bf926ef3aab67fe35e ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/base/fontenc.sty" 1581632200 4947 0c2888dd88121ae675fc6e82213623ba ""
@@ -127,8 +132,8 @@
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty" 1203877327 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/xcolor/xcolor.sty" 1463002160 55589 34128738f682d033422ca125f82e5d62 ""
   "/usr/local/texlive/2020basic/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1417732693 4962 9c1069474ff71dbc47d5006555e352d3 ""
-  "scaling.aux" 1598264571 8 a94a2480d3289e625eea47cd1b285758 "pdflatex"
-  "scaling.tex" 1598264541 8289 83cfbe3c40268a5cad91cb16fa8ea86c ""
+  "scaling.aux" 1599723831 8 a94a2480d3289e625eea47cd1b285758 "pdflatex"
+  "scaling.tex" 1599723819 8327 27c13820b246fb19d13fb0a19d9b49f6 ""
   (generated)
   "scaling.pdf"
   "scaling.log"
