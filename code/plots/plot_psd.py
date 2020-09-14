@@ -71,12 +71,26 @@ def plot_psd():
 
         # get legend handles and labels
         handles, labels = ax.get_legend_handles_labels()
+        title_proxy, = plt.plot(0, marker='None', linestyle='None', label='dummy')
+
         # add a seperate legend for each model
-        leg_fl = ax.legend(handles[:3], labels[:3], bbox_to_anchor=(1, 1), loc='upper left')
-        leg_fl.set_title('Flowline model', {'weight': 'bold'})
-        leg_vas = ax.legend(handles[3:], labels[3:], bbox_to_anchor=(1, 0), loc='lower left')
-        leg_vas.set_title('VAS model', {'weight': 'bold'})
-        ax.add_artist(leg_fl)
+        # leg_fl = ax.legend(handles[:3], labels[:3], bbox_to_anchor=(1, 1), loc='upper left')
+        # leg_fl.set_title('Flowline model', {'weight': 'bold'})
+        # leg_vas = ax.legend(handles[3:], labels[3:], bbox_to_anchor=(1, 0), loc='lower left')
+        # leg_vas.set_title('VAS model', {'weight': 'bold'})
+        # ax.add_artist(leg_fl)
+
+        # create list of handles and labels in correct order
+        my_handles = list([title_proxy])
+        my_handles.extend(handles[:3])
+        my_handles.extend([title_proxy])
+        my_handles.extend(handles[3:])
+        my_labels = list(["$\\bf{Flowline\ model}$"])
+        my_labels.extend(labels[:3])
+        my_labels.extend(["$\\bf{VAS\ model}$"])
+        my_labels.extend(labels[3:])
+        # add single two-column legend
+        ax.legend(my_handles, my_labels, ncol=2)
 
         # add grid
         ax.grid(which='both')
@@ -151,22 +165,29 @@ def plot_psd_length_mb():
             freqs, psd = signal.welch(sig)
             ax[1].loglog(1 / freqs, psd, label='{:+.1f} °C'.format(b), c=vas_cycle[j], lw=2)
 
-        # add legend for length
+
+                # get legend handles and labels
         handles, labels = ax[0].get_legend_handles_labels()
+        title_proxy, = plt.plot(0, marker='None', linestyle='None', label='dummy')
+
         # add a seperate legend for each model
-        leg_fl = ax[0].legend(handles[:3], labels[:3], bbox_to_anchor=(0, 0.2), loc='lower left')
-        leg_fl.set_title('Flowline', {'weight': 'bold'})
-        leg_vas = ax[0].legend(handles[3:], labels[3:], loc='lower left')
-        leg_vas.set_title('V/A scaling', {'weight': 'bold'})
-        ax[0].add_artist(leg_fl)
-        # add lengend for mass balance
-        handles, labels = ax[1].get_legend_handles_labels()
-        # add a seperate legend for each model
-        leg_fl = ax[1].legend(handles[6::2], labels[6::2], loc='lower right')
-        leg_fl.set_title('Flowline model', {'weight': 'bold'})
-        leg_vas = ax[1].legend(handles[7::2], labels[7::2], loc='lower left')
-        leg_vas.set_title('V/A scaling model', {'weight': 'bold'})
-        ax[1].add_artist(leg_fl)
+        # leg_fl = ax.legend(handles[:3], labels[:3], bbox_to_anchor=(1, 1), loc='upper left')
+        # leg_fl.set_title('Flowline model', {'weight': 'bold'})
+        # leg_vas = ax.legend(handles[3:], labels[3:], bbox_to_anchor=(1, 0), loc='lower left')
+        # leg_vas.set_title('VAS model', {'weight': 'bold'})
+        # ax.add_artist(leg_fl)
+
+        # create list of handles and labels in correct order
+        my_handles = list([title_proxy])
+        my_handles.extend(handles[:3])
+        my_handles.extend([title_proxy])
+        my_handles.extend(handles[3:])
+        my_labels = list(["$\\bf{Flowline\ model}$"])
+        my_labels.extend(labels[:3])
+        my_labels.extend(["$\\bf{VAS\ model}$"])
+        my_labels.extend(labels[3:])
+        # add single two-column legend
+        ax[1].legend(my_handles, my_labels, ncol=2, loc='lower center')
 
         # add grid
         ax[0].grid(which='both')
