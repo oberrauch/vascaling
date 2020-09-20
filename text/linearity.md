@@ -26,7 +26,7 @@ Let's state the obvious: decreasing/increasing the air temperature will increase
 
 ![](/Users/oberrauch/work/master/plots/linearity/lin_reg_detail.pdf)
 
-For a sensible range of temperature biases from -5°C to +5°C, the constant mass balance function reacts as predicted. The result is almost symmetrical even though slightly positive skewed and could be approximated by a linear function to an acceptable degree of accuracy. For temperature biases $\beta_{T}$ between -1°C and +1°C the function $b(\beta_T) \simeq -400 \beta_T - 5.9$ approximates the actual mass balance function $b$ with a coefficient of determination of 0.9995.
+For a sensible range of temperature biases from -5°C to +5°C, the constant mass balance function reacts as predicted. The result is almost symmetrical even though slightly positively skewed and can be approximated by a linear function to an acceptable degree of accuracy. For temperature biases $\beta_{T}$ between -1°C and +1°C the function $b(\beta_T) \simeq -400 \beta_T - 5.9$ approximates the actual mass balance function $b$ with a coefficient of determination of 0.9995.
 
 Hence, the symmetry hypothesis is sustainable for small temperature biases. But what about the bigger picture?!
 

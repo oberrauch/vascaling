@@ -166,7 +166,7 @@ def plot_psd_length_mb():
             ax[1].loglog(1 / freqs, psd, label='{:+.1f} °C'.format(b), c=vas_cycle[j], lw=2)
 
 
-                # get legend handles and labels
+        # get legend handles and labels
         handles, labels = ax[0].get_legend_handles_labels()
         title_proxy, = plt.plot(0, marker='None', linestyle='None', label='dummy')
 

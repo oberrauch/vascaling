@@ -5,25 +5,55 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-% ---- my packages
+% ---- my packages:
+% date and time formatting
 \usepackage{datetime}
 \newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
-\usepackage{listings}  % pretty print code lines
-% Default fixed font does not support bold face
+
+% pretty print code lines
+\usepackage{listings}
+% default fixed font does not support bold face
 \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
 \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
 \lstset{language=Python, basicstyle=\ttm}
-\usepackage{amsmath}  % standard math package
+
+% strike trough text
+% \usepackage[normalem]{ulem}
+% \newcommand\xoutpars[1]{\let\helpcmd\xout\parhelp#1\par\relax\relax}
+% \newcommand\soutpars[1]{\let\helpcmd\sout\parhelp#1\par\relax\relax}
+% \long\def\parhelp#1\par#2\relax{%
+%   \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
+% }
+\usepackage{soul}
+
+% standard math packages
+\usepackage{amsmath}
 \usepackage{mathtools}
-\usepackage{siunitx}  % display numbers and units
-\sisetup{per-mode = reciprocal, retain-explicit-plus = true}
+\usepackage{bm}
+
+% display numbers and units
+\usepackage{siunitx}
+\sisetup{per-mode = reciprocal, retain-explicit-plus = true, detect-weight=true, detect-family=true}
 \DeclareSIUnit\year{yr}
 
-\setcounter{secnumdepth}{2} % specify depths of section numbering
+% lists
+\usepackage[inline]{enumitem}
+
+% tables
+\usepackage{multirow}  % cells over multiple rows in tables
+\usepackage{booktabs}  % horizontal lines
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}} % increase spaces between rows
+\usepackage{rotating}  % allow for vertical tables (also works with other floats)
+
+% ---- my commands: 
+\newcommand{\vas}{volume/area scaling}
+\newcommand{\Vas}{Volume/area scaling}
+\newcommand{\tstar}{$t^*$}
+\newcommand{\mustar}{$\mu^*$}
+\newcommand{\bias}{$\beta^*$}
 
 % ---- graphicx package:
 \usepackage{graphicx}
-
 
 % ---- natbib package:
 \usepackage{natbib}
@@ -104,20 +134,15 @@
 \renewcommand{\thefigure}{\thechapter.\arabic{figure}}
 \renewcommand{\thetable}{\thechapter.\arabic{table}}
 
+% specify depths of section numbering
+\setcounter{secnumdepth}{2}
+
 
 % ==== END OF PREAMBLE =========================================================
 
 
 % ==== BEGIN OF BODY ===========================================================
 \begin{document}
-
-% ---- my commands
-\newcommand{\vas}{volume/area scaling}
-\newcommand{\Vas}{Volume/area scaling}
-\newcommand{\tstar}{$t^*$}
-\newcommand{\mustar}{$\mu^*$}
-\newcommand{\bias}{$\beta^*$}
-
 
 % ==== START FRONT MATTER (use ROMAN numerals) =================================
 \frontmatter
