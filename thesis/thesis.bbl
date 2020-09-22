@@ -1,4 +1,4 @@
-\begin{thebibliography}{12}
+\begin{thebibliography}{15}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -32,11 +32,21 @@ Giesen, R.~H. and J.~Oerlemans, 2012: {Calibration of a surface mass balance
   model for global-scale applications}. \textit{Cryosphere}, \textbf{6~(6)},
   1463--1481, \doi{10.5194/tc-6-1463-2012}.
 
+\bibitem[{Greuell(1992)}]{Greuell1992}
+Greuell, W., 1992: Hintereisferner, austria: mass-balance reconstruction and
+  numerical modelling of the historical length variations. \textit{Journal of
+  Glaciology}, \textbf{38~(129)}, 233–244, \doi{10.3189/S0022143000003646}.
+
 \bibitem[{Jarvis et~al.(2008)Jarvis, Guevara, Reuter, and Nelson}]{Jarvis2008}
 Jarvis, A., E.~Guevara, H.~Reuter, and A.~Nelson, 2008: Hole-filled srtm for
   the globe, version 4. CGIAR Consortium for Spatial Information, University of
   Twente, published by CGIAR-CSI on 19 August 2008., published by CGIAR-CSI on
   19 August 2008.
+
+\bibitem[{J{\'{o}}hannesson et~al.(1989)J{\'{o}}hannesson, Rymond, and
+  Waddington}]{Johannesson1989}
+J{\'{o}}hannesson, T., C.~Rymond, and E.~Waddington, 1989: {Time-scale for
+  adjustment of glaciers to changes in mass balance}. \textbf{35~(1)}.
 
 \bibitem[{Marzeion et~al.(2012)Marzeion, Jarosch, and Hofer}]{Marzeion2012b}
 Marzeion, B., A.~H. Jarosch, and M.~Hofer, 2012: {Past and future sea-level
@@ -69,6 +79,11 @@ Pfeffer, W.~T., et~al., 2014: The randolph glacier inventory: a globally
 Roe, G.~H. and M.~B. Baker, 2014: {Glacier response to climate perturbations:
   an accurate linear geometric model}. \textit{Journal of Glaciology},
   \textbf{60~(222)}, 670--684, \doi{https://doi.org/10.3189/2014jog14j016}.
+
+\bibitem[{Schuster(2020)}]{Schuster2020}
+Schuster, L., 2020: {Response time of glaciers using the Open Global Glacier
+  Model : from simple idealized experiments to an estimate for Alpine
+  glaciers}. Ph.D. thesis.
 
 \bibitem[{{{World Glacier Monitoring Service, Zürich,
   Switzerland}}(2017)}]{WGMS2017}

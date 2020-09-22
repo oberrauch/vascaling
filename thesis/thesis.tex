@@ -17,15 +17,6 @@
 \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
 \lstset{language=Python, basicstyle=\ttm}
 
-% strike trough text
-% \usepackage[normalem]{ulem}
-% \newcommand\xoutpars[1]{\let\helpcmd\xout\parhelp#1\par\relax\relax}
-% \newcommand\soutpars[1]{\let\helpcmd\sout\parhelp#1\par\relax\relax}
-% \long\def\parhelp#1\par#2\relax{%
-%   \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
-% }
-\usepackage{soul}
-
 % standard math packages
 \usepackage{amsmath}
 \usepackage{mathtools}
@@ -35,6 +26,7 @@
 \usepackage{siunitx}
 \sisetup{per-mode = reciprocal, retain-explicit-plus = true, detect-weight=true, detect-family=true}
 \DeclareSIUnit\year{yr}
+\DeclareSIUnit\waterequivalent{we.}
 
 % lists
 \usepackage[inline]{enumitem}
@@ -45,12 +37,36 @@
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}} % increase spaces between rows
 \usepackage{rotating}  % allow for vertical tables (also works with other floats)
 
+% breakable, framed, color boxes using TikZ
+\usepackage[framemethod=TikZ]{mdframed}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TL;DR Box
+%Theorem
+\newenvironment{tldrbox}[2][]{
+    \mdfsetup{
+        frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut TL;DR:~#1};
+        }
+    }
+    \mdfsetup{
+        innertopmargin=10pt,linecolor=blue!20,
+        linewidth=2pt,topline=true,
+        frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+    \begin{mdframed}[]\relax\label{#2}
+    \begin{itemize}
+}
+{\end{itemize}\end{mdframed}}
+
 % ---- my commands: 
 \newcommand{\vas}{volume/area scaling}
 \newcommand{\Vas}{Volume/area scaling}
 \newcommand{\tstar}{$t^*$}
 \newcommand{\mustar}{$\mu^*$}
 \newcommand{\bias}{$\beta^*$}
+\newcommand{\tldr}{\textbf{TL;DR}}
 
 % ---- graphicx package:
 \usepackage{graphicx}

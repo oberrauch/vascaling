@@ -1,4 +1,6 @@
 #! /bin/bash
+# insert text from insert.txt file at the beginning of all *.tex files
+# used to establish a master file
 
 for file in $(find . -name "*.tex" ! -iname "thesis.tex"); do
 	echo "Processing $file"

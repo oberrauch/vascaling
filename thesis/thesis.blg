@@ -16,46 +16,48 @@ A level-1 auxiliary file: curricv.aux
 A level-1 auxiliary file: epilogue.aux
 Database file #1: ./master.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty journal in Johannesson1989
+Warning--missing school in Schuster2020
 Warning--missing publisher in WGMS2017
-You've used 12 entries,
+You've used 15 entries,
             3488 wiz_defined-function locations,
-            787 strings with 7901 characters,
-and the built_in function-call counts, 11053 in all, are:
-= -- 1281
-> -- 304
-< -- 7
-+ -- 173
-- -- 75
-* -- 615
-:= -- 1172
-add.period$ -- 24
-call.type$ -- 12
-change.case$ -- 87
-chr.to.int$ -- 12
-cite$ -- 13
-duplicate$ -- 1142
-empty$ -- 662
-format.name$ -- 113
-if$ -- 2247
+            808 strings with 8444 characters,
+and the built_in function-call counts, 13162 in all, are:
+= -- 1504
+> -- 363
+< -- 9
++ -- 203
+- -- 90
+* -- 732
+:= -- 1425
+add.period$ -- 30
+call.type$ -- 15
+change.case$ -- 107
+chr.to.int$ -- 15
+cite$ -- 18
+duplicate$ -- 1356
+empty$ -- 798
+format.name$ -- 133
+if$ -- 2669
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 116
-newline$ -- 46
-num.names$ -- 48
-pop$ -- 456
+missing$ -- 142
+newline$ -- 55
+num.names$ -- 60
+pop$ -- 537
 preamble$ -- 1
-purify$ -- 71
+purify$ -- 88
 quote$ -- 0
-skip$ -- 649
+skip$ -- 775
 stack$ -- 0
-substring$ -- 508
-swap$ -- 897
+substring$ -- 595
+swap$ -- 1048
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 108
-warning$ -- 1
-while$ -- 56
+type$ -- 135
+warning$ -- 3
+while$ -- 67
 width$ -- 0
-write$ -- 155
-(There was 1 warning)
+write$ -- 187
+(There were 3 warnings)

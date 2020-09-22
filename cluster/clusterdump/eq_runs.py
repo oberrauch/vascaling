@@ -357,7 +357,7 @@ def test_run_vas(rgi_ids, use_random_mb=True, path=True,
 
     # get environmental variables for working and output directories
     # WORKING_DIR = os.environ["WORKDIR"]
-    WORKING_DIR = 'Users/oberrauch/work/master/working_directories/hef_tau/'
+    WORKING_DIR = '/Users/oberrauch/work/master/working_directories/hef_tau/'
     # OUTPUT_DIR = os.environ["OUTDIR"]
     # create working directory
     utils.mkdir(WORKING_DIR)
@@ -429,7 +429,7 @@ def test_run_vas(rgi_ids, use_random_mb=True, path=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 deg C each (per default).
         for suffix, temp_bias in zip(suffixes, temp_biases):
-            vascaling.run_random_climate(gdirs,
+            vascaling.run_random_climate(gdirs[0],
                                          temperature_bias=temp_bias,
                                          output_filesuffix=suffix, **kwargs)
     else:
@@ -437,7 +437,7 @@ def test_run_vas(rgi_ids, use_random_mb=True, path=True,
         # temperature bias and once with positive and negative temperature bias
         # of 0.5 deg C each (per default).
         for suffix, temp_bias in zip(suffixes, temp_biases):
-            vascaling.run_constant_climate(gdirs,
+            vascaling.run_constant_climate(gdirs[0],
                                            temperature_bias=temp_bias,
                                            output_filesuffix=suffix, **kwargs)
 
@@ -1212,12 +1212,12 @@ def single_glaciers():
     cfg.set_logging_config()
 
     # get RGI IDs
-    fpath = '/home/users/moberrauch/data/showcase_glaciers.csv'
-    showcase_glaciers = pd.read_csv(fpath)
-    rgi_ids = showcase_glaciers.rgi_id.values
+    # fpath = '/home/users/moberrauch/data/showcase_glaciers.csv'
+    # showcase_glaciers = pd.read_csv(fpath)
+    # rgi_ids = showcase_glaciers.rgi_id.values
 
     # start runs
-    test_eq_runs(rgi_ids=['RGI60-11.0897'], nyears=1e3, use_default_tstar=False, store_mean_sum=False)
+    test_eq_runs(rgi_ids=['RGI60-11.00897'], use_random_mb=True, nyears=1e3, use_default_tstar=False, store_mean_sum=False)
     # eq_runs(rgi_ids, nyears=1e3, use_default_tstar=False, store_mean_sum=False)
 
 
