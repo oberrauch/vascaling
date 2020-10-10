@@ -1,4 +1,4 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -14,11 +14,21 @@ Auer, I. and R.~B{\"{o}}hm, 2007: {HISTALP – historical instrumental
   \textit{INTERNATIONAL JOURNAL OF CLIMATOLOGY}, \textbf{27},
   \doi{10.1002/joc.1377}.
 
+\bibitem[{Bahr et~al.(1997)Bahr, Meier, and Peckham}]{Bahr1997b}
+Bahr, D.~B., M.~F. Meier, and S.~D. Peckham, 1997: {The physical basis of
+  glacier volume-area scaling}. \textit{Journal of Geophysical Research: Solid
+  Earth}, \textbf{102~(B9)}, 20\,355--20\,362, \doi{10.1029/97jb01696}.
+
 \bibitem[{Bahr et~al.(2015)Bahr, Pfeffer, and Kaser}]{Bahr2015}
 Bahr, D.~B., W.~T. Pfeffer, and G.~Kaser, 2015: {A review of volume-area
   scaling of glaciers}. \textit{Reviews of Geophysics}, \textbf{53~(1)},
   95--140, \doi{10.1002/2014RG000470},
   \urlprefix\url{http://doi.org/10.1002/2014RG000470}.
+
+\bibitem[{Chen and Ohmura(1990)}]{Chen1990}
+Chen, J. and A.~Ohmura, 1990: {Estimation of Alpine glacier water resources and
+  their change since the 1870s}. \textit{Hydrology in mountainous regions I},
+  \textbf{V~(193)}, 127--135.
 
 \bibitem[{Dusch(2018)}]{Dusch2018}
 Dusch, M., 2018: Mass-balance model calibration for the alps. OGGM Blog,
@@ -70,6 +80,11 @@ Pfeffer, W.~T., et~al., 2014: The randolph glacier inventory: a globally
   complete inventory of glaciers. \textit{Journal of Glaciology},
   \textbf{60~(221)}, 537–552, \doi{10.3189/2014JoG13J176}.
 
+\bibitem[{Proakis and Manolakis(2007)}]{Proakis2007}
+Proakis, J. and D.~Manolakis, 2007: \textit{Digital Signal Processing}.
+  Prentice Hall international editions, Pearson Prentice Hall,
+  \urlprefix\url{https://books.google.at/books?id=H\_5SAAAAMAAJ}.
+
 \bibitem[{{{RGI Consortium}}(2017)}]{RGI2017}
 {{RGI Consortium}}, 2017: Randolph glacier inventory - a dataset og global
   glacier outlines: Version 6.0: Technichal report. Global Land Ice
@@ -84,6 +99,12 @@ Roe, G.~H. and M.~B. Baker, 2014: {Glacier response to climate perturbations:
 Schuster, L., 2020: {Response time of glaciers using the Open Global Glacier
   Model : from simple idealized experiments to an estimate for Alpine
   glaciers}. Ph.D. thesis.
+
+\bibitem[{{Welch}(1967)}]{Welch1967}
+{Welch}, P., 1967: The use of fast fourier transform for the estimation of
+  power spectra: A method based on time averaging over short, modified
+  periodograms. \textit{IEEE Transactions on Audio and Electroacoustics},
+  \textbf{15~(2)}, 70--73.
 
 \bibitem[{{{World Glacier Monitoring Service, Zürich,
   Switzerland}}(2017)}]{WGMS2017}

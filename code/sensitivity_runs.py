@@ -557,6 +557,40 @@ def scaling_const_sensitivity():
                         suffixes=suffixes, path=path, nyears=7e3)
 
 
+def scaling_param_sensitivity():
+    """
+
+    Returns
+    -------
+
+    """
+    # define RGI IDs
+    rgi_ids = ['RGI60-11.00897']
+
+    # define scaling constants
+    scaling_const_list = list((1.5038582086557708, 0.24399290770672957))  # HEF
+    scaling_const_list.append((4.5507, 0.191))  # Global
+    scaling_const = np.zeros(len(scaling_const_list), dtype=object)
+    scaling_const[:] = scaling_const_list
+    # define time scale factor
+    time_scale_factor = [1]
+    sensitivity_params = np.array(np.meshgrid(scaling_const,
+                                              time_scale_factor)).T
+    sensitivity_params = (sensitivity_params
+                          .reshape(-1, sensitivity_params.shape[-1]))
+    # specify file suffixes
+    suffixes = ['_{:2f}_{:2f}_{:.2f}'.format(p[0][0], p[0][1], p[1])
+                for p in sensitivity_params]
+
+    # specify file storage location
+    path = '/Users/oberrauch/work/master/data/eq_runs/hef_const_sensitivity.nc'
+
+    # perform equilibrium experiments for constant climate
+    sensitivity_run_vas(rgi_ids, use_random_mb=False, tstar=None,
+                        temp_bias=-0.5, sensitivity_params=sensitivity_params,
+                        suffixes=suffixes, path=path, nyears=1e3)
+
+
 def sensitivity():
     """
 

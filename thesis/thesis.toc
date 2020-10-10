@@ -20,22 +20,32 @@
 \contentsline {subsubsection}{Random climate scenario}{10}{section*.9}%
 \contentsline {subsection}{\numberline {2.2.2}Glacier evolution model}{10}{subsection.2.2.2}%
 \contentsline {section}{\numberline {2.3}Experimental setup}{11}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Equilibrium runs}{11}{subsection.2.3.1}%
-\contentsline {subsubsection}{Hintereisferner test case}{12}{section*.10}%
-\contentsline {subsubsection}{Single glaciers under random climate scenario}{13}{section*.11}%
-\contentsline {subsubsection}{Commitment runs}{14}{section*.12}%
-\contentsline {chapter}{\numberline {3}Results}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Equilibrium experiments}{15}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Time series}{15}{subsection.3.1.1}%
-\contentsline {subsubsection}{Hintereisferner test case}{16}{section*.13}%
-\contentsline {subsubsection}{Commitment runs}{22}{section*.17}%
-\contentsline {subsection}{\numberline {3.1.2}Autocorrelation analysis}{22}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Sensitivity experiments}{24}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Future projection}{24}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Discussion}{27}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Conclusions}{29}{chapter.5}%
-\contentsline {chapter}{\numberline {A}Large Quantities of Data}{31}{appendix.A}%
-\contentsline {chapter}{Bibliography}{33}{appendix.A}%
-\contentsline {chapter}{Acknowledgments}{35}{appendix*.21}%
-\contentsline {chapter}{Curriculum Vitae}{37}{appendix*.22}%
-\contentsline {chapter}{Epilogue}{39}{appendix*.23}%
+\contentsline {subsection}{\numberline {2.3.1}Single glacier test case}{13}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Autocorrelation and Power spectral density}{13}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Regional runs with all Alpine glaciers}{15}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Sensitivity experiments}{15}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Commitment runs}{17}{subsection.2.3.5}%
+\contentsline {chapter}{\numberline {3}Results}{19}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Single glacier test case}{19}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Autocorrelation and Power spectral density}{23}{section.3.2}%
+\contentsline {subsubsection}{Autocorrelation function}{26}{section*.13}%
+\contentsline {subsubsection}{Power spectral density}{27}{section*.16}%
+\contentsline {section}{\numberline {3.3}Regional runs with all Alpine glaciers}{30}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Sensitivity experiments}{30}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Commitment runs}{30}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Equilibrium experiments}{30}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Time series}{30}{subsection.3.6.1}%
+\contentsline {subsubsection}{Commitment runs on a regional scale}{32}{section*.18}%
+\contentsline {subsection}{\numberline {3.6.2}Autocorrelation analysis}{34}{subsection.3.6.2}%
+\contentsline {subsubsection}{Power spectral density analysis}{36}{section*.21}%
+\contentsline {section}{\numberline {3.7}Sensitivity experiments}{37}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Sensitivity to model-internal time scales}{37}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Sensitivity to scaling parameters}{40}{subsection.3.7.2}%
+\contentsline {section}{\numberline {3.8}Future projection}{41}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Discussion}{43}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Conclusions}{45}{chapter.5}%
+\contentsline {chapter}{\numberline {A}Large Quantities of Data}{47}{appendix.A}%
+\contentsline {chapter}{Bibliography}{49}{appendix.A}%
+\contentsline {chapter}{Acknowledgments}{51}{appendix*.25}%
+\contentsline {chapter}{Curriculum Vitae}{53}{appendix*.26}%
+\contentsline {chapter}{Epilogue}{55}{appendix*.27}%

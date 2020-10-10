@@ -19,45 +19,45 @@ Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--empty journal in Johannesson1989
 Warning--missing school in Schuster2020
 Warning--missing publisher in WGMS2017
-You've used 15 entries,
+You've used 19 entries,
             3488 wiz_defined-function locations,
-            808 strings with 8444 characters,
-and the built_in function-call counts, 13162 in all, are:
-= -- 1504
-> -- 363
-< -- 9
-+ -- 203
-- -- 90
-* -- 732
-:= -- 1425
-add.period$ -- 30
-call.type$ -- 15
-change.case$ -- 107
-chr.to.int$ -- 15
-cite$ -- 18
-duplicate$ -- 1356
-empty$ -- 798
-format.name$ -- 133
-if$ -- 2669
+            842 strings with 9228 characters,
+and the built_in function-call counts, 17177 in all, are:
+= -- 1984
+> -- 461
+< -- 12
++ -- 265
+- -- 114
+* -- 951
+:= -- 1826
+add.period$ -- 38
+call.type$ -- 19
+change.case$ -- 134
+chr.to.int$ -- 19
+cite$ -- 22
+duplicate$ -- 1779
+empty$ -- 1031
+format.name$ -- 171
+if$ -- 3483
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 142
-newline$ -- 55
-num.names$ -- 60
-pop$ -- 537
+missing$ -- 181
+newline$ -- 67
+num.names$ -- 76
+pop$ -- 688
 preamble$ -- 1
-purify$ -- 88
+purify$ -- 112
 quote$ -- 0
-skip$ -- 775
+skip$ -- 1040
 stack$ -- 0
-substring$ -- 595
-swap$ -- 1048
+substring$ -- 809
+swap$ -- 1401
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 135
+type$ -- 168
 warning$ -- 3
-while$ -- 67
+while$ -- 87
 width$ -- 0
-write$ -- 187
+write$ -- 233
 (There were 3 warnings)
