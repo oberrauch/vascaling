@@ -1,4 +1,4 @@
-""" Equilibrium runs
+""" Sensitivity runs
 --------------------
 
 This script runs the VAS model for a single (or more) glacier(s)

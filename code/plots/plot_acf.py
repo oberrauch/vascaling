@@ -5,9 +5,13 @@ import pandas as pd
 import xarray as xr
 from statsmodels.tsa import stattools
 import matplotlib.pyplot as plt
-from master_colors import vas_cycle, fl_cycle
+from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
+logging.basicConfig(format='%(asctime)s: %(name)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    level=logging.INFO)
+log = logging.getLogger('plot acf')
 
 
 def plot_acf(ds, rgi_df, xlim=None, path=True, nlags=1000, slice_start=1000,
@@ -229,11 +233,6 @@ def plot_pacf(ds, rgi_df, xlim=None, path=True, nlags=1000, slice_start=1000,
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s: %(name)s: %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        level=logging.INFO)
-    log = logging.getLogger('plot acf')
-
     # specify path and read datasets
     dir_path = '/Users/oberrauch/work/master/data/'\
                + 'cluster_output/showcase_glaciers_random_climate/'

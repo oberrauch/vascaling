@@ -4,7 +4,7 @@ import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
 
-from master_colors import vas_cycle, fl_cycle
+from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
 

@@ -6,7 +6,7 @@ import xarray as xr
 from scipy import signal
 import matplotlib.pyplot as plt
 
-from master_colors import vas_cycle, fl_cycle
+from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
 
