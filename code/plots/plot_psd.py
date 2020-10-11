@@ -10,13 +10,20 @@ from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
 
+import logging
+logging.basicConfig(format='%(asctime)s: %(name)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    level=logging.INFO)
+log = logging.getLogger('Plot PSD')
 
-def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
+
+def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0, norm=False):
     # iterate over all above selected glaciers
     for rgi_id, glacier in rgi_df.iterrows():
         # select glacier
         rgi_id = rgi_id
         name = glacier['name']
+        log.info(f'Plotting PSD for {name}')
         # create figure and axes
         fig, ax = plt.subplots(1, 1, figsize=[8, 6])
         # select from complete dataset
@@ -24,7 +31,7 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
                         mb_model='random',
                         rgi_id=rgi_id)
         # truncate spinup if necessary
-        ds_sel = ds_sel.isel(time=slice(spinup_time, None))
+        ds_sel = ds_sel.isel(time=slice(int(spinup_time), None))
 
         # plots for the FLOWLINE model
         for i, b in enumerate(np.sort(ds.temp_bias)):
@@ -36,6 +43,9 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
             # convert frequency into periods
             if plot_periods:
                 freqs = 1 / freqs
+            # normalize power density
+            if norm:
+                psd = psd / psd[0]
             ax.loglog(freqs, psd, label='{:+.1f} °C'.format(b), c=fl_cycle[i],
                       lw=2)
 
@@ -49,6 +59,9 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
             # convert frequency into periods
             if plot_periods:
                 freqs = 1 / freqs
+            # normalize power density
+            if norm:
+                psd = psd / psd[0]
             ax.loglog(freqs, psd, label='{:+.1f} °C'.format(b), c=vas_cycle[i],
                       lw=2)
 
@@ -60,13 +73,6 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
         title_proxy, = plt.plot(0, marker='None', linestyle='None',
                                 label='dummy')
 
-        # add a seperate legend for each model
-        # leg_fl = ax.legend(handles[:3], labels[:3], bbox_to_anchor=(1, 1), loc='upper left')
-        # leg_fl.set_title('Flowline model', {'weight': 'bold'})
-        # leg_vas = ax.legend(handles[3:], labels[3:], bbox_to_anchor=(1, 0), loc='lower left')
-        # leg_vas.set_title('VAS model', {'weight': 'bold'})
-        # ax.add_artist(leg_fl)
-
         # create list of handles and labels in correct order
         my_handles = list([title_proxy])
         my_handles.extend(handles[:3])
@@ -77,7 +83,7 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
         my_labels.extend(["$\\bf{VAS\ model}$"])
         my_labels.extend(labels[3:])
         # add single two-column legend
-        ax.legend(my_handles, my_labels, ncol=2)
+        ax.legend(my_handles, my_labels, ncol=2, loc=3)
 
         # add grid
         ax.grid(which='both')
@@ -86,17 +92,20 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0):
             ax.invert_xaxis()
 
         # title, labels, ...
-        # ax.set_title('PSD of {} length changes under random climate'.format(name), {'weight': 'bold'})
         if plot_periods:
             ax.set_xlabel('Period [yr]')
         else:
             ax.set_xlabel('Frequency [yr$^{-1}$]')
-        ax.set_ylabel('Power density [m$^2$/yr$^{-1}$]')
+        if norm:
+            ax.set_ylabel('Normalized power density')
+        else:
+            ax.set_ylabel('Power density [m$^2$/yr$^{-1}$]')
 
         # store plot
-        f_path = '/Users/oberrauch/work/master/plots/final_plots/psd/{}.pdf'.format(
-            name.replace(' ', '_'))
-        plt.savefig(f_path, bbox_inches='tight')
+        dir_path = '/Users/oberrauch/work/master/plots/final_plots/psd/'
+        f_name = '{}{}.pdf'.format(name.replace(' ', '_'),
+                                   '_norm' if norm else '')
+        plt.savefig(os.path.join(dir_path, f_name), bbox_inches='tight')
 
 
 def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
@@ -113,8 +122,8 @@ def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
                         rgi_id=rgi_id)
         ds_mb_sel = ds_mb.sel(rgi_id=rgi_id)
         # truncate spinup if necessary
-        ds_sel = ds_sel.isel(time=slice(spinup_time, None))
-        ds_mb_sel = ds_mb_sel.isel(year=slice(spinup_time, None))
+        ds_sel = ds_sel.isel(time=slice(int(spinup_time), None))
+        ds_mb_sel = ds_mb_sel.isel(year=slice(int(spinup_time), None))
 
         # plot spectral density of length changes in left subplot
         # -------------------------------------------------------
@@ -263,5 +272,5 @@ if __name__ == '__main__':
     spinup_time = 1e3
 
     # call plotting functions
-    plot_psd(ds, showcase_glaciers, spinup_time)
-    plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)
+    plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=True)
+    #plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)
