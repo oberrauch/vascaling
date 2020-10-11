@@ -9,8 +9,6 @@ import matplotlib.pyplot as plt
 from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
-
-import logging
 logging.basicConfig(format='%(asctime)s: %(name)s: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
                     level=logging.INFO)
@@ -273,4 +271,4 @@ if __name__ == '__main__':
 
     # call plotting functions
     plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=True)
-    #plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)
+    # plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)
