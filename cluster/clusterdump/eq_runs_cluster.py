@@ -15,7 +15,6 @@ import geopandas as gpd
 import xarray as xr
 
 import logging
-
 log = logging.getLogger('equilibrium-runs')
 
 # import the needed OGGM modules
@@ -112,8 +111,6 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     log.info('Starting VAS equilibrium runs')
 
     # assert correct output file suffixes for temp biases
-    temp_biases = np.atleast_1d(temp_biases)
-    suffixes = np.atleast_1d(suffixes)
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
                            "corresponding suffix")
@@ -180,15 +177,12 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     # compute local t* and the corresponding mu*
     if tstar or use_default_tstar:
         # compute mustar from given tstar or reference table
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
-                                     tstar=tstar, bias=0)
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs, tstar=tstar, bias=0)
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(
-            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
-                                     ref_df=ref_df)
+        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df)
     # Run model with constant/random mass balance model
     # -------------------------------------------------
 
@@ -279,7 +273,7 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
                 mb = 'random' if use_random_mb else 'constant'
                 path = os.path.join(OUTPUT_DIR,
                                     'run_output_{}_vas.nc'.format(mb))
-            log.info(f'Result are written into {path}')
+            log.info('Result are written into {}Store to file')
             ds.to_netcdf(path)
 
     return ds
@@ -330,9 +324,8 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     """
     log.info('Starting flowline equilibrium runs')
 
+
     # assert correct output file suffixes for temp biases
-    temp_biases = np.atleast_1d(temp_biases)
-    suffixes = np.atleast_1d(suffixes)
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
                            "corresponding suffix")
@@ -390,15 +383,12 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     # compute local t* and the corresponding mu*
     if tstar or use_default_tstar:
         # compute mustar from given tstar or reference table
-        workflow.execute_entity_task(climate.local_t_star, gdirs, tstar=tstar,
-                                     bias=0)
+        workflow.execute_entity_task(climate.local_t_star, gdirs, tstar=tstar, bias=0)
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(
-            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(climate.local_t_star, gdirs,
-                                     ref_df=ref_df)
+        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(climate.local_t_star, gdirs, ref_df=ref_df)
 
     workflow.execute_entity_task(climate.mu_star_calibration, gdirs)
     # run inversion tasks
@@ -496,7 +486,7 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
                 mb = 'random' if use_random_mb else 'constant'
                 path = os.path.join(OUTPUT_DIR,
                                     'run_output_{}_fl.nc'.format(mb))
-            log.info(f'Result are written into {path}')
+            log.info('Result are written into {}Store to file')
             ds.to_netcdf(path)
 
     return ds
@@ -544,8 +534,6 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
 
     """
     # assert correct output file suffixes for temp biases
-    temp_biases = np.atleast_1d(temp_biases)
-    suffixes = np.atleast_1d(suffixes)
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
                            "corresponding suffix")
@@ -601,15 +589,12 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # compute local t* and the corresponding mu*
     if tstar or use_default_tstar:
         # compute mustar from given tstar
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
-                                     tstar=tstar, bias=0)
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs, tstar=tstar, bias=0)
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(
-            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
-                                     ref_df=ref_df)
+        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df)
 
     # use t* as center year, even if specified differently
     kwargs['y0'] = tstar
@@ -728,8 +713,6 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     """
 
     # assert correct output file suffixes for temp biases
-    temp_biases = np.atleast_1d(temp_biases)
-    suffixes = np.atleast_1d(suffixes)
     if len(temp_biases) != len(suffixes):
         raise RuntimeError("Each given temperature bias must have its "
                            "corresponding suffix")
@@ -789,10 +772,8 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(
-            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(climate.local_t_star, gdirs,
-                                     ref_df=ref_df)
+        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(climate.local_t_star, gdirs, ref_df=ref_df)
     workflow.execute_entity_task(climate.mu_star_calibration, gdirs)
     # run inversion tasks
     workflow.inversion_tasks(gdirs)
@@ -897,16 +878,16 @@ def eq_runs(rgi_ids, use_random_mb=[True, False], tstar=None, nyears=None,
                 # run foe 1'000 years under constant climate
                 nyears = 1e3
 
-        log.info(f"Running a {'random' if r_mb else 'constant'} climate "
-                 + f"scenario for {len(rgi_ids):.0f} glaciers "
-                 + f"for {nyears:.0f} years")
+        log.info('Running a {} climate scenario for {:.0f} glaciers for {:.0f} years'
+                 .format('random' if r_mb else 'constant',
+                         len(rgi_ids), nyears))
 
         vas_ds = equilibrium_run_vas(rgi_ids, use_random_mb=r_mb, tstar=tstar,
                                      use_default_tstar=use_default_tstar,
                                      use_bias_for_run=use_bias_for_run,
                                      path=True, nyears=nyears,
                                      store_individual_glaciers=store_individual_glaciers,
-                                     store_mean_sum=store_mean_sum, **kwargs)
+                                     store_mean_sum=store_mean_sum)
         fl_ds = equilibrium_run_fl(rgi_ids, use_random_mb=r_mb, tstar=tstar,
                                    use_default_tstar=use_default_tstar,
                                    use_bias_for_run=use_bias_for_run,
@@ -940,6 +921,7 @@ def mb_runs(rgi_ids, tstar=None, path=True):
     ds = xr.concat([vas_ds, fl_ds], pd.Index(['vas', 'fl'], name='model'))
 
     # store to file
+    # store to file
     if path:
         if not isinstance(path, str):
             # set default path and filename
@@ -961,8 +943,7 @@ def showcase_glaciers_random_climate():
 
     # start runs
     mb_runs(rgi_ids, use_default_tstar=False)
-    eq_runs(rgi_ids, use_random_mb=True, use_default_tstar=False,
-            store_mean_sum=False)
+    eq_runs(rgi_ids, use_random_mb=True, use_default_tstar=False, store_mean_sum=False)
 
 
 def single_glaciers():
@@ -975,47 +956,18 @@ def single_glaciers():
     fpath = '/home/users/moberrauch/data/showcase_glaciers.csv'
     showcase_glaciers = pd.read_csv(fpath)
     rgi_ids = showcase_glaciers.rgi_id.values
-
-    # start runs
-    eq_runs(rgi_ids, use_default_tstar=False, store_mean_sum=False)
-
-
-def tmp_test():
-    """Temporary function to look into special cases that don't merit a
-    dedicated function. Can be deleted if necessary."""
-    # start logger with OGGM settings
-    cfg.set_logging_config()
-
-    # run Pasterze under constant equilibrium climate
-    # without temperature bias
-    rgi_ids = ['RGI60-11.00106']
-
-    # start runs
-    eq_runs(rgi_ids, use_random_mb=False, temp_biases=(0),
-            suffixes=('_bias_zero',), nyears=3e3,
-            use_default_tstar=False, store_mean_sum=False)
-
-
-def hef_mb_feedback():
-    """ Run equilibrium experiment for Hintereisferner (RGI60-11.00897)
-    under constant and random climate scenario for 1'000 years each.
-    Thereby the mass balance-elevation feedback of the flowline model is
-    ommited using `mb_elev_feedback='never'` as keyword argument."""
-    # start logger with OGGM settings
-    cfg.set_logging_config()
-
+    
     # only use Hintereisferner
     rgi_ids = ['RGI60-11.00897']
 
     # start runs
-    eq_runs(rgi_ids, nyears=1e3, use_default_tstar=False, store_mean_sum=False,
-            mb_elev_feedback='never')
+    eq_runs(rgi_ids, nyears=1e3, use_default_tstar=False, store_mean_sum=False, mb_elev_feedback='never')
 
 
 def histalp_commitment_run():
     """ Run equilibrium experiment for the entire HISTALP domain:
         - constant climate scenario for 1'000 years
-        - random climate scenario for 1'000 years
+        - random climate scenario for 10'000 years
         - each evolution model runs with it's "best fitting" tstar reference table
 
     """
@@ -1023,16 +975,9 @@ def histalp_commitment_run():
     cfg.set_logging_config()
 
     # get HISTALP RGI IDs
-    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
-                          index_col=0)['RGIId'].values
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv', index_col=0)['RGIId'].values
 
     # start runs
-    eq_runs(rgi_ids, nyears=1e3, use_random_mb=[True, False],
-            use_default_tstar=True,
+    eq_runs(rgi_ids, use_random_mb=[True, False], use_default_tstar=True,
             store_individual_glaciers=False, use_bias_for_run=True)
 
-
-if __name__ == '__main__':
-    os.environ['WORKDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
-    os.environ['OUTDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
-    tmp_test()

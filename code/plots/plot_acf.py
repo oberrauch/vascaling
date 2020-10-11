@@ -5,6 +5,7 @@ import pandas as pd
 import xarray as xr
 from statsmodels.tsa import stattools
 import matplotlib.pyplot as plt
+from pylab import MaxNLocator
 from plots.master_colors import vas_cycle, fl_cycle
 
 import logging
@@ -233,8 +234,8 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
         plt.savefig(path, bbox_inches='tight')
 
 
-def plot_pacf(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000,
-              plot_confint=True):
+def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000,
+                   plot_confint=True):
     """
 
     Parameters
@@ -313,6 +314,8 @@ def plot_pacf(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000,
             xlim = [0, nlags]
         ax.set_xlim(xlim)
         ax.set_ylim([-1.1, 1.1])
+        ya = ax.get_yaxis()
+        ya.set_major_locator(MaxNLocator(integer=True))
         # add grid
         ax.grid()
 
@@ -470,5 +473,4 @@ if __name__ == '__main__':
 
     # call plotting functions
     plot_acf(ds, showcase_glaciers, xlim=[0, 200])
-    # plot_acf_stem(ds, showcase_glaciers, xlim=[0, 200])
-    # plot_pacf(ds, showcase_glaciers, xlim=[0, 20])
+    plot_pacf_stem(ds, showcase_glaciers, xlim=[0, 20])
