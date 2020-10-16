@@ -1,0 +1,329 @@
+% The results chapter in its first (complete) form
+% Did some resturcturing, hence it is of no use anymore.
+% However, I'm to afraid I forgot some paragraph so I can't quite delete it yet.
+
+% ==== SECTION 1 ===============================================================
+\section{Equilibrium experiments} % (fold)
+\label{sec:equilibrium_experiments_results}
+    
+    \subsection{Time series} % (fold)
+    \label{sec:time_series_results}
+
+      The following section tries to explain the model behavior using the temporal evolution of the length, surface area and ice volume. The plots show a comparison between the \vas{} model and the flowline model time series, both for the constant and random climate scenario. Since the \vas{} model derives the initial geometry from the surface area, absolute values of initial length and volume differ between the \vas{} model and the flowline model. The results are therefore normalized with respect to their initial values for better comparability. %TODO: not up to date anymore... adjust to new structure!
+
+      \subsubsection{Commitment runs on a regional scale} % (fold)
+      \label{ssec:commitment_runs_results}
+
+        At the risk of repetition, \vas{} should not be applied to individual glaciers but to populations of glaciers \citep{Bahr2015}. This is were the scaling approach shows its strength. The law of large number assures a reasonable estimation of the collective glacier ice volume, since random error will be canceled out by each other. Hence, this section examines the behavior of \vas{} model applied to all Alpine glaciers. The findings explained hereafter result from runs under
+        \begin{enumerate*}[label=(\alph*)]
+          \item an equilibrium climate, with \lstinline`y0` = \tstar{} for each glacier
+          \item todays climate, with \lstinline`y0 = 1999`
+        \end{enumerate*}.
+        Both climate scenarios run with different mass balance models and apply different temperature biases. For more details see Section~\ref{sec:commitment_runs_setup}.
+
+        Let's first take a more general look at the model behavior under equilibrium climate, similar to the Hintereisferner test case (Section~\ref{ssec:hintereisferner_test_case_results}. Both evolution models run for 1'000 years, once with the \lstinline`ConstantMassBalance` model and once with the \lstinline`RandomMassBalance` model. A random climate with its year-to-year fluctuations is obviously more physical than a completely constant climate. However, the changes in glacier ice volume under both climate scenarios are almost identical. Over the last 200 years of the simulations with equilibrium climate, the differences in total ice volume between the constant and random climate scenario average around \SI{0.6}{\percent} to \SI{0.7}{\percent} for the \vas{} model and \SI{0.7}{\percent} to \SI{2.3}{\percent} for the flowline model, depending on the temperature bias. This makes intuitive sense, considering that glaciers act as natural low-pass filters for climatic variabilities. For this reason and to simplify the following discussion, only the constant climate scenarios are investigated further.
+
+        The \vas{} model estimates a total Alpine ice volume of \SI{139}{\cubic\kilo\meter} (\SI{+6}{\percent}), \SI{115}{\cubic\kilo\meter} (\SI{-12}{\percent}) and \SI{95}{\cubic\kilo\meter} (\SI{-27}{\percent}), while the flowline model estimates a total Alpine ice volume of \SI{236}{\cubic\kilo\meter} (\SI{+45}{\percent}), \SI{147}{\cubic\kilo\meter} (\SI{-10}{\percent}) and \SI{86}{\cubic\kilo\meter} (\SI{-47}{\percent}), for a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. 
+        Both evolution models adjust their initial ice volume downwards by under equilibrium climate. This is due to the mass balance residual \bias{}. It indicates that the 2003 RGI geometries are not sustainable by any 31-period in the HISTALP records \citep{Maussion2019}. This sag could be eliminated by a spin-up period, but since the absolute values are of less interest for now it seems unnecessary. Besides that, all characteristics of the \vas{} model found for the Hintereisferner test case can be seen here as well. The \vas{} scaling model underestimates the change in ice volume, produced symmetric results and adjusts faster to a given step change in climate. 
+
+        \begin{figure}[htp]
+          \centering
+          \begin{subfigure}[b]{0.48\textwidth}
+            \caption{\Vas{} model, relative glacier volume}
+            \label{fig:histalp_commitment:volume_norm_const}
+            \centering
+            \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_norm_vas.pdf}
+          \end{subfigure}
+          \hfill
+          \begin{subfigure}[b]{0.48\textwidth}
+            \caption{Flowline model, relative glacier volume}
+            \label{fig:histalp_commitment:volume_norm_random}
+            \centering
+            \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_norm_fl.pdf}
+          \end{subfigure}
+          \begin{subfigure}[b]{0.48\textwidth}
+            \caption{\Vas{} model, absolute glacier volume}
+            \label{fig:histalp_commitment:volume_abs_const}
+            \centering
+            \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_abs_vas.pdf}
+          \end{subfigure}
+          \hfill
+          \begin{subfigure}[b]{0.48\textwidth}
+            \caption{Flowline model, absolute glacier volume}
+            \label{fig:histalp_commitment:volume_abs_random}
+            \centering
+            \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_abs_fl.pdf}
+          \end{subfigure}
+          
+          \caption{Time series of total ice volume for all glaciers in the HISTALP domain. The upper two panels show the relative glacier ice volume, normalized with the initial values, while the lower two panels show the absolute glacier ice volume. The left panels show the result of the \vas{} model, the right panels show the results of the flowline model. Solid lines represent the random climate scenarios, while dashed lines represent the constant climate scenarios. All climate scenarios are based on an equilibrium climate, with one of three different temperature biases.
+          Yellow, orange and red solid lines represent the \vas{} model, while cyan, blue and purple solid lines represent the flowline model, under a random climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. Yellow, orange and red dashed lines represent the \vas{} model, while cyan, blue and purple dashed lines represent the flowline model, under a constant climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. %TODO change colors
+          The dotted line indicate the initial volume. The light gray lines represent the volume evolutions of the other model, to facilitate comparisons.}
+          \label{fig:histalp_commitment}
+        \end{figure}
+
+        % \begin{figure}[htp]
+        %   \centering
+        %   \begin{subfigure}[b]{0.99\textwidth}
+        %     \caption{Normalized glacier volume}
+        %     \label{fig:histalp_commitment:volume_norm}
+        %     \centering
+        %     \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_norm.pdf}
+        %   \end{subfigure}
+        %   \begin{subfigure}[b]{0.99\textwidth}
+        %     \caption{Absolute glacier volume}
+        %     \label{fig:histalp_commitment:volume_abs}
+        %     \centering
+        %     \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_abs.pdf}
+        %   \end{subfigure}
+          
+        %   \caption{Time series of total ice volume for all glaciers in the HISTALP domain. The upper two panels show the relative values, normalized with the initial values, while the lower two panels show absolute values. The left panels show the result of the \vas{} model, the right panels show the results of the flowline model. Solid lines represent a random climate scenario, while dashed lines represent a constant climate scenario. All climate scenarios are based on an equilibrium climate, however with three different temperature biases.
+        %   Yellow, orange and red solid lines represent the \vas{} model, while cyan, blue and purple solid lines represent the flowline model, under a random climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. Yellow, orange and red dashed lines represent the \vas{} model, while cyan, blue and purple dashed lines represent the flowline model, under a constant climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. %TODO change colors
+        %   The dotted line indicate the initial volume. The light gray lines represent the volume evolutions of the other model, to facilitate comparisons.}
+        %   \label{fig:histalp_commitment}
+        % \end{figure}
+
+      % subsubsection commitment_runs_results (end)
+
+    % subsection time_series (end)
+
+    \subsection{Autocorrelation analysis} % (fold)
+    \label{sec:autocorrelation_results}
+
+      The autocorrelation function for selected glaciers is shown in Figure~\ref{fig:acf}. For details about the experimental setup see Section~\ref{ssec:sec:autocorrelation_and_power_spectral_density_setup}
+
+      The autocorrelation function of the \vas{} length shows little to no variability between runs under different climate conditions. % TODO compare with almost linear behavior of mass balance model in the vicinity of equilibirum
+      The autocorrelation function of the \vas{} length is comparable even between different glaciers. It has the same behavior of a dampened oscillator as described above. Their are differences in amplitude and frequency--most likely affected by size--the general behavior is almost identical. 
+      
+      The flowline model is able to represent different glacial geometries and grasp individual responses to climatic forcings, which can be seen in the vastly different autocorrelation functions. They differ from to glacier, but also for different climate scenarios (temperature biases) on the same glacier. However, there are no discernible patterns, which again confirms the notion that the OGGM flowline model is capable of modeling each glaciers individual response. Here are some examples: for Hintereisferner the autocorrelation of the flowline model is stronger than that of the \vas{} model, while for Mer de Glace and Großer Aletschgletscher it is lower (for all tested climate scenarios); the flowline model of the Pasterze shows a strong autocorrelation under the equilibrium climate, i.e., \SI{0}{\celsius} temperature bias, (>0.7 for lags times between 0 and 95 years, still >0.43 for 200 years lag time, statistically significant up until a lag time of 232 years), while with a positive and negative temperature bias of \SI{\pm0.5}{\celsius} the autocorrelation is less than for the \vas{} model.
+      The \vas{} model has a stronger autocorrelation for short lag time (i.e., less than about 20 years) than the flowline model; similarly, the flowline model of the d'Argentière shows a strong autocorrelation under the climate with \SI{+0.5}{\celsius} temperature bias, and lower autocorrelation than the \vas{} model for the other two climate scenarios; The only observation made for all glaciers, it that the \vas{} model has a stronger autocorrelation for short lag time (i.e., less than about 20 years) than the flowline model. This is true even for glaciers, where the autocorrelation of the flowline mode is generally stronger (e.g., Hintereisferner). 
+
+      It is not the intent of this work to investigate the relation between a glacier's geometry and its autocorrelation function, therefore we leave it at this qualitative first look. However, it is notable that the OGGM flowline model behaves differently for different glaciers and/or different climatic forcings. How far these results are comparable to real world glaciers is anyones guess. The \textit{one size fits all} approach of the \vas{} model produces comparable results, mostly independent the glaciers geometry and the climate forcing (which was to be expected).
+
+      \begin{figure}[htp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00897 - Hintereisferner}
+          \label{fig:acf:hintereisferner}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Hintereisferner.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00106 - Pasterze}
+          \label{fig:acf:pasterze}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Pasterze.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03643 - Mer de Glace}
+          \label{fig:acf:mer_de_glace}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Mer_de_Glace.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03638 - d'Argentière}
+          \label{fig:acf:glacier_d_argentiere}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Glacier_d'Argentière.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01450 - Großer Aletschgletscher}
+          \label{fig:acf:großer_aletschgletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Großer_Aletschgletscher.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01238 - Rhonegletscher}
+          \label{fig:acf:rhonegletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/acf/Rhonegletscher.pdf}
+        \end{subfigure}
+        % \begin{subfigure}[b]{0.48\textwidth}
+        %   \caption{RGI60-11.02704 - Allalingletscher}
+        %   \label{fig:acf:allalingletscher}
+        %   \centering
+        %   \includegraphics[width=\textwidth]{../plots/final_plots/acf/Allalingletscher.pdf}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}[b]{0.48\textwidth}
+        %   \caption{RGI60-11.02773 - Findelgletscher}
+        %   \label{fig:acf:findelgletscher}
+        %   \centering
+        %   \includegraphics[width=\textwidth]{../plots/final_plots/acf/Findelgletscher.pdf}
+        % \end{subfigure}
+
+        \caption{Autocorrelation function of modeled length for lag times between zero and 200 years. Different lines represent different combinations of evolution model and climate scenario.
+        The random climate scenario is based on an equilibrium climate, with different temperature biases.
+        Cyan, blue and purple lines represent the flowline model, while yellow, orange and red lines represent the \vas{} model, with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively.
+        The \SI{99}{\percent} confidence intervals are shaded in the corresponding colors.}
+        \label{fig:acf}
+      \end{figure}
+    
+    % subsection sec:autocorrelation_analysis_results (end)
+
+    \subsubsection{Power spectral density analysis} % (fold)
+    \label{ssec:power_spectral_density_results}
+      % intro
+      The power spectral density is estimated via Welch's method. Welch's method reduces the variance in the estimated power density by time-averaging, at the cost of frequency resolution (e.g., TODO: citation). As for the autocorrelation analysis, the initial 1000 years of the adjustment period are clipped. The resulting 9000 data points are divided into nine time windows with a window size of 1800 datapoints and a \SI{50}{\percent} overlap. The windows are tapered using the Hann function. For details about additional parameters see the default values of the python function \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html}{\lstinline`scipy.signal.welch`}. The power spectral density should not be computed from the aggragate glacier length of all Alpine glaciers, since mirroring oscillations would cancel each other out. In order to avoid a n-of-1 experiment, the follwing six Alpine glaciers are shown below %TODO Showcase glaciers.
+
+      % general
+      For all glaciers and all cliamte scenarios, the power density of the length change signal decreases with increasing frequency. This makes intuituve sense, sinceh changes in glacier length---and thereby also changes in surface area and changes in glacier volume---are mainly driven by long term climatic trends and less by inter-annual variabilities in the climatic forcing. Glaciers are low-pass filters
+
+      As seen before, the flowline model glaciers react stronge to given changes in climate than the VAS model glaciers. This is reflected in an overall higher power density (approximately one order of magnitude) of the flowline model runs.
+
+      The flowline model runs are good examples of low pass filter. A low pass filter passes lower frequencies while attenuating (or rejecting) higher frequencies. And so does the glacier (model). For frequencies up to 
+
+      After an initial decrease in power density with increasing frequency, the power density stays fairly constant for periods in the order of magnitue of ten years. The longterm changes of the climate system are driving the glacial evolution, while the short term changes in monthly or yearly climatic parameters have little to no effect. The power spectral density anlysis suggests that trends  shorter than 10 years (corresponding to a frequency of 0.1 year$^{-1}$) are filtered by the flowline model.
+
+      The power spectral density curves of the \vas{} show no discernible differences between the different temperature biases and are even comparable across different glaciers. In fact, the maximum relative difference from one curve to another is \SI{150}{\percent}
+
+      Similar to the time series and the auto correlation analysis, the power spectral density of \vas{} model’s length change signal does not change for different temperature biases. Even the differences between glaciers is 
+
+      The PSD of the VAS model is almost identical between runs with different temperature biases, attributed to the linear (and symmetric) behaviour seen before. The flowline model produces a less coherent PSD between the runs with different temperature bias, whereby the equilibrium run and the positive mass balance run are more alike.
+
+      % vas vs flowline
+
+      \begin{figure}[htp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00897 - Hintereisferner}
+          \label{fig:psd:hintereisferner}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Hintereisferner_norm.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00106 - Pasterze}
+          \label{fig:psd:pasterze}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Pasterze_norm.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03643 - Mer de Glace}
+          \label{fig:psd:mer_de_glace}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Mer_de_Glace_norm.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03638 - d'Argentière}
+          \label{fig:psd:glacier_d_argentiere}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Glacier_d'Argentière_norm.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01450 - Großer Aletschgletscher}
+          \label{fig:psd:großer_aletschgletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Großer_Aletschgletscher_norm.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01238 - Rhonegletscher}
+          \label{fig:psd:rhonegletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/psd/Rhonegletscher_norm.pdf}
+        \end{subfigure}
+        % \begin{subfigure}[b]{0.48\textwidth}
+        %   \caption{RGI60-11.02704 - Allalingletscher}
+        %   \label{fig:psd:allalingletscher}
+        %   \centering
+        %   \includegraphics[width=\textwidth]{../plots/final_plots/psd/Allalingletscher.pdf}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}[b]{0.48\textwidth}
+        %   \caption{RGI60-11.02773 - Findelgletscher}
+        %   \label{fig:psd:findelgletscher}
+        %   \centering
+        %   \includegraphics[width=\textwidth]{../plots/final_plots/psd/Findelgletscher.pdf}
+        % \end{subfigure}
+
+        \caption{Power spectral density of modeled glacier length for different alpine glaciers. Different lines represent different combinations of evolution models and climate scenarios. The climate scenarios are based on a randomized equilibrium climate, with different temperature biases. Cyan, blue and purple lines represent the flowline model, while yellow, orange and red lines represent the \vas{} model, with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. The x-axis denotes the period length in years, i.e, the inverse frequency. Note the differences in y-axis scales.}
+        \label{fig:psd}
+      \end{figure}
+    
+    % subsubsection power_spectral_density_results (end)
+
+% section equilibrium_experiments (end)
+
+% ==== SECTION 2 ===============================================================
+\section{Sensitivity experiments} % (fold)
+\label{sec:sensitivity_experiments_results}
+
+  The equilibrium runs show quite large differences in projected ice volume change between the \vas{} model and the flowline model. However, the “out-of-the-box” scaling model is maybe not the best fit for the HISTALP domaion and it is definitely not a good fit for any single glacier. Hence, a set of tuning parameters may improve the model performance.
+  The most obvious tuning parameters are the model-internal time scales and the scaling constants and scaling exponents. The sensitivity experiments run the \vas{} model with different values for the above mentioned parameters. Experiments are perforemd on the Hintereisferner (RGI60-11.00897) and the entire HISTALP domain, in each case with a constant climate scenario with a positive temperature bias of \SI{+0.5}{\celsius}. For details about the experimental setup see Section~\ref{sec:sensitivity_experiments_setup}.
+
+  \begin{tldrbox}[Sensitivity experiments]{tldr:sensitivity_experiments_results}
+    \item the model-internal time scales control the damping ratio of the oscillation, longer time scales correspond to stronger overshoots
+    \item halving the model-internal time scales leads to an asymptotical change in aggregte ice volume of the HISTALP domain, without any oscillations
+    \item different scaling constants lead to a different initial ice volume and a different initial glacier length, which in turn affect the e-folding time scales
+    \item changing the scaling constants has little to no effect on the normalized volume change and normalized equilibrium volume
+    \item custom scaling constants and exponents increase the change in ice volume ever so slightly, but the results are still not comparable to the flowline model
+  \end{tldrbox}
+  
+  \begin{figure}[ht]
+    \centering
+    % HEF time scales
+    \begin{subfigure}[b]{0.476\textwidth}
+      \caption{Hintereisferner, different model-internal time scales}
+      \label{fig:sensitivity:time_scales_hef}
+      \centering
+      \includegraphics[width=\textwidth]{../plots/final_plots/sensitivity/time_scales_hef.pdf}
+    \end{subfigure}
+    \hfill
+    % HEF scaling params
+    \begin{subfigure}[b]{0.476\textwidth}
+      \caption{Hintereisferner, different scaling constants}
+      \label{fig:sensitivity:scaling_params_hef}
+      \centering
+      \includegraphics[width=\textwidth]{../plots/final_plots/sensitivity/scaling_params_hef.pdf}
+    \end{subfigure}
+    
+    % HISTALP time scales
+    \begin{subfigure}[b]{0.476\textwidth}
+      \caption{HISTALP domain, different model-internal time scales}
+      \label{fig:sensitivity:time_scales_histalp}
+      \centering
+      \includegraphics[width=\textwidth]{../plots/final_plots/sensitivity/time_scales_histalp.pdf}
+    \end{subfigure}
+    \hfill
+    % HISTALP scaling params
+    \begin{subfigure}[b]{0.476\textwidth}
+      \caption{HISTALP domain, different scaling constants and scaling exponents}
+      \label{fig:sensitivity:scaling_params_histalp}
+      \centering
+      \includegraphics[width=\textwidth]{../plots/final_plots/sensitivity/scaling_params_histalp.pdf}
+    \end{subfigure}
+    
+    \caption{Temporal evolution of glacier ice volume under a positive temperature bias of \SI{+0.5}{\celsius} for the Hintereisferner (RGI60-11.00897) in the two upper panels (\subref{fig:sensitivity:time_scales_hef}) and (\subref{fig:sensitivity:scaling_params_hef}) and for the entire HISTALP domain in the two lower panels (\subref{fig:sensitivity:time_scales_histalp}) and (\subref{fig:sensitivity:scaling_params_histalp}). The right panels show results for different model-internal time scales, scaled by a linear factor (see legend for details). The left panels show results for different scaling constants and scaling exponents (see legend for details). Note the difference in y-axis scales.}
+    \label{fig:sensitivity}
+  \end{figure}
+
+  \subsection{Sensitivity to model-internal time scales} % (fold)
+  \label{sec:sensitivity_to_model_internal_time_scales_results}
+    Let's again start with the Hintereisferner test case, before moving to the regional Alpine run. As was to be expected, the model-internal time scales do not affect the absolute values but control only the oscillatary behavior. The e-folding response time scales for length and area are directly proportional to the model-internal time scales, changing by approximately 18 years and 8 years, respectively. Interestingly enough, the e-folding response time for volume is indirect proportional and changes only by a maximum of three years. Halving the model-internal time scales leads to an increase of the volume e-folding time scale by three years to $\tau_V = \SI{39}{\year}$, while doubbling the model-internal time scales results in a decrease of the volume e-folding time scale by two years to $\tau_V = \SI{34}{\year}$.
+
+    The main change, however, is seen in the oscillation amplitude. The damping ratio seems to be controlled by the model-internal time scales. A higher model-internal time scales lead to a stronger oscillation and vice versa. But even with halved the model-internal time scales, the modeled volume adjustment still shows some oscillations. With the default values, the \vas{} model overshoots the volume change estimation by \SI{4}{\percent} of the final equilibrium value and it takes 434 years to reach an equilibrium. Hereby, an equilibrium state is (somewhat arbitrarily) defined as the range of \SI{\pm0.1}{\percent} of the equilibrium value at year 1000. Halving and doubling the model-internal time scales changes the overshoot to \SI{1}{\percent} and \SI{10}{\percent} of the equilibrium value, respectively. The time span until a new equilibrium is reached seems to be almost linearly dependend on the model-internal time scales. By halving and doubling the model-internal time scales it takes 234 years and 832 years for the model to reach a new steady state, respectively.
+
+    The same qualitative findings are made for the regional Alpine run. The absolute values do not change for different model-internal time scales, only the oscillatory behavior does. While longer model-internal time scales result again in stronger overshoots, the oscillations seem generally more damped for the regional run. This is most likely a side effect of the summation over all Alpine glacier, whereby small scale oscillations can cancel each other out. The overshoots amount to \SI{0.1}{\percent}, \SI{3.5}{\percent} and \SI{10.2}{\percent} of the equilibrium value for a time scale factor of 0.5, 1 and 2, respectively. Thereby it takes 312 years, 515 years and 941 years to reach a new steady state. When halving the model-internal time scales, the aggregate volume evolution shows no more discernable oscillations and is basically of exponetial (asympotical) nature.
+
+  % subsection sensitivity_to_model_internal_time_scales_results (end)
+
+  \subsection{Sensitivity to scaling parameters} % (fold)
+  \label{sec:sensitivity_to_scaling_parameters_results}
+
+    As seen above, the model-internal time scale do not change the absolute values of any geometric glacier property. So what about the scaling parameters?! The following paragraph compares the model behavior between the custom Hintereisferner scaling constants and the global scaling constants. The scaling exponents are held constant, since it is not possible to compute a linear regression from a single data point (see Section~\ref{sec:sensitivity_experiments_setup} for details). % $c_L = \SI{2.555}{\meter^{3-q}}$ and $c_A = \SI{0.252}{\meter^{3-2\gamma}}$ and the global scaling constants $c_L = \SI{4.551}{\meter^{3-q}}$ and $c_A = \SI{0.191}{\meter^{3-2\gamma}}$.
+    Changing the scaling constants leads to different absolute values. As explained in Section~\ref{sec:glacier_evolution_model_implementation}, the \vas{} model starts by computing the initial glacier volume from the surface area via the \vas{} relation. Hence, the initial area stays the same while the initial ice volume increases with the custom scaling constants (\SI{0.787}{\cubic\kilo\meter} vs. \SI{0.596}{\cubic\kilo\meter}). Starting with a larger initial ice volume, the absolute change in ice volume increase (\SI{-0.124}{\cubic\kilo\meter} vs. \SI{-0.094}{\cubic\kilo\meter}) but still results in a larger equilibrium ice volume (\SI{0.662}{\cubic\kilo\meter} vs. \SI{0.502}{\cubic\kilo\meter}). However, when normalized with the respective initial ice volumes, the changes in ice volume, the equilibrium values and the overshoots (i.e., minimum values due to the oscillating behavior) are almost identical (the differences lie far below \SI{0.1}{\percent}). This comes as no surprise, since the scaling constants are canceled during the normalization process. In fact, when estimating \emph{changes} in regional or global ice volume the scaling constant $c$ can be eliminated alltogether \citep[][Section 8.5]{Bahr2015}. While the relative values do no change, the temporal evolution does. As already discusse, the bigger costum scaling constant $c_A$ leads to a bigger initial ice volume. Increasing the glacier's ice volume in turn increases the glacier's response time, since larger glaciers generally react slower to climatic changes. The volume e-folding response time increases to 48 years with the costum scaling constants, compared to 36 years with the global values. The increased response time goes hand in hand with a stronger oscillation. While the amplitude stays the same, the frequency decreases. Hence, the peak of the overshoot shifts by 31 years (to year 178 after the initial climate perturbation) and it takes much longer to reach the new equilibrium state (573 years vs. 435 years).
+    While the glacier length reacts analogously to the costum scaling constants, the surface area does not. This is to be expected, since the initial surface area does not depend on the scaling parameters. While the equilibrium value and the e-folding response time are practically not affected, the oscillation amplifies. In addition to the decreased frequency, as for ice volume and glacier length, the surface area overshoots \SI{12\,141}{\square\meter} more under the costum scaling constants (which corresponds to \SI{\approx0.2}{\percent} of the equilibrium value).
+    
+    Again, the results of regional Alpine run are analogous to the Hintereisferner test case. While the Hintereisferner test case compares only the global and custom scaling constants, an additional regional with costum scaling constants and scaling exponents is investigated (see Section~\ref{sec:sensitivity_experiments_setup} for details). As seen above, changing the scaling constants results in different absolute values (for the initial volume as well as for the final equilibrium volume). However, when normalized with the initial values only the run with costum scaling exponents shows a different (bigger) change in ice volume. The total modeled glacier ice volume shrinks from an initial \SI{229.7}{\cubic\kilo\meter} to a final \SI{165.5}{\cubic\kilo\meter}, subjected to a positive temperature bias of \SI{+0.5}{\celsius}. The change of \SI{-64.2}{\cubic\kilo\meter} corresponds to \SI{-28}{\percent} of the initial value. However, the result does still not compare to the \SI{-47}{\percent} of the flowline model and is not even significantly different from the \SI{-26.5}{\percent} for the other two \vas{} runs.
+
+  % subsection sensitivity_to_scaling_parameters_results (end)
+
+% section sensitivity_experiments (end)
+
+% ==== SECTION 3 ===============================================================
+\section{Future projection} % (fold)
+\label{sec:future_projection_results}

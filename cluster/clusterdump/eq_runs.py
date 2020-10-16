@@ -285,6 +285,168 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     return ds
 
 
+def eq_vas_test(rgi_ids, use_random_mb=True, path=True,
+                temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
+                suffixes=('_bias_zero', '_bias_p', '_bias_n'),
+                tstar=None, use_default_tstar=True,
+                vas_c_length_m=None, vas_c_area_m2=None,
+                store_individual_glaciers=True, store_mean_sum=True,
+                **kwargs):
+    """ The routine runs all steps for the equilibrium experiments using the
+    volume/area scaling model:
+    - OGGM preprocessing, including initialization, GIS tasks, climate tasks and
+      massbalance tasks.
+    - Run model for all glaciers with constant (or random) massbalance model
+      over 3000 years (default value).
+    - Process the model output dataset(s), i.e. normalization, average/sum, ...
+
+    The final dataset containing all results is returned. Given a path it is
+    also stored to file.
+
+    Parameters
+    ----------
+    rgi_ids: array-like
+        List of RGI IDs for which the equilibrium experiments are performed.
+    use_random_mb: bool, optional, default=True
+        Choose between random massbalance model and constant massbalance model.
+    path: bool or str, optional, default=True
+        If a path is given (or True), the resulting dataset is stored to file.
+    temp_biases: array-like, optional, default=(0, +0.5, -0.5)
+        List of temperature biases (float, in degC) for the mass balance model.
+    suffixes: array-like, optional, default=['_normal', '_bias_p', '_bias_n']
+        Descriptive suffixes corresponding to the given temperature biases.
+    use_bias_for_run: bool, optional, default=False
+        Flag deciding whether or not the mass balance residual is used
+    tstar: float, optional, default=None
+        'Equilibrium year' used for the mass balance calibration. Using the
+        `ref_tstars.csv` table if not supplied.
+    use_default_tstar : bool, optional, default=True
+        Flag deciding whether or not to use the default ref_tstar.csv list. If
+        `False`the `oggm_ref_tstars_rgi6_histalp.csv` reference table is used.
+    vas_c_length_m: float, optional, default=None
+        Scaling constant for volume/length scaling
+    vas_c_area_m2: float, optional, default=None
+        Scaling constant for volume/area scaling
+    store_mean_sum: bool, optional, default=True
+        Flag deciding whether or not to compute and store the average and sum
+        over all given glaciers
+    store_individual_glaciers : bool, optional, default=True
+        Flag deciding whether or not to store the model output for all
+        individual glaciers
+    kwargs:
+        Additional key word arguments for the `run_random_climate` or
+        `run_constant_climate` routines of the vascaling module.
+
+    Returns
+    -------
+    Dataset containing yearly values of all glacier geometries.
+
+    """
+    log.info('Starting VAS equilibrium runs')
+
+    # assert correct output file suffixes for temp biases
+    temp_biases = np.atleast_1d(temp_biases)
+    suffixes = np.atleast_1d(suffixes)
+    if len(temp_biases) != len(suffixes):
+        raise RuntimeError("Each given temperature bias must have its "
+                           "corresponding suffix")
+
+    # OGGM preprocessing
+    # ------------------
+
+    # compute RGI region and version from RGI IDs
+    # assuming all they are all the same
+    rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
+    rgi_version = (rgi_ids[0].split('-')[0])[-2:-1]
+
+    # load default parameter file
+    cfg.initialize()
+
+    # get environmental variables for working and output directories
+    WORKING_DIR = os.environ["WORKDIR"]
+    OUTPUT_DIR = os.environ["OUTDIR"]
+    # create working directory
+    utils.mkdir(WORKING_DIR)
+    # set path to working directory
+    cfg.PATHS['working_dir'] = WORKING_DIR
+    # set RGI version and region
+    cfg.PARAMS['rgi_version'] = rgi_version
+    # define how many grid points to use around the glacier,
+    # if you expect the glacier to grow large use a larger border
+    cfg.PARAMS['border'] = 120
+    # we use HistAlp climate data
+    cfg.PARAMS['baseline_climate'] = 'HISTALP'
+    # set the mb hyper parameters accordingly
+    cfg.PARAMS['prcp_scaling_factor'] = 1.75
+    cfg.PARAMS['temp_melt'] = -1.75
+    # change scaling constants for length and area
+    if vas_c_length_m:
+        cfg.PARAMS['vas_c_length_m'] = vas_c_length_m
+    if vas_c_area_m2:
+        cfg.PARAMS['vas_c_area_m2'] = vas_c_area_m2
+    # the bias is defined to be zero during the calibration process,
+    # which is why we don't use it here to reproduce the results
+    cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
+
+    # read RGI entry for the glaciers as DataFrame
+    # containing the outline area as shapefile
+    rgidf = utils.get_rgi_glacier_entities(rgi_ids)
+
+    # get and set path to intersect shapefile
+    intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
+    cfg.set_intersects_db(intersects_db)
+
+    # sort by area for more efficient parallel computing
+    rgidf = rgidf.sort_values('Area', ascending=False)
+    cfg.PARAMS['use_multiprocessing'] = True
+    # operational run, all glaciers should run
+    cfg.PARAMS['continue_on_error'] = True
+
+    # initialize the GlacierDirectory
+    gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
+
+    # define the local grid and glacier mask
+    workflow.execute_entity_task(gis.define_glacier_region, gdirs)
+    workflow.execute_entity_task(gis.glacier_masks, gdirs)
+    # process the given climate file
+    workflow.execute_entity_task(climate.process_climate_data, gdirs)
+    # compute local t* and the corresponding mu*
+    if tstar or use_default_tstar:
+        # compute mustar from given tstar or reference table
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     tstar=tstar, bias=0)
+    else:
+        # compute mustar from the reference table for the flowline model
+        # RGI v6 and HISTALP baseline climate
+        ref_df = pd.read_csv(
+            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     ref_df=ref_df)
+    # Run model with constant/random mass balance model
+    # -------------------------------------------------
+
+    # use t* as center year, even if specified differently
+    kwargs['y0'] = tstar
+    # run for 3000 years if not specified otherwise
+    kwargs.setdefault('nyears', 3000)
+
+    models = dict()
+
+    for gdir in gdirs:
+        # instance the model
+        min_hgt, max_hgt = vascaling.get_min_max_elevation(gdir)
+        init_area_m2 = gdir.rgi_area_m2
+        mb_mod = vascaling.ConstantVASMassBalance(gdir)
+        model = vascaling.VAScalingModel(year_0=0, area_m2_0=init_area_m2,
+                                         min_hgt=min_hgt, max_hgt=max_hgt,
+                                         mb_model=mb_mod)
+        model._compute_time_scales()
+
+        models[gdir.rgi_id] = model
+
+    return models
+
+
 def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
                        temp_biases=(0, +0.5, -0.5), use_bias_for_run=False,
                        suffixes=['_bias_zero', '_bias_p', '_bias_n'],
@@ -981,19 +1143,23 @@ def single_glaciers():
 
 
 def tmp_test():
-    """Temporary function to look into special cases that don't merit a
-    dedicated function. Can be deleted if necessary."""
+    """ Run equilibrium experiment for showcase glaciers under random climate
+    scenario. """
     # start logger with OGGM settings
     cfg.set_logging_config()
 
-    # run Pasterze under constant equilibrium climate
-    # without temperature bias
-    rgi_ids = ['RGI60-11.00106']
+    # get RGI IDs
+    # fpath = '/home/users/moberrauch/data/showcase_glaciers.csv'
+    fpath = '/Users/oberrauch/work/master/data/showcase_glaciers.csv'
+    showcase_glaciers = pd.read_csv(fpath)
+    rgi_ids = showcase_glaciers.rgi_id.values
 
-    # start runs
-    eq_runs(rgi_ids, use_random_mb=False, temp_biases=(0),
-            suffixes=('_bias_zero',), nyears=3e3,
-            use_default_tstar=False, store_mean_sum=False)
+    models = eq_vas_test(rgi_ids, use_random_mb=True, use_default_tstar=False,
+                         store_mean_sum=False)
+
+    import pickle
+    pickle.dump(models,
+                open('/Users/oberrauch/work/master/data/tmp/vas_models.pkl', 'wb'))
 
 
 def hef_mb_feedback():
@@ -1033,6 +1199,8 @@ def histalp_commitment_run():
 
 
 if __name__ == '__main__':
-    os.environ['WORKDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
-    os.environ['OUTDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
+    os.environ[
+        'WORKDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
+    os.environ[
+        'OUTDIR'] = '/Users/oberrauch/work/master/working_directories/test_wd'
     tmp_test()

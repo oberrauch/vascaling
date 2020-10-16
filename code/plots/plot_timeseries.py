@@ -16,7 +16,7 @@ log = logging.getLogger('plot timeseries')
 
 def read_dataset(path):
     # read dataset
-    ds = xr.open_dataset(path)
+    ds = xr.load_dataset(path)
     # sort by temperature bias
     ds = ds.sortby('temp_bias')
     # cast normalized dimension from int to bool
@@ -507,25 +507,6 @@ def plot_histalp_commitment():
     path = '/Users/oberrauch/work/master/data/cluster_output/histalp_commitment/eq_runs.nc'
     ds = read_dataset(path)
 
-    # the DataFrame has the following structure
-    # <xarray.Dataset>
-    # Dimensions:         (mb_model: 2, model: 2, normalized: 2, rgi_id: 2, temp_bias: 3, time: 10001)
-    # Coordinates:
-    #   * normalized      (normalized) bool False True
-    #   * model           (model) object 'vas' 'fl'
-    #   * rgi_id          (rgi_id) object 'mean' 'sum'
-    #   * time            (time) float64 0.0 1.0 2.0 3.0 ... 9.998e+03 9.999e+03 1e+04
-    #   * temp_bias       (temp_bias) float64 -0.5 0.0 0.5
-    #     hydro_year      (mb_model, time) float64 0.0 1.0 2.0 3.0 ... nan nan nan nan
-    #     calendar_year   (mb_model, time) float64 -1.0 0.0 1.0 2.0 ... nan nan nan
-    #     hydro_month     (mb_model, time) float64 1.0 1.0 1.0 1.0 ... nan nan nan nan
-    #     calendar_month  (mb_model, time) float64 10.0 10.0 10.0 10.0 ... nan nan nan
-    #   * mb_model        (mb_model) object 'random' 'constant'
-    # Data variables:
-    #     volume          (mb_model, model, normalized, rgi_id, temp_bias, time) float64 ...
-    #     area            (mb_model, model, normalized, rgi_id, temp_bias, time) float64 ...
-    #     length       ...
-
     # iterate over mass balance model
     for mb_model in ds['mb_model'].values:
         log.info('Creating plots for {} climate scenario'.format(mb_model))
@@ -588,5 +569,36 @@ def plot_histalp_commitment_both_climates():
     ds.close()
 
 
+def plot_test():
+    # specify path and read datasets
+    path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate_long/eq_runs.nc'
+    ds = read_dataset(path)
+
+    # define glaciers of interest
+    showcase_glaciers = pd.read_csv(
+        '/Users/oberrauch/work/master/data/showcase_glaciers.csv', index_col=0)
+    showcase_glaciers = showcase_glaciers.loc[['RGI60-11.03638']]
+
+    # iterate over all above selected glaciers
+    for rgi_id, glacier in showcase_glaciers.iterrows():
+        # select glacier
+        rgi_id = rgi_id
+        name = glacier['name']
+        log.info('Plots for {} ({})'.format(name, rgi_id))
+
+        # iterate over all selected variables
+        variables = ['length']
+        for var in variables:
+            for norm in [True]:
+                log.info('Plotting {} {} time series'
+                         .format('normalized' if norm else 'absolute',
+                                 var))
+                suptitle = '{} evolution under random climate'.format(name)
+                plot_time_series(ds.sel(mb_model='random',
+                                        normalized=norm,
+                                        rgi_id=rgi_id, model='fl'),
+                                 var=var, )
+
 if __name__ == '__main__':
-    plot_single_glaciers_both_climates()
+    plot_test()
+    plt.show()

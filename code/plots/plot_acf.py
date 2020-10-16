@@ -16,8 +16,8 @@ logging.basicConfig(format='%(asctime)s: %(name)s: %(message)s',
 log = logging.getLogger('Plot ACF')
 
 
-def plot_acf(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
-             plot_confint=True):
+def plot_acf(ds, rgi_df, xlim=None, nlags=200, slice_start=3000,
+             plot_confint=True, dir_path=None):
     """
 
     Parameters
@@ -65,10 +65,12 @@ def plot_acf(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
             acf, confint = stattools.acf(length.sel(model='fl'), nlags=nlags,
                                          fft=True, alpha=0.01)
             # plot autocorrelation function
-            ax.plot(acf, c=fl_cycle[i], label='{:+.1f} °C'.format(b))
+            ax.plot(lags[1:], acf[1:], c=fl_cycle[i],
+                    label='{:+.1f} °C'.format(b))
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=fl_cycle[i], alpha=0.1)
 
             # V/A SCALING MODEL
@@ -78,10 +80,12 @@ def plot_acf(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
             acf, confint = stattools.acf(length.sel(model='vas'), nlags=nlags,
                                          fft=True, alpha=0.01)
             # plot autocorrelation function
-            ax.plot(acf, c=vas_cycle[i], label='{:+.1f} °C'.format(b))
+            ax.plot(lags[1:], acf[1:], c=vas_cycle[i],
+                    label='{:+.1f} °C'.format(b))
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=vas_cycle[i], alpha=0.1)
 
         # adjust axes
@@ -114,13 +118,14 @@ def plot_acf(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
         ax.set_ylabel('Correlation coefficient')
 
         # store plot
-        f_path = '/Users/oberrauch/work/master/plots/final_plots/acf/'
+        if not dir_path:
+            dir_path = '/Users/oberrauch/work/master/plots/final_plots/acf/'
         f_name = '{}.pdf'.format(name.replace(' ', '_'))
-        path = os.path.join(f_path, f_name)
+        path = os.path.join(dir_path, f_name)
         plt.savefig(path, bbox_inches='tight')
 
 
-def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
+def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=3000,
                   plot_confint=True):
     """
 
@@ -169,7 +174,7 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
             acf, confint = stattools.acf(length.sel(model='fl'), nlags=nlags,
                                          fft=True, alpha=0.01)
             # plot autocorrelation function
-            ml, sl, bl = ax.stem(lags, acf, markerfmt=f'o',
+            ml, sl, bl = ax.stem(lags[1:], acf, markerfmt=f'o',
                                  linefmt=':',
                                  basefmt='None', label='{:+.1f} °C'.format(b))
             plt.setp(sl, 'color', fl_cycle[i])
@@ -177,7 +182,8 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
 
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=fl_cycle[i], alpha=0.1)
 
             # V/A SCALING MODEL
@@ -187,7 +193,7 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
             acf, confint = stattools.acf(length.sel(model='vas'), nlags=nlags,
                                          fft=True, alpha=0.01)
             # plot autocorrelation function
-            ml, sl, bl = ax.stem(lags, acf, markerfmt=f'o',
+            ml, sl, bl = ax.stem(lags[1:], acf, markerfmt=f'o',
                                  linefmt=':',
                                  basefmt='None', label='{:+.1f} °C'.format(b))
             plt.setp(sl, 'color', vas_cycle[i])
@@ -195,7 +201,8 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
 
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=vas_cycle[i], alpha=0.1)
 
         # adjust axes
@@ -228,13 +235,14 @@ def plot_acf_stem(ds, rgi_df, xlim=None, nlags=200, slice_start=1000,
         ax.set_ylabel('Correlation coefficient')
 
         # store plot
-        f_path = '/Users/oberrauch/work/master/plots/final_plots/acf/'
+        dir_path = '/Users/oberrauch/work/master/plots/final_plots/acf/'
         f_name = '{}.pdf'.format(name.replace(' ', '_'))
-        path = os.path.join(f_path, f_name)
+        path = os.path.join(dir_path, f_name)
         plt.savefig(path, bbox_inches='tight')
 
 
-def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000,
+def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200,
+                   slice_start=3000,
                    plot_confint=True):
     """
 
@@ -284,13 +292,15 @@ def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000
             acf, confint = stattools.pacf(length.sel(model='fl'), nlags=nlags,
                                           alpha=0.01, method='ywmle')
             # plot autocorrelation function
-            ml, sl, bl = ax.stem(lags+xoffset, acf, markerfmt=f'o', linefmt=':',
+            ml, sl, bl = ax.stem(lags[1:] + xoffset, acf[1:], markerfmt=f'o',
+                                 linefmt=':',
                                  basefmt='None', label='{:+.1f} °C'.format(b))
             plt.setp(sl, 'color', fl_cycle[i])
             plt.setp(ml, 'color', fl_cycle[i])
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=fl_cycle[i], alpha=0.1)
 
             # V/A SCALING MODEL
@@ -300,13 +310,15 @@ def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000
             acf, confint = stattools.pacf(length.sel(model='vas'), nlags=nlags,
                                           alpha=0.01, method='ywmle')
             # plot autocorrelation function
-            ml, sl, bl = ax.stem(lags-xoffset, acf, markerfmt=f'o', linefmt=':',
+            ml, sl, bl = ax.stem(lags[1:] - xoffset, acf[1:], markerfmt=f'o',
+                                 linefmt=':',
                                  basefmt='None', label='{:+.1f} °C'.format(b))
             plt.setp(sl, 'color', vas_cycle[i])
             plt.setp(ml, 'color', vas_cycle[i])
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=vas_cycle[i], alpha=0.1)
 
         # adjust axes
@@ -341,14 +353,14 @@ def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200, slice_start=1000
         ax.set_ylabel('Correlation coefficient')
 
         # store plot
-        f_path = '/Users/oberrauch/work/master/plots/final_plots/pacf/'
+        dir_path = '/Users/oberrauch/work/master/plots/final_plots/pacf/'
         f_name = '{}.pdf'.format(name.replace(' ', '_'))
-        path = os.path.join(f_path, f_name)
+        path = os.path.join(dir_path, f_name)
         plt.savefig(path, bbox_inches='tight')
 
 
 def plot_pacf_bars(ds, rgi_df, xlim=None, nlags=200,
-                   slice_start=1000,
+                   slice_start=3000,
                    plot_confint=True):
     """
 
@@ -403,7 +415,8 @@ def plot_pacf_bars(ds, rgi_df, xlim=None, nlags=200,
                    label='{:+.1f} °C'.format(b))
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=fl_cycle[i], alpha=0.1)
 
             # V/A SCALING MODEL
@@ -417,7 +430,8 @@ def plot_pacf_bars(ds, rgi_df, xlim=None, nlags=200,
                    label='{:+.1f} °C'.format(b))
             if plot_confint:
                 # fill confidence interval
-                ax.fill_between(lags, confint[:, 0] - acf, confint[:, 1] - acf,
+                ax.fill_between(lags[1:], confint[1:, 0] - acf[1:],
+                                confint[1:, 1] - acf[1:],
                                 color=vas_cycle[i], alpha=0.1)
 
         # adjust axes
@@ -450,16 +464,16 @@ def plot_pacf_bars(ds, rgi_df, xlim=None, nlags=200,
         ax.set_ylabel('Correlation coefficient')
 
         # store plot
-        f_path = '/Users/oberrauch/work/master/plots/final_plots/pacf/'
+        dir_path = '/Users/oberrauch/work/master/plots/final_plots/pacf/'
         f_name = '{}.pdf'.format(name.replace(' ', '_'))
-        path = os.path.join(f_path, f_name)
+        path = os.path.join(dir_path, f_name)
         plt.savefig(path, bbox_inches='tight')
 
 
 if __name__ == '__main__':
     # specify path and read datasets
     dir_path = '/Users/oberrauch/work/master/data/' \
-               + 'cluster_output/showcase_glaciers_random_climate/'
+               + 'cluster_output/showcase_glaciers_random_climate_long/'
     ds = xr.open_dataset(os.path.join(dir_path, 'eq_runs.nc'))
     # sort by temperature bias
     ds = ds.sortby('temp_bias')
@@ -472,5 +486,6 @@ if __name__ == '__main__':
     showcase_glaciers = pd.read_csv(os.path.join(data_dir, path), index_col=0)
 
     # call plotting functions
-    plot_acf(ds, showcase_glaciers, xlim=[0, 200])
-    plot_pacf_stem(ds, showcase_glaciers, xlim=[0, 20])
+    # plot_acf(ds, showcase_glaciers, nlags=500, dir_path='/Users/oberrauch/work/master/plots/final_plots/acf_long/')
+    plot_acf(ds, showcase_glaciers, nlags=500)
+    # plot_pacf_stem(ds, showcase_glaciers, nlags=20)

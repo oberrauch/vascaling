@@ -119,7 +119,7 @@ def compute_arma_order_df(ds, rgi_df, nlags=200, slice_start=1000):
     return data
 
 
-def compute_arma_order(ds, rgi_df, nlags=300, slice_start=1000):
+def compute_arma_order(ds, rgi_df, nlags=500, slice_start=1000):
     """
 
     Parameters
@@ -216,7 +216,7 @@ def compute_arma_order(ds, rgi_df, nlags=300, slice_start=1000):
 if __name__ == '__main__':
     # specify path and read datasets
     dir_path = '/Users/oberrauch/work/master/data/' \
-               + 'cluster_output/showcase_glaciers_random_climate/'
+               + 'cluster_output/showcase_glaciers_random_climate_long/'
     ds = xr.open_dataset(os.path.join(dir_path, 'eq_runs.nc'))
     # sort by temperature bias
     ds = ds.sortby('temp_bias')

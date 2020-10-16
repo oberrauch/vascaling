@@ -35,9 +35,10 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0, norm=False):
         for i, b in enumerate(np.sort(ds.temp_bias)):
             # select values by temperature bias
             ds_tmp = ds_sel.sel(temp_bias=b).length
-            # compute the power of the signel per frequency band
+            # compute the power of the signal per frequency band
             sig = ds_tmp.sel(model='fl').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            nperseg = int(len(sig) / 10)
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequency into periods
             if plot_periods:
                 freqs = 1 / freqs
@@ -53,7 +54,7 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0, norm=False):
             ds_tmp = ds_sel.sel(temp_bias=b).length
             # compute the power of the signel per frequency band
             sig = ds_tmp.sel(model='vas').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequency into periods
             if plot_periods:
                 freqs = 1 / freqs
@@ -133,7 +134,8 @@ def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
 
             # compute the power of the signel per frequency band
             sig = ds_tmp.sel(model='fl').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            nperseg = int(len(sig) / 10)
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequencies into period
             if plot_periods:
                 freqs = 1 / freqs
@@ -149,7 +151,7 @@ def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
 
             # compute the power of the signel per frequency band
             sig = ds_tmp.sel(model='vas').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequencies into period
             if plot_periods:
                 freqs = 1 / freqs
@@ -166,7 +168,8 @@ def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
 
             # compute the power of the signel per frequency band
             sig = ds_tmp.sel(model='fl').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            nperseg = int(len(sig) / 10)
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequencies into period
             if plot_periods:
                 freqs = 1 / freqs
@@ -174,7 +177,7 @@ def plot_psd_length_mb(ds, ds_mb, rgi_df, plot_periods=False, spinup_time=0):
                          c=fl_cycle[j], lw=2)
             # compute the power of the signel per frequency band
             sig = ds_tmp.sel(model='vas').values.flatten()
-            freqs, psd = signal.welch(sig, nperseg=int(len(sig) / 5))
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
             # convert frequencies into period
             if plot_periods:
                 freqs = 1 / freqs
@@ -248,11 +251,13 @@ if __name__ == '__main__':
 
     # specify path and read datasets
     data_dir = '/Users/oberrauch/work/master/data/' \
-               + 'cluster_output/showcase_glaciers_random_climate/'
+               + 'cluster_output/showcase_glaciers_random_climate_long/'
     path = os.path.join(data_dir, 'eq_runs.nc')
-    ds = xr.open_dataset(path)
+    ds = xr.load_dataset(path)
+    data_dir = '/Users/oberrauch/work/master/data/' \
+               + 'cluster_output/showcase_glaciers_random_climate/'
     path = os.path.join(data_dir, 'mb_output.nc')
-    ds_mb = xr.open_dataset(path)
+    ds_mb = xr.load_dataset(path)
 
     # convert normalized variable from integer to boolean
     ds['normalized'] = [bool(norm) for norm in ds.normalized]
@@ -267,8 +272,8 @@ if __name__ == '__main__':
     showcase_glaciers = pd.read_csv(os.path.join(data_dir, path), index_col=0)
 
     # define spinup time
-    spinup_time = 1e3
+    spinup_time = 3e3
 
     # call plotting functions
-    plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=True)
+    plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=False)
     # plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)

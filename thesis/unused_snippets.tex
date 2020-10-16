@@ -73,3 +73,25 @@
 Text with all the equilibrium values contained in the table, don't know if to inlcude since it looks/reads weird.
 The equilibrium ice volume for the positive and negative mass balance scenario is \SI{0.70}{\cubic\kilo\meter} (\SI{117}{\percent}) and \SI{0.50}{\cubic\kilo\meter} (\SI{84}{\percent}) for the \vas{} model and \SI{1.37}{\cubic\kilo\meter} (\SI{171}{\percent}) and \SI{0.47}{\cubic\kilo\meter} (\SI{58}{\percent}) for the flowline model, respectively. The values in parenthesis are normalized with the respective initial values. The equilibrium surface area for the positive and negative mass balance scenario is \SI{9.02}{\squared\kilo\meter} (\SI{112}{\percent}) and \SI{7.08}{\squared\kilo\meter} (\SI{88}{\percent}) for the \vas{} model and \SI{10.68}{\squared\kilo\meter} (\SI{133}{\percent}) and \SI{6.17}{\squared\kilo\meter} (\SI{77}{\percent}) for the flowline model, respectively. The equilibrium length for the positive and negative mass balance scenario is \SI{5.26}{\kilo\meter} (\SI{107}{\percent}) and \SI{4.52}{\kilo\meter} (\SI{92}{\percent}) for the \vas{} model and \SI{9.95}{\kilo\meter} (\SI{144}{\percent}) and \SI{4.20}{\kilo\meter} (\SI{61}{\percent}) for the flowline model, respectively.
 
+% Time series for the HISTALP commitment run...
+
+\begin{figure}[htp]
+  \centering
+  \begin{subfigure}[b]{0.99\textwidth}
+    \caption{Normalized glacier volume}
+    \label{fig:histalp_commitment:volume_norm}
+    \centering
+    \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_norm.pdf}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.99\textwidth}
+    \caption{Absolute glacier volume}
+    \label{fig:histalp_commitment:volume_abs}
+    \centering
+    \includegraphics[width=\textwidth]{../plots/final_plots/time_series/histalp_commitment/volume_abs.pdf}
+  \end{subfigure}
+  
+  \caption{Time series of total ice volume for all glaciers in the HISTALP domain. The upper two panels show the relative values, normalized with the initial values, while the lower two panels show absolute values. The left panels show the result of the \vas{} model, the right panels show the results of the flowline model. Solid lines represent a random climate scenario, while dashed lines represent a constant climate scenario. All climate scenarios are based on an equilibrium climate, however with three different temperature biases.
+  Yellow, orange and red solid lines represent the \vas{} model, while cyan, blue and purple solid lines represent the flowline model, under a random climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. Yellow, orange and red dashed lines represent the \vas{} model, while cyan, blue and purple dashed lines represent the flowline model, under a constant climate with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. %TODO change colors
+  The dotted line indicate the initial volume. The light gray lines represent the volume evolutions of the other model, to facilitate comparisons.}
+  \label{fig:histalp_commitment}
+\end{figure}
