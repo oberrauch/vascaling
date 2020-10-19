@@ -315,27 +315,65 @@
 
     \subsubsection{Power spectral density} % (fold)
     \label{ssub:power_spectral_density_results}
-    
-      % intro
-      The power spectral density is estimated via Welch's method. Welch's method reduces the variance in the estimated power density by time-averaging, at the cost of frequency resolution (e.g., TODO: citation). As for the autocorrelation analysis, the initial 1000 years of the adjustment period are clipped. The resulting 9000 data points are divided into nine time windows with a window size of 1800 datapoints and a \SI{50}{\percent} overlap. The windows are tapered using the Hann function. For details about additional parameters see the default values of the python function \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html}{\lstinline`scipy.signal.welch`}. The power spectral density should not be computed from the aggragate glacier length of all Alpine glaciers, since mirroring oscillations would cancel each other out. In order to avoid a n-of-1 experiment, the follwing six Alpine glaciers are shown below %TODO Showcase glaciers.
 
-      % general
-      For all glaciers and all cliamte scenarios, the power density of the length change signal decreases with increasing frequency. This makes intuituve sense, since changes in glacier length are mainly driven by long term climatic trends and less by inter-annual variabilities in the climatic forcing. Glaciers are low-pass filters
+      % intro and general
+      % low pass filter
+      Glaciers act as low-pass filters for the natural climate variability. A low pass filter passes lower frequencies while attenuating higher frequencies. This can be seen in the PSD for all glaciers under all three equilibrium climates. The power density stays in a constant range for frequencies up to \SI{3e-3}{\per\year} (corresponding to signals with a period of over 300 years) and decreases for higher frequencies. This makes intuitive sense, since changes in glacier length are mainly driven by long term climatic trends and less by inter-annual variabilities in the climatic forcing. A single year with low temperatures and high (cold season) precipitation has less impact on the glacier size than a decade of slightly above average temperatures.
+      % higher power density of flowline model
+      While the overall shape of the PSDs are similar for the \vas{} and flowline model, there are some key differences. The length changes estimated by the \vas{} model are small compared to the flowline model. Hence, the overall power of the flowline model is higher across all frequencies. In agreement with the symmetric behavior discussed before, the PSD's of the \vas{} model are practically identical for different sizes of the same glacier. The flowline model produces less coherent PSDs between the runs of the same glacier, whereby there is no discernible relation between shape of PSD and glacier size.
+      % power density for high frequencies
+      Additionally, the flowline model shows a rather constant power density for lower frequencies. This is due to the discrete changes in glacier length of the flowline model, the resolution depends on the grid size (\SI{100}{\meter} in this case). The \vas{} model length is a continuous variable, resulting in a constantly decreasing power density.
+      % slope?
+      While the absolute values are different, the slope of the PSDs is comparable between \vas{} and flowline model. This indicates that both models resolve the same processes.
 
-      As seen before, the flowline model glaciers react stronge to given changes in climate than the VAS model glaciers. This is reflected in an overall higher power density (approximately one order of magnitude) of the flowline model runs.
+      % Random length plots
+      \begin{figure}[htp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00897 - Hintereisferner}
+          \label{fig:random_length:hintereisferner}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Hintereisferner.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.00106 - Pasterze}
+          \label{fig:random_length:pasterze}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Pasterze.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03643 - Mer de Glace}
+          \label{fig:random_length:mer_de_glace}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Mer_de_Glace.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.03638 - d'Argentière}
+          \label{fig:random_length:glacier_d_argentiere}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Glacier_d'Argentière.pdf}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01450 - Großer Aletschgletscher}
+          \label{fig:random_length:großer_aletschgletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Großer_Aletschgletscher.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}
+          \caption{RGI60-11.01238 - Rhonegletscher}
+          \label{fig:random_length:rhonegletscher}
+          \centering
+          \includegraphics[width=\textwidth]{../plots/final_plots/random_length/Rhonegletscher.pdf}
+        \end{subfigure}
 
-      The flowline model runs are good examples of low pass filter. A low pass filter passes lower frequencies while attenuating (or rejecting) higher frequencies. And so does the glacier (model). For frequencies up to 
-
-      After an initial decrease in power density with increasing frequency, the power density stays fairly constant for periods in the order of magnitue of ten years. The longterm changes of the climate system are driving the glacial evolution, while the short term changes in monthly or yearly climatic parameters have little to no effect. The power spectral density anlysis suggests that trends  shorter than 10 years (corresponding to a frequency of 0.1 year$^{-1}$) are filtered by the flowline model.
-
-      The power spectral density curves of the \vas{} show no discernible differences between the different temperature biases and are even comparable across different glaciers. In fact, the maximum relative difference from one curve to another is \SI{150}{\percent}
-
-      Similar to the time series and the auto correlation analysis, the power spectral density of \vas{} model’s length change signal does not change for different temperature biases. Even the differences between glaciers is 
-
-      The PSD of the VAS model is almost identical between runs with different temperature biases, attributed to the linear (and symmetric) behaviour seen before. The flowline model produces a less coherent PSD between the runs with different temperature bias, whereby the equilibrium run and the positive mass balance run are more alike.
-
-      % vas vs flowline
-
+        \caption{Power spectral density of modeled glacier length for different alpine glaciers. Different lines represent different combinations of evolution models and climate scenarios. The climate scenarios are based on a randomized equilibrium climate, with different temperature biases. Cyan, blue and purple lines represent the flowline model, while yellow, orange and red lines represent the \vas{} model, with a temperature bias of \SI{-.5}{\celsius}, \SI{0}{\celsius} and \SI{+.5}{\celsius}, respectively. Note the differences in y-axis scales.}
+        \label{fig:random_length}
+      \end{figure}
+      
+      % PSD plots
       \begin{figure}[htp]
         \centering
         \begin{subfigure}[b]{0.48\textwidth}

@@ -326,8 +326,8 @@ def plot_pacf_stem(ds, rgi_df, xlim=None, path=True, nlags=200,
             xlim = [0, nlags]
         ax.set_xlim(xlim)
         ax.set_ylim([-1.1, 1.1])
-        ya = ax.get_yaxis()
-        ya.set_major_locator(MaxNLocator(integer=True))
+        xa = ax.get_xaxis()
+        xa.set_major_locator(MaxNLocator(integer=True))
         # add grid
         ax.grid()
 
@@ -488,4 +488,4 @@ if __name__ == '__main__':
     # call plotting functions
     # plot_acf(ds, showcase_glaciers, nlags=500, dir_path='/Users/oberrauch/work/master/plots/final_plots/acf_long/')
     plot_acf(ds, showcase_glaciers, nlags=500)
-    # plot_pacf_stem(ds, showcase_glaciers, nlags=20)
+    plot_pacf_stem(ds, showcase_glaciers, nlags=20)

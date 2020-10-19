@@ -1,4 +1,5 @@
 # import section
+import os
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -23,6 +24,11 @@ def read_dataset(path):
     ds['normalized'] = [bool(norm) for norm in ds.normalized]
 
     return ds
+
+
+# ---------------------------------------------
+# Defining plotting functions for universal use
+# ---------------------------------------------
 
 
 def plot_time_series(ds, var, x='time',
@@ -417,6 +423,100 @@ def plot_both_climates_same_fig(ds, var, title='', suptitle='', xlim=None):
         fig.suptitle(suptitle, fontsize=15)
 
 
+def plot_deviations_three_panel(ds, rgi_df, var='length', time0=None, time1=None, out_dir=''):
+    # iterate over all glaciers
+    for i, (rgi_id, glacier) in enumerate(rgi_df.iterrows()):
+
+        # create new figure and axes for each glacier
+        fig, axes = plt.subplots(3, 1)
+
+        # create empty containers
+        ylim = list()
+        ylim_ = list()
+        axes_ = list()
+        handles_fl = list()
+        handles_vas = list()
+
+        # iterate over all temperature biases
+        for j, (ax, temp_bias) in enumerate(zip(axes, ds.temp_bias)):
+            # select glacier and climate
+            ds_var = ds[var].sel(rgi_id=rgi_id,
+                                 temp_bias=temp_bias,
+                                 normalized=False).squeeze()
+            # select time period
+            time0 = (int(8e3) if not time0 else time0)
+            time1 = (int(12e3) + 1 if not time1 else time1)
+            ds_var = ds_var.isel(time=slice(time0, time1))
+
+            # compute mean and deviations
+            mean = ds_var.mean(dim='time')
+            deviations = ds_var - mean
+
+            # plot var anomalies
+            handles_fl.append(ax.plot(deviations.time,
+                                      deviations.sel(model='fl'),
+                                      c=fl_cycle[j],
+                                      label=f'fl {temp_bias.values:+.1f}'))
+
+            # instantiate a second axes that shares the same x-axis
+            ax_ = ax.twinx()
+            axes_.append(ax_)
+            handles_vas.append(ax_.plot(deviations.time,
+                                        deviations.sel(model='vas'),
+                                        c=vas_cycle[j], lw=2,
+                                        label=f'vas {temp_bias.values:+.1f}'))
+            ax_.axhline(0, c='k', ls=':', lw=0.8)
+
+            ylim.append(ax.get_ylim())
+            ylim_.append(ax_.get_ylim())
+
+            # take care of tickparams
+            ax.tick_params(direction='inout', top=True, labelbottom=(j == 2))
+            # set xlimits to match sliced time
+            ax.set_xlim([time0, time1])
+
+        # title, labels
+        fig.text(0.5, 0.02, 'Years of model evolution', ha='center')
+        unit = 'm$^3$' if var == 'volume' else (
+            'm$^2$' if var == 'area' else 'm')
+        fig.text(-0.02, 0.5, f'Flowline {var} anomalies [{unit}]', va='center',
+                 rotation='vertical')
+        fig.text(1.02, 0.5, f'VAS {var} anomalies [{unit}]', va='center',
+                 rotation='vertical')
+
+        # adjust layout
+        fig.subplots_adjust(wspace=0, hspace=0)
+
+        # adjust limits
+        ylim = abs(np.array(ylim).flatten()).max()
+        [ax.set_ylim([-ylim, ylim]) for ax in axes]
+        ylim_ = abs(np.array(ylim_).flatten()).max()
+        [ax_.set_ylim([-ylim_, ylim_]) for ax_ in axes_]
+
+        # define legend handles and labels
+        title_proxy, = plt.plot(0, time0, marker='None', linestyle='None',
+                                label='dummy')
+        # define legend labels
+        labels = ["$\\bf{VAS:}$", "$\\bf{Flowline:}$"]
+        labels.extend(np.array(
+            ['{:+.1f} °C'.format(bias) for bias in
+             ds.temp_bias.values]).repeat(2))
+        handles = list(np.array(np.repeat(title_proxy, 2)))
+        handles.extend(
+            np.array([handles_vas, handles_fl]).T.flatten())
+        fig.legend(handles, labels, bbox_to_anchor=(0.5, 1.0), loc='upper center',
+                   ncol=4)
+
+        # save to file
+        f_name = f"{glacier['name'].replace(' ', '_')}.pdf"
+        fig.savefig(os.path.join(out_dir, f_name), bbox_inches='tight')
+
+
+# --------------------------------------------
+# Calling the plotting functions on real data
+# --------------------------------------------
+
+
 def plot_showcase_glaciers_random_climate():
     # specify path and read datasets
     path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate/eq_runs.nc'
@@ -569,7 +669,7 @@ def plot_histalp_commitment_both_climates():
     ds.close()
 
 
-def plot_test():
+def plot_random_length():
     # specify path and read datasets
     path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate_long/eq_runs.nc'
     ds = read_dataset(path)
@@ -577,28 +677,10 @@ def plot_test():
     # define glaciers of interest
     showcase_glaciers = pd.read_csv(
         '/Users/oberrauch/work/master/data/showcase_glaciers.csv', index_col=0)
-    showcase_glaciers = showcase_glaciers.loc[['RGI60-11.03638']]
 
-    # iterate over all above selected glaciers
-    for rgi_id, glacier in showcase_glaciers.iterrows():
-        # select glacier
-        rgi_id = rgi_id
-        name = glacier['name']
-        log.info('Plots for {} ({})'.format(name, rgi_id))
+    out_dir = '/Users/oberrauch/work/master/plots/final_plots/random_length/'
+    plot_deviations_three_panel(ds, rgi_df=showcase_glaciers, out_dir=out_dir)
 
-        # iterate over all selected variables
-        variables = ['length']
-        for var in variables:
-            for norm in [True]:
-                log.info('Plotting {} {} time series'
-                         .format('normalized' if norm else 'absolute',
-                                 var))
-                suptitle = '{} evolution under random climate'.format(name)
-                plot_time_series(ds.sel(mb_model='random',
-                                        normalized=norm,
-                                        rgi_id=rgi_id, model='fl'),
-                                 var=var, )
 
 if __name__ == '__main__':
-    plot_test()
-    plt.show()
+    plot_random_length()
