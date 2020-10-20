@@ -138,8 +138,8 @@ def plot_eq_time_series(ds, var, title='', suptitle='', xlim=None):
     # title, labels, legend
     ax1.set_title('Flowline model')
     ax1.set_xlabel('Years of model evolution')
-    ax1.legend(handles_fl, labels_fl, title='Temperature bias',
-               bbox_to_anchor=(0.5, 0), loc=8, ncol=3)
+    leg_kwargs = {'bbox_to_anchor': (0.5, 0), 'loc': 8, 'ncol': 3}
+    ax1.legend(handles_fl, labels_fl, title='Temperature bias', **leg_kwargs)
     ax1.yaxis.tick_right()
     ax1.yaxis.set_label_position('right')
     if ds.normalized:
@@ -669,6 +669,38 @@ def plot_histalp_commitment_both_climates():
     ds.close()
 
 
+def plot_histalp_projection():
+    # specify path and read datasets
+    path = '/Users/oberrauch/work/master/data/cluster_output/histalp_projection/eq_runs.nc'
+    ds = read_dataset(path)
+
+    # iterate over mass balance model
+    for mb_model in ds['mb_model'].values:
+        log.info('Creating plots for {} climate scenario'.format(mb_model))
+        # iterate over all selected variables
+        variables = ['length', 'volume']
+        for var in variables:
+            # iterate over normalized and absolute values
+            for norm in [True, False]:
+                log.info('Plotting {} {} time series'
+                         .format('normalized' if norm else 'absolute',
+                                 var))
+
+                suptitle = None
+                plot_eq_time_series(
+                    ds.sel(mb_model=mb_model, normalized=norm, rgi_id='sum'),
+                    var=var, suptitle=suptitle, xlim=[0, 300])
+                # store to file
+                f_path = '/Users/oberrauch/work/master/plots/final_plots/time_series/histalp_projection/'
+                f_path += '{}_{}_{}.pdf'.format(var, 'norm' if norm else 'abs',
+                                                mb_model)
+                plt.savefig(f_path, bbox_inches='tight')
+                plt.close(plt.gcf())
+
+    # close dataset
+    ds.close()
+
+
 def plot_random_length():
     # specify path and read datasets
     path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate_long/eq_runs.nc'
@@ -683,4 +715,4 @@ def plot_random_length():
 
 
 if __name__ == '__main__':
-    plot_random_length()
+    plot_histalp_projection()

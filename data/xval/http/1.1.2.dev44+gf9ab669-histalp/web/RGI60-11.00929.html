@@ -1,0 +1,386 @@
+<!DOCCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href=" ../../img/favicon.ico" />
+    <title>OGGM mass balance calibration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.dropbtn {
+    background-color: #326986;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #85aac2;
+    color: black;
+}
+
+#myInput {
+    border-box: box-sizing;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+#myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+    height: 500px;
+    position: relative;
+    display: inline-block;
+    float: left;
+    width: 180px;
+    margin: 0;
+    padding: 1em;
+}
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    border: 1px solid #ddd;
+    z-index: 1;
+    max-height: 500px;
+    overflow: scroll
+}
+
+.dropdown-content a.neu {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a.neu:hover {background-color: #85aac2}
+
+.show {display:block;}
+
+a.neu {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+a.neu:hover {
+    background-color: #85aac2;
+    color: black;
+}
+
+.previous {
+    background-color: #326986;
+    color: white;
+    width: 250px;
+    text-align: center;
+}
+
+.next {
+    background-color: #326986;
+    color: white;
+    width: 250px;
+    text-align: center;
+}
+
+.round {
+    border-radius: 50%;
+}
+
+
+article {
+    margin-left: 00px;
+    padding: 1em;
+    overflow: hidden;
+}
+
+.navbar {
+    overflow: hidden;
+    background-color: #326986;
+}
+
+.navbar a.neu {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.subnav {
+    float: left;
+    overflow: hidden;
+}
+
+.subnav .subnavbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.navbar a.neu:hover, .subnav:hover .subnavbtn {
+    background-color: #85aac2;
+    color: black;
+}
+
+.subnav-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #326986;
+    width: 100%;
+    z-index: 1;
+}
+
+.subnav-content a.neu {
+    float: left;
+    color: white;
+    text-decoration: none;
+}
+
+.subnav-content a.neu:hover {
+    background-color: #85aac2;
+    color: black;
+}
+
+.subnav:hover .subnav-content {
+    display: block;
+}
+
+</style>
+</head>
+<body>
+
+<img src="../../img/oggm_s_alpha.png" alt="OGGM logo">
+
+
+<div class="navbar">
+  <a class=neu href="../../index.html">Home</a>
+
+  <div class="subnav">
+    <button class="subnavbtn">All reference glaciers<i class="fa fa-caret-down"></i></button>
+    <div class="subnav-content">
+      <a class=neu href="../../cru_short.html">Short Crossvalidation</a>
+      <a class=neu href="../../cru_extended.html">Extended Crossvalidation</a>
+    </div>
+  </div>
+
+  <div class="subnav">
+    <button class="subnavbtn">HISTALP reference glaciers<i class="fa fa-caret-down"></i></button>
+    <div class="subnav-content">
+      <a class=neu href="../../1.1.2.dev44+gf9ab669-histalp/histalp_short.html">Short Crossvalidation</a>
+      <a class=neu href="../../1.1.2.dev44+gf9ab669-histalp/histalp_extended.html">Extended Crossvalidation</a>
+    </div>
+  </div>
+
+  <div class="subnav">
+    <button class="subnavbtn">OGGM<i class="fa fa-caret-down"></i></button>
+    <div class="subnav-content">
+      <a class=neu href="https://oggm.org/">OGGM Website</a>
+      <a class=neu href="http://docs.oggm.org/en/latest">OGGM Documentation</a>
+      <a class=neu href="https://github.com/OGGM/oggm">OGGM Github</a>
+    </div>
+  </div>
+</div>
+
+
+
+<h1>Standard mass balance calibration for the Alpine reference glaciers</h1>
+<p>
+    The general overview of each model version first provides a histogram
+    comparing two different approaches to determine the glaciers temperature
+    sensitivity parameter. For more information on this see
+    <a href="https://www.geosci-model-dev-discuss.net/gmd-2018-9/">
+        Maussion et all. (2018), Figure 4</a>.
+    <br>
+    <br>
+    With <i>Select glacier</i> you can search for and select a specific glacier
+    and see how the mass balance model performs in its case.
+    The plots compare the measured annual mass balance on this glacier with two
+    different OGGM results: For the <i>Calibrated t_star</i> the annual mass
+    balance is used to calibrate the glaciers temperature sensitivity in a way
+    that the resulting mass balance bias is 0.
+    The <i>Crossvalidated t_star</i> does not use the measured mass balance
+    data and therefore represents true model performance.
+
+    <br>
+    All results for the Alpine reference glaciers are calculated with the
+    <a href="http://www.zamg.ac.at/histalp/">ZAMG Histalp</a> data set.
+</p>
+
+
+
+<p>OGGM Version: 1.1.2.dev44+gf9ab669-histalp.</p>
+<p>Output created: 2020-10-20.</p>
+
+
+
+<p></p>
+
+<div class="dr pd wn">
+    <button onclick="myFunction()" class="dropbtn">Select glacier</button>
+    <div id="myDropdown" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+        
+        
+   <a class=neu href="../histalp_short.html"> Overview </a>
+
+   <a class=neu href="RGI60-11.01987.html"> RGI60-11.01987, Basodino </a>
+
+   <a class=neu href="RGI60-11.01834.html"> RGI60-11.01834, Careser </a>
+
+   <a class=neu href="RGI60-11.03135.html"> RGI60-11.03135, Ciardoney </a>
+
+   <a class=neu href="RGI60-11.01704.html"> RGI60-11.01704, Fontana Bianca </a>
+
+   <a class=neu href="RGI60-11.03671.html"> RGI60-11.03671, Fr4N01146D09+E06 Gebroulaz </a>
+
+   <a class=neu href="RGI60-11.03674.html"> RGI60-11.03674, Fr4N01162B09+154D03 De Saint Sorlin </a>
+
+   <a class=neu href="RGI60-11.03756.html"> RGI60-11.03756, Fr4N01163A02 De Sarennes 1 </a>
+
+   <a class=neu href="RGI60-11.03638.html"> RGI60-11.03638, Fr4N01235A08 Dargentiere </a>
+
+   <a class=neu href="RGI60-11.03643.html"> RGI60-11.03643, Fr4N01236A01 Mer De Glace/Geant </a>
+
+   <a class=neu href="RGI60-11.03166.html"> RGI60-11.03166, Grand Etret </a>
+
+   <a class=neu href="RGI60-11.01876.html"> RGI60-11.01876, Gries </a>
+
+   <a class=neu href="RGI60-11.00897.html"> RGI60-11.00897, Hintereisferner </a>
+
+   <a class=neu href="RGI60-11.00781.html"> RGI60-11.00781, Jamtalferner </a>
+
+   <a class=neu href="RGI60-11.00787.html"> RGI60-11.00787, Kesselwandferner </a>
+
+   <a class=neu href="RGI60-11.00918.html"> RGI60-11.00918, Limmern </a>
+
+   <a class=neu href="RGI60-11.00892.html"> RGI60-11.00892, Plattalva </a>
+
+   <a class=neu href="RGI60-11.01238.html"> RGI60-11.01238, Rhone </a>
+
+   <a class=neu href="RGI60-11.02214.html"> RGI60-11.02214, Sforzellina </a>
+
+   <a class=neu href="RGI60-11.00804.html"> RGI60-11.00804, Silvretta </a>
+
+   <a class=neu href="RGI60-11.00619.html"> RGI60-11.00619, Vedretta Malavalle </a>
+
+   <a class=neu href="RGI60-11.00603.html"> RGI60-11.00603, Vedretta Pendente </a>
+
+   <a class=neu href="RGI60-11.00719.html"> RGI60-11.00719, Vernagtferner </a>
+
+   <a class=neu href="RGI60-11.01450.html"> RGI60-11.01450 </a>
+
+   <a class=neu href="RGI60-11.01662.html"> RGI60-11.01662 </a>
+
+   <a class=neu href="RGI60-11.02648.html"> RGI60-11.02648 </a>
+
+   <a class=neu href="RGI60-11.01930.html"> RGI60-11.01930 </a>
+
+   <a class=neu href="RGI60-11.03084.html"> RGI60-11.03084 </a>
+
+   <a class=neu href="RGI60-11.00807.html"> RGI60-11.00807 </a>
+
+   <a class=neu href="RGI60-11.00647.html"> RGI60-11.00647 </a>
+
+   <a class=neu href="RGI60-11.02764.html"> RGI60-11.02764 </a>
+
+   <a class=neu href="RGI60-11.01776.html"> RGI60-11.01776 </a>
+
+   <a class=neu href="RGI60-11.02679.html"> RGI60-11.02679 </a>
+
+   <a class=neu href="RGI60-11.00797.html"> RGI60-11.00797 </a>
+
+   <a class=neu href="RGI60-11.00929.html"> RGI60-11.00929 </a>
+
+   <a class=neu href="RGI60-11.00843.html"> RGI60-11.00843 </a>
+
+   <a class=neu href="RGI60-11.02671.html"> RGI60-11.02671 </a>
+
+   <a class=neu href="RGI60-11.02249.html"> RGI60-11.02249 </a>
+
+   <a class=neu href="RGI60-11.00957.html"> RGI60-11.00957 </a>
+
+   <a class=neu href="RGI60-11.02285.html"> RGI60-11.02285 </a>
+
+   <a class=neu href="RGI60-11.02704.html"> RGI60-11.02704 </a>
+
+   <a class=neu href="RGI60-11.02766.html"> RGI60-11.02766 </a>
+
+   <a class=neu href="RGI60-11.02773.html"> RGI60-11.02773 </a>
+
+   <a class=neu href="RGI60-11.02072.html"> RGI60-11.02072 </a>
+
+   <a class=neu href="RGI60-11.02245.html"> RGI60-11.02245 </a>
+
+   <a class=neu href="RGI60-11.02774.html"> RGI60-11.02774 </a>
+
+   <a class=neu href="RGI60-11.02746.html"> RGI60-11.02746 </a>
+
+   <a class=neu href="RGI60-11.00638.html"> RGI60-11.00638 </a>
+
+   <a class=neu href="RGI60-11.01863.html"> RGI60-11.01863 </a>
+        
+    </div>
+</div>
+
+
+<script>
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+<article>
+    <h1>RGI60-11.00929</h1>
+    <img src="../plots/RGI60-11.00929.png" width="1200" height="500">
+    <h3>Some statistics:</h3>
+    <p>Calibrated bias: -0.00 [mm w.e.] (0 by construction)</p>
+    <p>Crossvalidated bias: -146.67 [mm.w.e]</p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <hr>
+    <p>Used Precipitation Factor:  1.75</p>
+    <p>Used Liquid Precipitation Temperature:  2.00 [deg C]</p>
+    <p>Used Melt Temperature: -1.75 [deg C]</p>
+    <p>Used Temperature Lapse Rate: -6.50 [K/km]</p>
+
+</article>
+
+
+
+</body>
+</html>
+
+

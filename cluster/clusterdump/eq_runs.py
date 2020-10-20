@@ -192,8 +192,8 @@ def equilibrium_run_vas(rgi_ids, use_random_mb=True, path=True,
     # Run model with constant/random mass balance model
     # -------------------------------------------------
 
-    # use t* as center year, even if specified differently
-    kwargs['y0'] = tstar
+    # use t* as center year if not specified otherwise
+    kwargs.setdefault('y0', tstar)
     # run for 3000 years if not specified otherwise
     kwargs.setdefault('nyears', 3000)
 
@@ -568,8 +568,8 @@ def equilibrium_run_fl(rgi_ids, use_random_mb=True, path=True,
     # finalize preprocessing
     workflow.execute_entity_task(flowline.init_present_time_glacier, gdirs)
 
-    # use t* as center year, even if specified differently
-    kwargs['y0'] = tstar
+    # use t* as center year if not specified otherwise
+    kwargs.setdefault('y0', tstar)
     # run for 3000 years if not specified otherwise
     kwargs.setdefault('nyears', 3000)
     # disregard glaciers exceeding their domain boundaries
@@ -1153,13 +1153,13 @@ def tmp_test():
     fpath = '/Users/oberrauch/work/master/data/showcase_glaciers.csv'
     showcase_glaciers = pd.read_csv(fpath)
     rgi_ids = showcase_glaciers.rgi_id.values
+    rgi_ids = ['RGI60-11.00897']
 
-    models = eq_vas_test(rgi_ids, use_random_mb=True, use_default_tstar=False,
-                         store_mean_sum=False)
+    ds = equilibrium_run_vas(rgi_ids, temp_biases=[-1.5], suffixes=['_test'], store_mean_sum=False)
 
     import pickle
-    pickle.dump(models,
-                open('/Users/oberrauch/work/master/data/tmp/vas_models.pkl', 'wb'))
+    pickle.dump(ds,
+                open('/Users/oberrauch/work/master/data/tmp/vas_hef.pkl', 'wb'))
 
 
 def hef_mb_feedback():
@@ -1195,6 +1195,30 @@ def histalp_commitment_run():
     # start runs
     eq_runs(rgi_ids, nyears=1e3, use_random_mb=[True, False],
             use_default_tstar=True,
+            store_individual_glaciers=False, use_bias_for_run=False)
+
+
+def histalp_projection_run():
+    """ Run equilibrium experiment for the entire HISTALP domain:
+        - constant climate scenario for 1'000 years
+        - random climate scenario for 1'000 years
+        - each evolution model runs with it's "best fitting" tstar reference table
+
+    """
+    # start logger with OGGM settings
+    cfg.set_logging_config()
+
+    # get HISTALP RGI IDs
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
+                          index_col=0)['RGIId'].values
+
+    temp_biases = np.array([0.0, 0.5, 1.0, 1.5, 2.0])
+    suffixes = temp_biases.astype(str)
+
+    # start runs
+    eq_runs(rgi_ids, nyears=300, use_random_mb=[True, False],
+            use_default_tstar=True, temp_biases=temp_biases,
+            suffixes=suffixes, y0=1999,
             store_individual_glaciers=False, use_bias_for_run=True)
 
 
