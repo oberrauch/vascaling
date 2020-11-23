@@ -251,7 +251,7 @@ if __name__ == '__main__':
 
     # specify path and read datasets
     data_dir = '/Users/oberrauch/work/master/data/' \
-               + 'cluster_output/showcase_glaciers_random_climate_long/'
+               + 'cluster_output/showcase_glaciers_random_climate/'
     path = os.path.join(data_dir, 'eq_runs.nc')
     ds = xr.load_dataset(path)
     data_dir = '/Users/oberrauch/work/master/data/' \

@@ -1,0 +1,47 @@
+This is BibTeX, Version 0.99d (TeX Live 2020)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: icu-meeting.aux
+The style file: ametsoc.bst.bst
+Database file #1: ../thesis/master.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 1 entry,
+            3488 wiz_defined-function locations,
+            688 strings with 5140 characters,
+and the built_in function-call counts, 1379 in all, are:
+= -- 172
+> -- 37
+< -- 0
++ -- 24
+- -- 9
+* -- 74
+:= -- 129
+add.period$ -- 2
+call.type$ -- 1
+change.case$ -- 8
+chr.to.int$ -- 1
+cite$ -- 1
+duplicate$ -- 145
+empty$ -- 67
+format.name$ -- 12
+if$ -- 273
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 11
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 50
+preamble$ -- 1
+purify$ -- 7
+quote$ -- 0
+skip$ -- 97
+stack$ -- 0
+substring$ -- 72
+swap$ -- 131
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 9
+warning$ -- 0
+while$ -- 6
+width$ -- 0
+write$ -- 21

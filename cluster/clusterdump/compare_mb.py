@@ -108,8 +108,8 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.initialize()
 
     # get environmental variables for working and output directories
-    WORKING_DIR = utils.get_temp_dir('_mb_comp')
-    OUTPUT_DIR = './'
+    WORKING_DIR = os.environ["WORKDIR"]
+    OUTPUT_DIR = os.environ["OUTDIR"]
     # create working directory
     utils.mkdir(WORKING_DIR)
     # set path to working directory
@@ -122,8 +122,8 @@ def climate_run_vas(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
-    cfg.PARAMS['prcp_scaling_factor'] = 1.75
-    cfg.PARAMS['temp_melt'] = -1.75
+    cfg.PARAMS['prcp_scaling_factor'] = 2.5
+    cfg.PARAMS['temp_melt'] = -0.5
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
     cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
@@ -285,8 +285,8 @@ def climate_run_fl(rgi_ids, path=True, temp_biases=[0, +0.5, -0.5],
     cfg.initialize()
 
     # get environmental variables for working and output directories
-    WORKING_DIR = utils.get_temp_dir('_mb_comp')
-    OUTPUT_DIR = './'
+    WORKING_DIR = os.environ["WORKDIR"]
+    OUTPUT_DIR = os.environ["OUTDIR"]
     # create working directory
     utils.mkdir(WORKING_DIR)
     # set path to working directory
@@ -421,8 +421,8 @@ def mb_runs(rgi_ids, tstar=None, path=True):
     combines the resulting datasets for the VAS and flowline model and stores
     it to file.
     """
-    vas_ds = climate_run_vas(rgi_ids, tstar=tstar)
-    fl_ds = climate_run_fl(rgi_ids, tstar=tstar)
+    vas_ds = climate_run_vas(rgi_ids, tstar=tstar, nyears=1)
+    fl_ds = climate_run_fl(rgi_ids, tstar=tstar, nyears=1)
 
     # concat datasets by evolution balance model
     ds = xr.concat([vas_ds, fl_ds], pd.Index(['vas', 'fl'], name='model'))
@@ -438,8 +438,8 @@ def mb_runs(rgi_ids, tstar=None, path=True):
 
 
 if __name__ == '__main__':
+    os.environ['WORKDIR'] = utils.get_temp_dir('_mb_comp')
+    os.environ['OUTDIR'] = '/Users/oberrauch/work/master/data/tmp/'
     rgi_ids = ['RGI60-11.00897']
-    nyears = 1
-    ds = climate_run_vas(rgi_ids, nyears=nyears)
-    climate_run_fl(rgi_ids, nyears=nyears)
+    mb_runs(rgi_ids, tstar=1927)
 

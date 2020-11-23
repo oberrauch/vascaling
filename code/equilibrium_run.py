@@ -770,8 +770,8 @@ if __name__ == '__main__':
     cfg.set_logging_config()
 
     # get RGI IDs
-    rgi_ids = [rgi_id for rgi_id in rgidf.RGIId]
+    rgi_ids = ['RGI60-11.00897']
 
-    mb_runs(rgi_ids)
+    # mb_runs(rgi_ids)
     eq_runs(rgi_ids)
 

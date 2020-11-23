@@ -43,6 +43,7 @@
 % TL;DR Box
 %Theorem
 \newenvironment{tldrbox}[2][]{
+    \begin{figure}
     \mdfsetup{
         frametitle={
             \tikz[baseline=(current bounding box.east),outer sep=0pt]
@@ -58,7 +59,7 @@
     \begin{mdframed}[]\relax\label{#2}
     \begin{itemize}
 }
-{\end{itemize}\end{mdframed}}
+{\end{itemize}\end{mdframed}\end{figure}}
 
 % ---- my commands: 
 \newcommand{\vas}{volume/area scaling}
@@ -67,6 +68,10 @@
 \newcommand{\mustar}{$\mu^*$}
 \newcommand{\bias}{$\beta^*$}
 \newcommand{\tldr}{\textbf{TL;DR}}
+\usepackage{scalerel, xparse}
+\newcommand{\emojiwhale}{\scalerel*{
+       
+}}
 
 % ---- graphicx package:
 \usepackage{graphicx}
@@ -304,16 +309,16 @@
 
 % ==== CURRICULUM VITAE ========================================================
 % ---- include tex-file:
-\include{curricv}
-\newpage
-\thispagestyle{plain}
+% \include{curricv}
+% \newpage
+% \thispagestyle{plain}
 
 
 % ==== EPILOGUE ================================================================
 % ---- include tex-file:
-\include{epilogue}
-\newpage
-\thispagestyle{plain}
+% \include{epilogue}
+% \newpage
+% \thispagestyle{plain}
 
 
 \end{document}

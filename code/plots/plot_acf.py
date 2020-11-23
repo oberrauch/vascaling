@@ -473,7 +473,7 @@ def plot_pacf_bars(ds, rgi_df, xlim=None, nlags=200,
 if __name__ == '__main__':
     # specify path and read datasets
     dir_path = '/Users/oberrauch/work/master/data/' \
-               + 'cluster_output/showcase_glaciers_random_climate_long/'
+               + 'cluster_output/showcase_glaciers_random_climate/'
     ds = xr.open_dataset(os.path.join(dir_path, 'eq_runs.nc'))
     # sort by temperature bias
     ds = ds.sortby('temp_bias')
@@ -486,6 +486,5 @@ if __name__ == '__main__':
     showcase_glaciers = pd.read_csv(os.path.join(data_dir, path), index_col=0)
 
     # call plotting functions
-    # plot_acf(ds, showcase_glaciers, nlags=500, dir_path='/Users/oberrauch/work/master/plots/final_plots/acf_long/')
     plot_acf(ds, showcase_glaciers, nlags=500)
     plot_pacf_stem(ds, showcase_glaciers, nlags=20)

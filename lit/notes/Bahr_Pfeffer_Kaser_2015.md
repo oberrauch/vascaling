@@ -231,7 +231,7 @@ Hereby, $H$ describes the ice thickness, and $\tau_b \simeq \rho g \alpha H$ the
 
 **5.1 The stretching transformation and continuity equation**
 
-The stretching transformation entails a multiplication of each variable $X$ with a scalar factor $\lambda^{k_X}$, whereby $\lambda$ is the same constant for all variables and $k_X$ is a constant stretching exponent specific to $X$. The rescaled quantity is indicated by a bar, hence $\overline X = \lambda^{k_X}X$. Notice that the scaling factor can be represented as dimensionless number by $\lambda^{k_X} = \overline X / X$. Thereby, the the equations must be preserved for the stretched variables. This forces some constraints to the scaling constants, for example the topographic variables $h$, $h_s$ and $h_b$ must always rescale by the same amount, since 
+The stretching transformation entails a multiplication of each variable $X$ with a scalar factor $\lambda^{k_X}$, whereby $\lambda$ is the same constant for all variables and $k_X$ is a constant stretching exponent specific to $X$. The rescaled quantity is indicated by a bar, hence $\overline X = \lambda^{k_X}X$. Notice that the scaling factor can be represented as dimensionless number by $\lambda^{k_X} = \overline X / X$. Thereby, the equations must be preserved for the stretched variables. This forces some constraints to the scaling constants, for example the topographic variables $h$, $h_s$ and $h_b$ must always rescale by the same amount, since 
 $$
 \begin{equation}
 \begin{split}
@@ -337,7 +337,7 @@ All other parameters follow from combinations of $\Pi_{1,G}$ and $\Pi_{2,G}$, mo
 $$
 \Pi_{3,G} = \frac{x_i}{x_j} \qquad\qquad \Pi_{4,G} = \frac{u_i}{u_j}.
 $$
-Stretching the glacier geometry is stretched in one direction, it must stretch equally in the other two dimensions. The same holds true for velocities and forces.
+If the glacier geometry is stretched in one direction, it must stretch equally in the other two dimensions. The same holds true for velocities and forces.
 
 #### 6. Using dimensionless parameters
 
@@ -374,7 +374,37 @@ Even though volume area scaling is the most common application of dimensional an
 
 **7.1 Volume-area scaling for glaciers**
 
+> A volume-area scaling relationship can be derived by combining the dimensionless parameters given above and by selecting appropriate characteristic values.
 
+Combining the dimensionless parameters $\Pi_2$, $\Pi_4$ and $\Pi_9$ yields
+$$
+\frac{\Pi_4\Pi_9}{\Pi_2} = \frac{A\rho^n g_x^n z^{n+2}}{u_z x},
+$$
+which is valid for any orientation. The expression is independent of any angle, which make a slope closure unnecessary. The following characteristic values and closure conditions are chosen:
+
+- glacier length $l$ as characteristic length $x$
+- terminus mass balance $\dot b$ as characteristic vertical velocity $u_z$
+- average glacier width $w$ as characteristic width
+- average ice thickness $h$ as characteristic thickness $z$
+- width/length closure $w = c_q\,l^q$ with $q\approx0.6$ suggested by data ("the value of $q$ reflects the relationship between the glacier itself and the underlying topography" Bahr et al., (2015))
+- mass balance/length closure $\dot b = c_m\,l^m$ with $m\approx2$ suggested by data
+
+Substitution gives
+$$
+\begin{align}
+\begin{split}
+\frac{\Pi_4\Pi_9}{\Pi_2} &= \frac{A\rho^n g_x^n h^{n+2}}{\dot b\, l}\\
+ &= \frac{A\rho^n g_x^n h^{n+2}}{c_m\, l^{m+1}}\\
+\end{split}
+\end{align}
+$$
+and solving for average ice thickness $h$ gives
+$$
+h = \left(\frac{\Pi_4\Pi_9}{\Pi_2}\frac{c_m}{A\rho^n g_x^n}\right)^\frac{1}{n+2}\, l^\frac{m+1}{n+2}.
+$$
+
+
+Volume can be estimated as the product of characteristic ...
 
 **7.2 Volume-area scaling for ice caps**
 

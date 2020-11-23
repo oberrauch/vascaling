@@ -64,7 +64,8 @@ def normalize_ds_with_start(ds, store_var_0=False):
 
 def compute_scaling_params(rgi_ids, path=None):
     """ The routine computes scaling parameters by fitting a linear regression
-    to the volume/area and volume/length scatter in log-log space.
+    to the volume/area and volume/length scatter in log-log space, using the
+    inversion volume, the RGI area and the longest centerline as "observations"
     Thereby, the following two cases apply:
     - compute only scaling constants, since scaling exponents have a physical
         basis and should not be changed
@@ -91,13 +92,11 @@ def compute_scaling_params(rgi_ids, path=None):
     rgi_version = (rgi_ids[0].split('-')[0])[-2:-1]
 
     # load default parameter file
-    cfg.initialize()
+    vascaling.initialize()
 
     # get environmental variables for working and output directories
     WORKING_DIR = os.environ["WORKDIR"]
     OUTPUT_DIR = os.environ["OUTDIR"]
-    # WORKING_DIR = '/Users/oberrauch/work/master/working_directories/scaling_params/'
-    # OUTPUT_DIR = '/Users/oberrauch/work/master/data/scaling_params/'
     # create working directory
     utils.mkdir(WORKING_DIR)
     utils.mkdir(OUTPUT_DIR)
@@ -113,6 +112,9 @@ def compute_scaling_params(rgi_ids, path=None):
     # set the mb hyper parameters accordingly
     cfg.PARAMS['prcp_scaling_factor'] = 1.75
     cfg.PARAMS['temp_melt'] = -1.75
+    # set minimum ice thickness to include in glacier length computation
+    # this reduces weird spikes in length records
+    cfg.PARAMS['min_ice_thick_for_length'] = 0.1
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -129,7 +131,7 @@ def compute_scaling_params(rgi_ids, path=None):
     rgidf = rgidf.sort_values('Area', ascending=False)
     cfg.PARAMS['use_multiprocessing'] = True
     # operational run, all glaciers should run
-    cfg.PARAMS['continue_on_error'] = False
+    cfg.PARAMS['continue_on_error'] = True
 
     # initialize the GlacierDirectory
     gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
@@ -234,7 +236,7 @@ def sensitivity_run_vas(rgi_ids, use_random_mb=False, use_mean=False,
     rgi_version = (rgi_ids[0].split('-')[0])[-2:-1]
 
     # load default parameter file
-    cfg.initialize()
+    vascaling.initialize()
 
     # get environmental variables for working and output directories
     WORKING_DIR = os.environ["WORKDIR"]
@@ -252,11 +254,14 @@ def sensitivity_run_vas(rgi_ids, use_random_mb=False, use_mean=False,
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
-    cfg.PARAMS['prcp_scaling_factor'] = 1.75
-    cfg.PARAMS['temp_melt'] = -1.75
+    cfg.PARAMS['prcp_scaling_factor'] = 2.5
+    cfg.PARAMS['temp_melt'] = -0.5
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
     cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
+    # set minimum ice thickness to include in glacier length computation
+    # this reduces weird spikes in length records
+    cfg.PARAMS['min_ice_thick_for_length'] = 0.1
 
     # read RGI entry for the glaciers as DataFrame
     # containing the outline area as shapefile
@@ -283,12 +288,15 @@ def sensitivity_run_vas(rgi_ids, use_random_mb=False, use_mean=False,
     # compute local t* and the corresponding mu*
     if tstar or use_default_tstar:
         # compute mustar from given tstar or reference table
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs, tstar=tstar, bias=0)
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     tstar=tstar, bias=0)
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df)
+        ref_df = pd.read_csv(
+            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     ref_df=ref_df)
 
     # Run model with constant/random mass balance model
     # -------------------------------------------------
@@ -413,7 +421,8 @@ def histalp_scaling_params():
     cfg.set_logging_config()
 
     # get HISTALP RGI IDs
-    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv', index_col=0)['RGIId'].values
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
+                          index_col=0)['RGIId'].values
     compute_scaling_params(rgi_ids, path=True)
 
 
@@ -423,27 +432,34 @@ def histalp_commitment_custom_scaling():
     cfg.set_logging_config()
 
     # get computed scaling parameters
-    scaling_params_dict = json.load(open('/home/users/moberrauch/run_output/scaling_params/scaling_params.json'))
+    scaling_params_dict = json.load(open(
+        '/home/users/moberrauch/run_output/scaling_params/scaling_params.json'))
 
     # set scaling parameters
     scaling_params_list = [(4.5507, 0.191, 2.2, 1.375)]  # Global
+    # get custom scaling constants
     const_only = list(scaling_params_dict['const_only'].values())
+    # add default scaling exponents
     const_only.extend([2.2, 1.375])
+    # add to scaling parameter list
     scaling_params_list.append(tuple(const_only))  # consts only
-    scaling_params_list.append(tuple(list(scaling_params_dict['const_expo'].values())[:4]))  # best fit
+    scaling_params_list.append(tuple(
+        list(scaling_params_dict['const_expo'].values())[:4]))  # best fit
 
     # define file suffixes
     suffixes = ['_default', '_fixed_exp', '_lin_reg']
 
     # get HISTALP RGI IDs
-    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv', index_col=0)['RGIId'].values
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
+                          index_col=0)['RGIId'].values
 
     sensitivity_run_vas(rgi_ids=rgi_ids, scaling_params=scaling_params_list,
                         suffixes=suffixes, temp_bias=+0.5)
 
 
 def histalp_timescale_sensitivity():
-    """Use new found scaling parameters for HISTALP commitment run"""
+    """Use new found scaling parameters for HISTALP commitment run
+    The time scales are additionally scaled by a factor 0.5 and 2."""
     # start logger with OGGM settings
     cfg.set_logging_config()
 
@@ -451,28 +467,92 @@ def histalp_timescale_sensitivity():
     suffixes = ['_default', '_half', '_twice']
 
     # get HISTALP RGI IDs
-    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv', index_col=0)['RGIId'].values
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
+                          index_col=0)['RGIId'].values
 
-    sensitivity_run_vas(rgi_ids=rgi_ids, time_scale_factors=[1, 0.5, 1.5],
+    sensitivity_run_vas(rgi_ids=rgi_ids, time_scale_factors=[1, 0.5, 2],
                         suffixes=suffixes, temp_bias=+0.5)
 
 
-def test():
+def _test():
     """Use new found scaling parameters for HISTALP commitment run"""
     # start logger with OGGM settings
     cfg.set_logging_config()
 
     # get computed scaling parameters
-    scaling_params_dict = json.load(open('/home/users/moberrauch/run_output/scaling_params/scaling_params.json'))
+    scaling_params_dict = json.load(open(
+        '/home/users/moberrauch/run_output/scaling_params/scaling_params.json'))
 
     # set scaling parameters
-    scaling_params_list = [tuple(list(scaling_params_dict['const_expo'].values())[:4])]  # Global
+    scaling_params_list = [
+        tuple(list(scaling_params_dict['const_expo'].values())[:4])]  # Global
 
     # define file suffixes
     suffixes = ['_lin_reg']
 
     # get HISTALP RGI IDs
-    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv', index_col=0)['RGIId'].values
+    rgi_ids = pd.read_csv('/home/users/moberrauch/data/histalp_rgi_ids.csv',
+                          index_col=0)['RGIId'].values
 
     sensitivity_run_vas(rgi_ids=rgi_ids, scaling_params=scaling_params_list,
                         suffixes=suffixes, temp_bias=+0.5, nyears=100)
+
+
+def hef_sensitivity_local():
+    """ The sensitivtiy experiments for Hintereisferner can be run locally,
+    since they don't need much computational power. The can also be used as
+    "Test case" if changes to the functions are made. """
+    # start logger with OGGM settings
+    cfg.set_logging_config()
+
+    # define path to local directories as environmental variables
+    WORKDIR = '/Users/oberrauch/work/master/working_directories/test_scaling_const/'
+    OUTDIR = '/Users/oberrauch/work/master/data/hef_sensitivity/'
+    os.environ['WORKDIR'] = WORKDIR
+    os.environ['OUTDIR'] = OUTDIR
+
+    # specify Hintereisferner RGI ID
+    rgi_ids = ['RGI60-11.00897']
+
+    # compute custom scaling parameters for Hintereisferner
+    log.info('Compute scaling params')
+    scaling_params = compute_scaling_params(rgi_ids, path=True)
+
+    # ----------------------------
+    #  SCALING PARAMS SENSITIVITY
+    # ----------------------------
+    # use default time scales but custom scaling constants
+
+    # set scaling parameters
+    scaling_params_list = [(4.5507, 0.191, 2.2, 1.375)]  # Global
+    # get custom scaling constants
+    const_only = list(scaling_params['const_only'].values())
+    # add default scaling exponents
+    const_only.extend([2.2, 1.375])
+    # add to scaling parameter list
+    scaling_params_list.append(tuple(const_only))
+
+    # define file suffixes and file path
+    suffixes = ['_default', '_fixed_exp']
+    fpath = os.path.join(OUTDIR, 'scaling_param_sensitivity.nc')
+
+    log.info('Run scaling param sensitivity')
+    sensitivity_run_vas(rgi_ids=rgi_ids, scaling_params=scaling_params_list,
+                        suffixes=suffixes, temp_bias=+0.5, path=fpath)
+
+    # ------------------------
+    #  TIME SCALE SENSITIVITY
+    # ------------------------
+    # use default scaling parameters and scale time scales by factor 0.5 and 2
+
+    # define file suffixes and file path
+    suffixes = ['_default', '_half', '_twice']
+    fpath = os.path.join(OUTDIR, 'time_scale_sensitivity.nc')
+
+    log.info('Run time scale sensitivity')
+    sensitivity_run_vas(rgi_ids=rgi_ids, time_scale_factors=[1, 0.5, 2],
+                        suffixes=suffixes, temp_bias=+0.5, path=fpath)
+
+if __name__ == '__main__':
+    hef_sensitivity_local()
+

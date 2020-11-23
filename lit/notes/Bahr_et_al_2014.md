@@ -24,14 +24,13 @@ Ice thickness inversion is and will be ill-posed, however there are the followin
 
 2. By the law of large numbers, the sum over a substantially large set of glaciers' volume will be a good estimate since the random errors of each glacier are likely to balance out. However, additional uncertainties introduced by other parameters (e.g., Glen's A-parameter, sliding parameters, ...) must be addressed separately.
 
-3. > The ill-posed instability is dependent on the spatial wavelength or resolution of the solution. [...] defining the spatial
-   > wavelength (and related spatial frequency) as the length scale of variation of whatever surface properties are being projected downwards in the inversion for distributions at the bed. (Bahr et al., 2014)
-
-   Whatever that means... as far as I understand it, the instability depends on the spatial resolution (or more abstract the spatial wavelength and associated frequencies). 
-
-   > The trick is to eliminate the unstable short frequencies that generate most of the errors. Eliminating or smoothing high frequencies has been the strategy of many glacier inversions, and it is another example of regularization (which assumes something about the structure of the solution at the bed) (e.g. Truffer, 2004; Habermann and others, 2012). (Bahr et al., 2014)
-
-   No matter the type of inversion, errors grow chaotically and exponentially. Thereby, higher frequencies result in a stronger exponential growth. Hence, substantially large spatial wavelength can produce stable solutions.
+3. > The ill-posed instability is dependent on the spatial wavelength or resolution of the solution. [...] defining the spatial wavelength (and related spatial frequency) as the length scale of variation of whatever surface properties are being projected downwards in the inversion for distributions at the bed. (Bahr et al., 2014)
+   
+Whatever that means... as far as I understand it, the instability depends on the spatial resolution (or more abstract the spatial wavelength and associated frequencies). 
+   
+> The trick is to eliminate the unstable short frequencies that generate most of the errors. Eliminating or smoothing high frequencies has been the strategy of many glacier inversions, and it is another example of regularization (which assumes something about the structure of the solution at the bed) (e.g. Truffer, 2004; Habermann and others, 2012). (Bahr et al., 2014)
+   
+No matter the type of inversion, errors grow chaotically and exponentially. Thereby, higher frequencies result in a stronger exponential growth. Hence, substantially large spatial wavelength can produce stable solutions.
 
 **Error analysis for the ill-posed volume problem:**
 

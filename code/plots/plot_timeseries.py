@@ -297,6 +297,126 @@ def plot_both_climates(ds, var,
     return fig_vas, fig_fl
 
 
+def plot_one_fig_per_model(ds, var,
+                           title=['Volume/area scaling model',
+                                  'Flowline model'],
+                           xlim=None):
+    # define fig size and axes size and location
+    figsize = [4, 3]
+
+    # ----------------------------
+    #        SCALING MODEL
+    # ----------------------------
+    fig_vas = plt.figure(figsize=figsize)
+    ax_size = [0.2, 0.2, 0.7, 0.7]
+    ax_vas = fig_vas.add_axes(ax_size)
+    # flowline model
+    ds.sel(model='fl', mb_model='constant')[var].plot(hue='temp_bias',
+                                                      ax=ax_vas,
+                                                      add_legend=False,
+                                                      color='lightgray',
+                                                      lw=0.5)
+    # vas model
+    ax_vas.set_prop_cycle('color', vas_cycle)
+    handles_vas = ds.sel(model='vas', mb_model='constant')[var].plot(
+        hue='temp_bias', ax=ax_vas, add_legend=False, lw=2)
+    # define legend labels
+    labels_vas = np.array(
+        ['{:+.1f} °C'.format(bias) for bias in ds.temp_bias.values])
+
+    # set axes limits
+    if xlim:
+        ax_vas.set_xlim(xlim)
+    else:
+        ax_vas.set_xlim([ds.time.min(), ds.time.max()])
+
+    # title, labels, legend
+    if title:
+        ax_vas.set_title(title[0])
+    else:
+        ax_vas.set_title('')
+    ax_vas.set_xlabel('Years of model evolution')
+    legend_kwargs = {'title': '', 'bbox_to_anchor': (0.5, 0.98),
+                     'loc': 'upper center', 'ncol': 2}
+    ax_vas.legend(handles_vas, labels_vas, **legend_kwargs)
+    if ds.normalized:
+        # add ylabel
+        ax_vas.set_ylabel('Relative {}'.format(var))
+        # aux line
+        ax_vas.axhline(1, lw=0.8, ls=':', c='k')
+    else:
+        # add ylabel
+        unit = 'm' if var == 'length' else 'm$^2$' if var == 'area' else 'm$^3$'
+        ax_vas.set_ylabel('Glacier {} [{}]'.format(var, unit))
+        # aux line
+        ax_vas.axhline(ds.sel(model='vas')[var].isel(time=0).mean(), lw=0.8,
+                       ls=':', c='k')
+
+    # add grid
+    ax_vas.grid()
+
+    # ----------------------------
+    #        FLOWLINE MODEL
+    # ----------------------------
+    fig_fl = plt.figure(figsize=figsize)
+    ax_size = [0.1, 0.2, 0.7, 0.7]
+    ax_fl = fig_fl.add_axes(ax_size)
+
+    # vas model
+    ds.sel(model='vas', mb_model='constant')[var].plot(hue='temp_bias', ax=ax_fl,
+                                                     add_legend=False,
+                                                     color='lightgray',
+                                                     lw=0.5)
+    # flowline model
+    ax_fl.set_prop_cycle('color', fl_cycle)
+    handles_fl = ds.sel(model='fl', mb_model='constant')[var].plot(
+        hue='temp_bias', ax=ax_fl, add_legend=False, lw=2)
+
+    # define legend labels
+    labels_fl = np.array(
+        ['{:+.1f} °C'.format(bias) for bias in ds.temp_bias.values])
+
+    # set axes limits
+    if xlim:
+        ax_fl.set_xlim(xlim)
+    else:
+        ax_fl.set_xlim([ds.time.min(), ds.time.max()])
+
+    # title, labels, legend
+    if title:
+        ax_fl.set_title(title[0])
+    else:
+        ax_fl.set_title('')
+    ax_fl.set_xlabel('Years of model evolution')
+    ax_fl.legend(handles_fl, labels_fl, **legend_kwargs)
+    ax_fl.yaxis.tick_right()
+    ax_fl.yaxis.set_label_position('right')
+    if ds.normalized:
+        # add ylabel
+        ax_fl.set_ylabel('Relative {}'.format(var))
+        # aux line
+        ax_fl.axhline(1, lw=0.8, ls=':', c='k')
+    else:
+        # add ylabel
+        unit = 'm' if var == 'length' else 'm$^2$' if var == 'area' else 'm$^3$'
+        ax_fl.set_ylabel('Glacier {} [{}]'.format(var, unit))
+        # aux line
+        ax_fl.axhline(ds.sel(model='fl')[var].isel(time=0).mean(), lw=0.8,
+                      ls=':', c='k')
+
+    # add grid
+    ax_fl.grid()
+
+    # assure same y-scale for both figures
+    ylim_vas = ax_vas.get_ylim()
+    ylim_fl = ax_fl.get_ylim()
+    ylim = [np.min([ylim_vas, ylim_fl]), np.max([ylim_vas, ylim_fl])]
+    ax_vas.set_ylim(ylim)
+    ax_fl.set_ylim(ylim)
+
+    return fig_vas, fig_fl
+
+
 def plot_both_climates_same_fig(ds, var, title='', suptitle='', xlim=None):
     """
 
@@ -563,7 +683,6 @@ def plot_single_glaciers_both_climates():
     # define glaciers of interest
     showcase_glaciers = pd.read_csv(
         '/Users/oberrauch/work/master/data/showcase_glaciers.csv', index_col=0)
-    showcase_glaciers = showcase_glaciers.loc[['RGI60-11.00897']]
 
     # iterate over all above selected glaciers
     for rgi_id, glacier in showcase_glaciers.iterrows():
@@ -577,7 +696,7 @@ def plot_single_glaciers_both_climates():
         for var in variables:
             # iterate over normalized and absolute values
             # for norm in [True, False]:
-            for norm in [True]:
+            for norm in [True, False]:
                 log.info('Plotting {} {} time series'
                          .format('normalized' if norm else 'absolute',
                                  var))
@@ -670,32 +789,35 @@ def plot_histalp_commitment_both_climates():
 
 
 def plot_histalp_projection():
-    # specify path and read datasets
+    """
+    """
+    # specify path and read dataset
     path = '/Users/oberrauch/work/master/data/cluster_output/histalp_projection/eq_runs.nc'
     ds = read_dataset(path)
+    ds = ds.sel(temp_bias=[0, 0.5, 1, 2])
 
-    # iterate over mass balance model
-    for mb_model in ds['mb_model'].values:
-        log.info('Creating plots for {} climate scenario'.format(mb_model))
-        # iterate over all selected variables
-        variables = ['length', 'volume']
-        for var in variables:
-            # iterate over normalized and absolute values
-            for norm in [True, False]:
-                log.info('Plotting {} {} time series'
-                         .format('normalized' if norm else 'absolute',
-                                 var))
+    # iterate over all selected variables
+    variables = ['length', 'volume']
+    for var in variables:
+        # iterate over normalized and absolute values
+        for norm in [True, False]:
+            log.info('Plotting {} {} time series'
+                     .format('normalized' if norm else 'absolute',
+                             var))
+            # define limit of x-axis
+            xlim = [0, 300]
 
-                suptitle = None
-                plot_eq_time_series(
-                    ds.sel(mb_model=mb_model, normalized=norm, rgi_id='sum'),
-                    var=var, suptitle=suptitle, xlim=[0, 300])
-                # store to file
+            figs = plot_one_fig_per_model(
+                ds.sel(normalized=norm, rgi_id='sum'),
+                var=var, title=None, xlim=xlim)
+
+            # store to file
+            for m, fig in zip(['vas', 'fl'], figs):
                 f_path = '/Users/oberrauch/work/master/plots/final_plots/time_series/histalp_projection/'
                 f_path += '{}_{}_{}.pdf'.format(var, 'norm' if norm else 'abs',
-                                                mb_model)
-                plt.savefig(f_path, bbox_inches='tight')
-                plt.close(plt.gcf())
+                                                m)
+                fig.savefig(f_path)
+                plt.close(fig)
 
     # close dataset
     ds.close()
@@ -703,7 +825,7 @@ def plot_histalp_projection():
 
 def plot_random_length():
     # specify path and read datasets
-    path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate_long/eq_runs.nc'
+    path = '/Users/oberrauch/work/master/data/cluster_output/showcase_glaciers_random_climate/eq_runs.nc'
     ds = read_dataset(path)
 
     # define glaciers of interest
@@ -715,4 +837,8 @@ def plot_random_length():
 
 
 if __name__ == '__main__':
+    # plot_single_glaciers_both_climates()
+    # plot_random_length()
+    # plot_histalp_commitment_both_climates()
     plot_histalp_projection()
+

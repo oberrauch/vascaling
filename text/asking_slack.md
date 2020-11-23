@@ -107,7 +107,7 @@ The plots show the modeled evolution of glacier area for Hintereisferner over th
 
 **ASK FOR HELP:**
 
-All equations, units, ... are tripple checked at this point, while it is still more than possible that I have some bugs in my code. So I'm happy for any suggestions... Thank's so far.
+All equations, units, ... are triple checked at this point, while it is still more than possible that I have some bugs in my code. So I'm happy for any suggestions... Thank's so far.
 
 ### Answers:
 
@@ -132,7 +132,7 @@ Here is **[ben.marzeion](https://app.slack.com/team/U0KQG20JU)**'s comment, also
 
 After that I looked into the codebase (Ben original Matlab code) and found what causes the problem.
 
-> As suspected by many of you, the problem arises from a wrong (or different) computation of the terminus elevation. The glacier is initialized with a value for the surface area, from which the volume and length are computed via given scalinglaws. After that point my model differs from Ben's code:
+> As suspected by many of you, the problem arises from a wrong (or different) computation of the terminus elevation. The glacier is initialized with a value for the surface area, from which the volume and length are computed via given scaling laws. After that point my model differs from Ben's code:
 >
 > While Ben still uses the minimal and maximal elevation from the RGI entity, I scaled the terminus elevation proportional to the new glacier length. This results in strongly positive/negative mass balances for smaller/larger glaciers in the first couple year, which explains the *overturning*.
 >

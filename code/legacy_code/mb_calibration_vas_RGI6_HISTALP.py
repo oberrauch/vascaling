@@ -13,16 +13,16 @@ import os
 import oggm
 from oggm import cfg, utils, tasks, workflow
 from oggm.workflow import execute_entity_task
-from oggm.core import vascaling
+import oggm_vas as vascaling
 
 # RGI Version
-rgi_version = '61'
+rgi_version = '62'
 
 # since I'm in the Alps, I'll use HistAlp as baseline climate
 baseline = 'HISTALP'
 
 # initialize OGGM and set up the run parameters
-cfg.initialize(logging_level='WORKFLOW')
+vascaling.initialize(logging_level='WORKFLOW')
 
 # local paths (where to write the OGGM run output)
 dirname = 'OGGM_ref_mb_{}_RGIV{}_OGGM{}'.format(baseline, rgi_version,
@@ -52,10 +52,10 @@ cfg.PARAMS['continue_on_error'] = False
 
 if baseline == 'HISTALP':
     # other params: see https://oggm.org/2018/08/10/histalp-parameters/
-    # TODO: calibrate VAS/HistAlp hyper parameters
+    # DONE: TODO: calibrate VAS/HistAlp hyper parameters
     cfg.PARAMS['baseline_y0'] = 1850
-    cfg.PARAMS['prcp_scaling_factor'] = 1.75
-    cfg.PARAMS['temp_melt'] = -1.75
+    cfg.PARAMS['prcp_scaling_factor'] = 2.5
+    cfg.PARAMS['temp_melt'] = -1.25
 
 
 # the next step is to get all the reference glaciers,

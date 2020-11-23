@@ -64,7 +64,8 @@ def normalize_ds_with_start(ds, store_var_0=False):
 
 def compute_scaling_params(rgi_ids, path=None):
     """ The routine computes scaling parameters by fitting a linear regression
-    to the volume/area and volume/length scatter in log-log space.
+    to the volume/area and volume/length scatter in log-log space, using the
+    inversion volume, the RGI area and the longest centerline as "observations"
     Thereby, the following two cases apply:
     - compute only scaling constants, since scaling exponents have a physical
         basis and should not be changed
@@ -96,8 +97,6 @@ def compute_scaling_params(rgi_ids, path=None):
     # get environmental variables for working and output directories
     WORKING_DIR = os.environ["WORKDIR"]
     OUTPUT_DIR = os.environ["OUTDIR"]
-    # WORKING_DIR = '/Users/oberrauch/work/master/working_directories/scaling_params/'
-    # OUTPUT_DIR = '/Users/oberrauch/work/master/data/scaling_params/'
     # create working directory
     utils.mkdir(WORKING_DIR)
     utils.mkdir(OUTPUT_DIR)
@@ -252,8 +251,8 @@ def sensitivity_run_vas(rgi_ids, use_random_mb=False, use_mean=False,
     # we use HistAlp climate data
     cfg.PARAMS['baseline_climate'] = 'HISTALP'
     # set the mb hyper parameters accordingly
-    cfg.PARAMS['prcp_scaling_factor'] = 1.75
-    cfg.PARAMS['temp_melt'] = -1.75
+    cfg.PARAMS['prcp_scaling_factor'] = 2.5
+    cfg.PARAMS['temp_melt'] = -0.5
     # the bias is defined to be zero during the calibration process,
     # which is why we don't use it here to reproduce the results
     cfg.PARAMS['use_bias_for_run'] = use_bias_for_run
@@ -283,12 +282,15 @@ def sensitivity_run_vas(rgi_ids, use_random_mb=False, use_mean=False,
     # compute local t* and the corresponding mu*
     if tstar or use_default_tstar:
         # compute mustar from given tstar or reference table
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs, tstar=tstar, bias=0)
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     tstar=tstar, bias=0)
     else:
         # compute mustar from the reference table for the flowline model
         # RGI v6 and HISTALP baseline climate
-        ref_df = pd.read_csv(utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
-        workflow.execute_entity_task(vascaling.local_t_star, gdirs, ref_df=ref_df)
+        ref_df = pd.read_csv(
+            utils.get_demo_file('oggm_ref_tstars_rgi6_histalp.csv'))
+        workflow.execute_entity_task(vascaling.local_t_star, gdirs,
+                                     ref_df=ref_df)
 
     # Run model with constant/random mass balance model
     # -------------------------------------------------
@@ -465,10 +467,18 @@ def histalp_timescale_sensitivity(path=True):
 
 
 if __name__ == '__main__':
-    os.environ['WORKDIR'] = '/Users/oberrauch/work/master/working_directories/test_scaling_const('
+    """ Run the sensitivity experiments solely on Hintereisferner """
+    # define environmental variables for directories
+    os.environ['WORKDIR'] = '/Users/oberrauch/work/master/working_directories/test_scaling_const/'
     os.environ['OUTDIR'] = '/Users/oberrauch/work/master/data/hef_sensitivity/'
+
+    # use default scaling parameters and scale time scales by factor 0.5 and 2
     histalp_timescale_sensitivity(path='/Users/oberrauch/work/master/data/hef_sensitivity/time_scale_sensitivity.nc')
+
+    # compute custom scaling parameters for Hintereisferner
     rgi_ids = ['RGI60-11.00897']
     params = compute_scaling_params(rgi_ids, path=True)
+
+    # use default time scaled but costum scaling constants
     histalp_commitment_custom_scaling(path='/Users/oberrauch/work/master/data/hef_sensitivity/scaling_param_sensitivity.nc')
 

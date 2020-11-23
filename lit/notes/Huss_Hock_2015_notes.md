@@ -82,7 +82,7 @@ $$
 $$
 
 
-The mean thickness of individual elevation bands therefore changes by $f_s\Delta h_i$. Additionally, the surface area is adjusted assuming a parabolic bed shape given by last years area/width and ice thickness.
+The mean thickness of individual elevation bands therefore changes by $f_s\Delta h_i$. Additionally, the surface area is adjusted assuming a parabolic bed shape given by last years area/width and ice thickness.x
 
 Glacier retreat and advance is controlled over ice thickness changes. If a elevation band reaches a mean thickness of below zero, it is set to zero and thereby the glacier is retreating. The model glacier advances if the ice thickness increase of at least one band exceeds +5 m. The excessive ice volume is moved downstream, creating new elevation band(s) which thickness and surface area depend on the average of its superjacent bands.
 

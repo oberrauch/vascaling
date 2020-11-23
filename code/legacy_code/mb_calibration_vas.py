@@ -6,8 +6,9 @@ import os
 
 # Locals
 from oggm import cfg, utils, tasks, workflow
+from oggm.core import gis
 from oggm.workflow import execute_entity_task
-from oggm.core import vascaling
+import oggm_vas as vascaling
 
 
 def mb_calibration(rgi_version, baseline):
@@ -19,10 +20,10 @@ def mb_calibration(rgi_version, baseline):
     """
 
     # initialize OGGM and set up the run parameters
-    cfg.initialize(logging_level='WORKFLOW')
+    vascaling.initialize(logging_level='WORKFLOW')
 
     # local paths (where to write the OGGM run output)
-    dirname = 'OGGM_ref_mb_{}_RGIV{}'.format(baseline, rgi_version)
+    dirname = 'VAS_ref_mb_{}_RGIV{}'.format(baseline, rgi_version)
     wdir = utils.gettempdir(dirname, home=True, reset=True)
     utils.mkdir(wdir, reset=True)
     cfg.PATHS['working_dir'] = wdir
@@ -40,9 +41,10 @@ def mb_calibration(rgi_version, baseline):
 
     if baseline == 'HISTALP':
         # other params: see https://oggm.org/2018/08/10/histalp-parameters/
-        cfg.PARAMS['baseline_y0'] = 1850
-        cfg.PARAMS['prcp_scaling_factor'] = 1.75
-        cfg.PARAMS['temp_melt'] = -1.75
+        # cfg.PARAMS['prcp_scaling_factor'] = 1.75
+        # cfg.PARAMS['temp_melt'] = -1.75
+        cfg.PARAMS['prcp_scaling_factor'] = 2.5
+        cfg.PARAMS['temp_melt'] = -0.5
 
     # the next step is to get all the reference glaciers,
     # i.e. glaciers with mass balance measurements.
@@ -60,8 +62,11 @@ def mb_calibration(rgi_version, baseline):
         rids = [rid for rid in rids if '-11' in rid]
         cfg.PARAMS['use_multiprocessing'] = False
 
-    debug = True
+    debug = False
     if debug:
+        print("==================================\n"
+              + "DEBUG MODE: only RGI60-11.00897\n"
+              + "==================================")
         rids = [rid for rid in rids if '-11.00897' in rid]
 
     # make a new dataframe with those (this takes a while)
@@ -71,7 +76,10 @@ def mb_calibration(rgi_version, baseline):
           'glaciers.'.format(rgi_version, len(rgidf)))
 
     # initialize the glacier regions
-    gdirs = workflow.init_glacier_regions(rgidf)
+    gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
+    workflow.execute_entity_task(gis.define_glacier_region, gdirs,
+                                 source='SRTM')
+    workflow.execute_entity_task(gis.glacier_masks, gdirs)
 
     # we need to know which period we have data for
     print('Process the climate data...')
@@ -81,7 +89,8 @@ def mb_calibration(rgi_version, baseline):
         # Some glaciers are not in Alps
         gdirs = [gdir for gdir in gdirs if gdir.rgi_subregion == '11-01']
         # cfg.PARAMS['continue_on_error'] = True
-        execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False)
+        execute_entity_task(tasks.process_histalp_data, gdirs, print_log=False,
+                            y0=1850)
         # cfg.PARAMS['continue_on_error'] = False
     else:
         execute_entity_task(tasks.process_custom_climate_data,
@@ -102,22 +111,11 @@ def mb_calibration(rgi_version, baseline):
     # sort for more efficient parallel computing
     rgidf = rgidf.sort_values('Area', ascending=False)
 
-    # initialize glacier directories
-    gdirs = workflow.init_glacier_regions(rgidf)
-
-    # specify needed prepro tasks
-    task_list = [
-        tasks.glacier_masks,
-        tasks.compute_centerlines,
-        tasks.initialize_flowlines,
-        tasks.catchment_area,
-        tasks.catchment_intersections,
-        tasks.catchment_width_geom,
-        tasks.catchment_width_correction,
-    ]
-    # execute all prepro tasks
-    for task in task_list:
-        execute_entity_task(task, gdirs)
+    # newly initialize glacier directories
+    gdirs = workflow.init_glacier_directories(rgidf, reset=False, force=True)
+    workflow.execute_entity_task(gis.define_glacier_region, gdirs,
+                                 source='SRTM')
+    workflow.execute_entity_task(gis.glacier_masks, gdirs)
 
     # run climate tasks
     vascaling.compute_ref_t_stars(gdirs)
@@ -135,10 +133,8 @@ if __name__ == '__main__':
     ~/tmp/OGGM/OGGM_ref_mb_xx_RGIVxx/ directory.
     """
     # specify RGI Version and baseline climate
-    rgi_version = '5'
+    rgi_version = '6'
     baseline = 'HISTALP'
 
     # run mass balance calibration
     mb_calibration(rgi_version, baseline)
-
-
