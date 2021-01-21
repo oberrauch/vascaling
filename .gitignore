@@ -4,6 +4,9 @@ working_directories
 *.nc
 *.mat
 
+# large file
+lit/IPCC_2007_AR4_WG1_full_report.pdf
+
 # Aux files
 .ask
 .todo

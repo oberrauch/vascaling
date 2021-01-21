@@ -1,0 +1,177 @@
+
+2021-01-21 11:44:10: oggm.workflow: Execute entity task define_glacier_region on 274 glaciers
+2021-01-21 11:44:11: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-01.02228 with border 20
+2021-01-21 11:44:11: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-01.02228: 
+2021-01-21 11:44:11: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-01.00570 with border 20
+2021-01-21 11:44:11: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-01.00570: 
+2021-01-21 11:44:13: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-01.09162 with border 20
+2021-01-21 11:44:13: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-01.09162: 
+2021-01-21 11:44:28: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.00691 with border 20
+2021-01-21 11:44:28: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.00691: 
+2021-01-21 11:44:28: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.00840 with border 20
+2021-01-21 11:44:28: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.00840: 
+2021-01-21 11:44:29: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.01427 with border 20
+2021-01-21 11:44:29: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.01427: 
+2021-01-21 11:44:29: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.01623 with border 20
+2021-01-21 11:44:29: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.01623: 
+2021-01-21 11:44:29: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.02435 with border 10
+2021-01-21 11:44:29: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.02435: 
+2021-01-21 11:44:30: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.04539 with border 20
+2021-01-21 11:44:30: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.04539: 
+2021-01-21 11:44:31: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-03.04552 with border 20
+2021-01-21 11:44:31: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-03.04552: 
+2021-01-21 11:44:31: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-04.03082 with border 20
+2021-01-21 11:44:31: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-04.03082: 
+2021-01-21 11:44:31: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-04.06187 with border 20
+2021-01-21 11:44:31: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-04.06187: 
+2021-01-21 11:44:31: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.00115 with border 20
+2021-01-21 11:44:31: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.00115: 
+2021-01-21 11:44:32: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.00446 with border 20
+2021-01-21 11:44:32: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.00446: 
+2021-01-21 11:44:32: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.05149 with border 20
+2021-01-21 11:44:32: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.05149: 
+2021-01-21 11:44:32: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.07217 with border 20
+2021-01-21 11:44:32: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.07217: 
+2021-01-21 11:44:33: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.11186 with border 20
+2021-01-21 11:44:33: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.11186: 
+2021-01-21 11:44:33: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-05.20030 with border 20
+2021-01-21 11:44:33: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-05.20030: 
+2021-01-21 11:44:33: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00234 with border 20
+2021-01-21 11:44:33: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00234: 
+2021-01-21 11:44:33: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00236 with border 20
+2021-01-21 11:44:33: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00236: 
+2021-01-21 11:44:34: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00238 with border 20
+2021-01-21 11:44:34: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00238: 
+2021-01-21 11:44:34: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00310 with border 20
+2021-01-21 11:44:34: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00310: 
+2021-01-21 11:44:34: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00377 with border 20
+2021-01-21 11:44:34: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00377: 
+2021-01-21 11:44:35: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00424 with border 20
+2021-01-21 11:44:35: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00424: 
+2021-01-21 11:44:35: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00443 with border 20
+2021-01-21 11:44:35: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00443: 
+2021-01-21 11:44:35: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00472 with border 20
+2021-01-21 11:44:35: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00472: 
+2021-01-21 11:44:36: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00477 with border 20
+2021-01-21 11:44:36: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00477: 
+2021-01-21 11:44:36: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00483 with border 20
+2021-01-21 11:44:36: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00483: 
+2021-01-21 11:44:36: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-06.00513 with border 20
+2021-01-21 11:44:36: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-06.00513: 
+2021-01-21 11:44:36: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00231 with border 20
+2021-01-21 11:44:36: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00231: 
+2021-01-21 11:44:37: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00240 with border 10
+2021-01-21 11:44:37: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00240: 
+2021-01-21 11:44:37: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00246 with border 20
+2021-01-21 11:44:37: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00246: 
+2021-01-21 11:44:37: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00382 with border 20
+2021-01-21 11:44:37: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00382: 
+2021-01-21 11:44:38: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00490 with border 20
+2021-01-21 11:44:38: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00490: 
+2021-01-21 11:44:38: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00492 with border 20
+2021-01-21 11:44:38: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00492: 
+2021-01-21 11:44:39: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00493 with border 20
+2021-01-21 11:44:39: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00493: 
+2021-01-21 11:44:39: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00496 with border 20
+2021-01-21 11:44:39: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00496: 
+2021-01-21 11:44:39: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00504 with border 20
+2021-01-21 11:44:39: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00504: 
+2021-01-21 11:44:40: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00570 with border 10
+2021-01-21 11:44:40: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00570: 
+2021-01-21 11:44:40: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.00593 with border 20
+2021-01-21 11:44:40: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.00593: 
+2021-01-21 11:44:40: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01060 with border 20
+2021-01-21 11:44:40: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01060: 
+2021-01-21 11:44:41: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01100 with border 10
+2021-01-21 11:44:41: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01100: 
+2021-01-21 11:44:41: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01107 with border 20
+2021-01-21 11:44:41: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01107: 
+2021-01-21 11:44:41: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01132 with border 20
+2021-01-21 11:44:41: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01132: 
+2021-01-21 11:44:41: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01464 with border 20
+2021-01-21 11:44:41: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01464: 
+2021-01-21 11:44:42: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-07.01481 with border 20
+2021-01-21 11:44:42: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-07.01481: 
+2021-01-21 11:44:42: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00006 with border 20
+2021-01-21 11:44:42: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00006: 
+2021-01-21 11:44:42: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00146 with border 20
+2021-01-21 11:44:42: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00146: 
+2021-01-21 11:44:43: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00188 with border 20
+2021-01-21 11:44:43: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00188: 
+2021-01-21 11:44:43: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00199 with border 20
+2021-01-21 11:44:43: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00199: 
+2021-01-21 11:44:44: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00210 with border 20
+2021-01-21 11:44:44: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00210: 
+2021-01-21 11:44:44: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00213 with border 20
+2021-01-21 11:44:44: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00213: 
+2021-01-21 11:44:44: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00259 with border 20
+2021-01-21 11:44:44: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00259: 
+2021-01-21 11:44:45: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00287 with border 20
+2021-01-21 11:44:45: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00287: 
+2021-01-21 11:44:45: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00295 with border 20
+2021-01-21 11:44:45: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00295: 
+2021-01-21 11:44:45: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00312 with border 20
+2021-01-21 11:44:45: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00312: 
+2021-01-21 11:44:46: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00434 with border 20
+2021-01-21 11:44:46: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00434: 
+2021-01-21 11:44:46: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00449 with border 20
+2021-01-21 11:44:46: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00449: 
+2021-01-21 11:44:46: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.00987 with border 20
+2021-01-21 11:44:46: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.00987: 
+2021-01-21 11:44:47: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01013 with border 20
+2021-01-21 11:44:47: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01013: 
+2021-01-21 11:44:47: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01099 with border 20
+2021-01-21 11:44:47: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01099: 
+2021-01-21 11:44:47: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01126 with border 20
+2021-01-21 11:44:47: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01126: 
+2021-01-21 11:44:47: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01186 with border 20
+2021-01-21 11:44:47: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01186: 
+2021-01-21 11:44:48: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01217 with border 20
+2021-01-21 11:44:48: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01217: 
+2021-01-21 11:44:48: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01258 with border 20
+2021-01-21 11:44:48: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01258: 
+2021-01-21 11:44:48: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01286 with border 20
+2021-01-21 11:44:48: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01286: 
+2021-01-21 11:44:49: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01484 with border 20
+2021-01-21 11:44:49: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01484: 
+2021-01-21 11:44:49: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01598 with border 20
+2021-01-21 11:44:49: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01598: 
+2021-01-21 11:44:49: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01657 with border 20
+2021-01-21 11:44:49: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01657: 
+2021-01-21 11:44:50: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01764 with border 20
+2021-01-21 11:44:50: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01764: 
+2021-01-21 11:44:50: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.01779 with border 20
+2021-01-21 11:44:50: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.01779: 
+2021-01-21 11:44:50: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02017 with border 20
+2021-01-21 11:44:50: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02017: 
+2021-01-21 11:44:51: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02384 with border 20
+2021-01-21 11:44:51: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02384: 
+2021-01-21 11:44:51: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02436 with border 20
+2021-01-21 11:44:51: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02436: 
+2021-01-21 11:44:51: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02458 with border 20
+2021-01-21 11:44:51: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02458: 
+2021-01-21 11:44:52: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02643 with border 20
+2021-01-21 11:44:52: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02643: 
+2021-01-21 11:44:52: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02650 with border 20
+2021-01-21 11:44:52: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02650: 
+2021-01-21 11:44:54: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02666 with border 20
+2021-01-21 11:44:54: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02666: 
+2021-01-21 11:44:54: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02916 with border 20
+2021-01-21 11:44:54: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02916: 
+2021-01-21 11:44:55: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02920 with border 20
+2021-01-21 11:44:55: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02920: 
+2021-01-21 11:44:56: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02962 with border 20
+2021-01-21 11:44:56: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02962: 
+2021-01-21 11:44:56: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02963 with border 20
+2021-01-21 11:44:56: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02963: 
+2021-01-21 11:44:57: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.02966 with border 20
+2021-01-21 11:44:57: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.02966: 
+2021-01-21 11:44:57: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-08.03416 with border 20
+2021-01-21 11:44:57: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-08.03416: 
+2021-01-21 11:45:00: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-10.03264 with border 20
+2021-01-21 11:45:00: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-10.03264: 
+2021-01-21 11:45:02: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-10.05085 with border 20
+2021-01-21 11:45:02: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-10.05085: 
+2021-01-21 11:45:02: oggm.core.gis: Source: SRTM may not be available for glacier RGI60-10.05087 with border 20
+2021-01-21 11:45:02: oggm.core.gis: AssertionError occurred during task define_glacier_region on RGI60-10.05087: 
+2021-01-21 11:45:45: oggm.core.gis: InvalidDEMError occurred during task define_glacier_region on RGI60-15.04847: Source: SRTM no topography file available for extent lat:[28.792439287650698, 28.854723432702382], lon:[83.45998270430704, 83.5151624344288]!
