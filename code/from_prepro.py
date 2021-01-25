@@ -1,50 +1,33 @@
-# import internal and externals libraries
-import os
-import numpy as np
-import pandas as pd
-import xarray as xr
-
-import logging
-
-log = logging.getLogger('vas-template')
-
-# import the needed OGGM modules
+# Locals
 from oggm import cfg, utils, workflow
-from oggm.core import gis, climate, flowline
+from oggm.core import climate, gis
+
 import oggm_vas as vascaling
 
-log.info('Starting run')
+# Initialize OGGM and set up the default run parameters
+cfg.initialize()
+rgi_version = '62'
 
-# specify glaciers by RGI IDs (INPUT)
-rgi_ids = ['RGI60-11.00897']
+# 10 is only for OGGM-VAS, OGGM needs 80 to run
+cfg.PARAMS['border'] = 10
 
-# compute RGI region and version from RGI IDs
-# assuming all they are all the same
-rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
-rgi_version = (rgi_ids[0].split('-')[0])[-2:-1]
-
-# load default parameter file
-vascaling.initialize()
-
-# get LOCAL environmental variables for working and output directories
-WORKING_DIR = '/Users/oberrauch/work/master/working_directories/vas_run/'
-OUTPUT_DIR = '/Users/oberrauch/work/master/data/vas_run/'
-# create working directory
-utils.mkdir(WORKING_DIR)
-utils.mkdir(OUTPUT_DIR)
-
-# get path to directories on the CLUSTER - comment/uncomment as necessary
-# OUTPUT_DIR = os.environ['OUTDIR']
-# WORKING_DIR = os.environ['WORKDIR']
-
-
-# set path to working directory
+# Local working directory (where OGGM will write its output)
+WORKING_DIR = utils.gettempdir('moritz')
+utils.mkdir(WORKING_DIR, reset=True)
 cfg.PATHS['working_dir'] = WORKING_DIR
-# set RGI version and region
-cfg.PARAMS['rgi_version'] = rgi_version
-# define how many grid points to use around the glacier,
-# if you expect the glacier to grow large use a larger border
-cfg.PARAMS['border'] = 20
+
+# RGI glaciers: her you usually pick a region or yours
+rgi_ids = ['RGI60-11.00897']
+rgi_region = rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
+
+# The important bit: update with the folder with CRU files in it when available
+base_url = 'https://cluster.klima.uni-bremen.de/~oggm/gdirs/oggm_v1.4/L2_files/elev_bands/'
+
+# Go - get the pre-processed glacier directories
+gdirs = workflow.init_glacier_directories(rgi_ids, from_prepro_level=2,
+                                          prepro_base_url=base_url,
+                                          prepro_rgi_version=rgi_version)
+
 # define the baseline cliamte CRU or HISTALP
 cfg.PARAMS['baseline_climate'] = 'CRU'
 # set the mb hyper parameters accordingly

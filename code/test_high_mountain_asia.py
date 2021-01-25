@@ -2,6 +2,7 @@
 import os
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import xarray as xr
 
 import logging
@@ -15,28 +16,18 @@ import oggm_vas as vascaling
 
 log.info('Starting run')
 
-# specify glaciers by RGI IDs (INPUT)
-rgi_ids = ['RGI60-11.00897']
-
-# compute RGI region and version from RGI IDs
-# assuming all they are all the same
-rgi_region = (rgi_ids[0].split('-')[-1]).split('.')[0]
-rgi_version = (rgi_ids[0].split('-')[0])[-2:-1]
+# get all glaciers of RGI region 14 (HIGH MOUNTAIN ASIA)
+rgi_region = '14'
+rgi_version = '61'
+rgidf = gpd.read_file(utils.get_rgi_region_file(region=rgi_region,
+                                                 version=rgi_version))
 
 # load default parameter file
 vascaling.initialize()
 
-# get LOCAL environmental variables for working and output directories
-WORKING_DIR = '/Users/oberrauch/work/master/working_directories/vas_run/'
-OUTPUT_DIR = '/Users/oberrauch/work/master/data/vas_run/'
-# create working directory
-utils.mkdir(WORKING_DIR)
-utils.mkdir(OUTPUT_DIR)
-
 # get path to directories on the CLUSTER - comment/uncomment as necessary
-# OUTPUT_DIR = os.environ['OUTDIR']
-# WORKING_DIR = os.environ['WORKDIR']
-
+OUTPUT_DIR = os.environ['OUTDIR']
+WORKING_DIR = os.environ['WORKDIR']
 
 # set path to working directory
 cfg.PATHS['working_dir'] = WORKING_DIR
@@ -59,10 +50,6 @@ cfg.PARAMS['min_ice_thick_for_length'] = 0.1
 # which is why we don't use it here to reproduce the results
 cfg.PARAMS['use_bias_for_run'] = True
 
-# read RGI entry for the glaciers as DataFrame
-# containing the outline area as shapefile
-rgidf = utils.get_rgi_glacier_entities(rgi_ids)
-
 # get and set path to intersect shapefile
 intersects_db = utils.get_rgi_intersects_region_file(region=rgi_region)
 cfg.set_intersects_db(intersects_db)
@@ -84,3 +71,4 @@ workflow.execute_entity_task(gis.glacier_masks, gdirs)
 workflow.execute_entity_task(climate.process_climate_data, gdirs)
 # compute local t* and the corresponding mu*
 workflow.execute_entity_task(vascaling.local_t_star, gdirs)
+
