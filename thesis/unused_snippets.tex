@@ -1,5 +1,91 @@
 % unused snippets
 
+% CMIP tables
+% -----------
+  \begin{table}[htp]
+          \centering
+          \small
+          \ra{1.4}
+
+          \caption{asdf}
+          \label{tab:cmip}
+          
+          \begin{tabular}{@{}llcclcc@{}}
+            \toprule
+            {} & \phantom{a} & \multicolumn{2}{c}{\textbf{V/A model}} & \phantom{a} & \multicolumn{2}{c}{\textbf{{Flowline model}}} \\
+            {} & \phantom{a} & $V_\text{2003}$ [\si{\percent}] & $V_\text{2100}$ [\si{\percent}] & & $V_\text{2003}$ [\si{\percent}] & $V_\text{2100}$ [\si{\percent}] \\
+            \midrule
+            \textbf{Central Europe}\\
+            SSP1-26.0 & \phantom{a} & 150 & 63 ± 10 & \phantom{a} & 134 & 31 ± 16\\
+            SSP2-45.0 & \phantom{a} & 150 & 40 ± 6 & \phantom{a} & 134 & 12 ± 8\\
+            SSP3-70.0 & \phantom{a} & 150 & 25 ± 6 & \phantom{a} & 134 & 4 ± 4\\
+            SSP5-85.0 & \phantom{a} & 150 & 16 ± 5 & \phantom{a} & 134 & 2 ± 2\\
+            \textbf{Central Asia}\\
+            SSP1-26.0 & \phantom{a} & 110 & 61 ± 3 & \phantom{a} & 106 & 56 ± 6\\
+            SSP2-45.0 & \phantom{a} & 110 & 54 ± 3 & \phantom{a} & 106 & 46 ± 5\\
+            SSP3-70.0 & \phantom{a} & 110 & 48 ± 3 & \phantom{a} & 106 & 37 ± 5\\
+            SSP5-85.0 & \phantom{a} & 110 & 43 ± 4 & \phantom{a} & 106 & 30 ± 6\\
+            \textbf{South Asia East}\\
+            SSP1-26.0 & \phantom{a} & 107 & 73 ± 3 & \phantom{a} & 102 & 74 ± 8\\
+            SSP2-45.0 & \phantom{a} & 107 & 70 ± 3 & \phantom{a} & 102 & 67 ± 8\\
+            SSP3-70.0 & \phantom{a} & 107 & 66 ± 4 & \phantom{a} & 102 & 60 ± 9\\
+            SSP5-85.0 & \phantom{a} & 107 & 63 ± 4 & \phantom{a} & 102 & 52 ± 10\\
+            \textbf{South Asia West}\\
+            SSP1-26.0 & \phantom{a} & 119 & 49 ± 4 & \phantom{a} & 117 & 45 ± 5\\
+            SSP2-45.0 & \phantom{a} & 119 & 41 ± 4 & \phantom{a} & 117 & 37 ± 4\\
+            SSP3-70.0 & \phantom{a} & 119 & 35 ± 3 & \phantom{a} & 117 & 30 ± 4\\
+            SSP5-85.0 & \phantom{a} & 119 & 30 ± 4 & \phantom{a} & 117 & 24 ± 5\\
+            \bottomrule
+            % {} & \phantom{a} & \multicolumn{2}{c}{\textbf{Length [\si{\kilo\meter}]}} & \phantom{a} & \multicolumn{2}{c}{\textbf{Area [\si{\square\kilo\meter}]}} & \phantom{a} & \multicolumn{2}{c}{\textbf{Volume [\si{\cubic\kilo\meter}]}} \\
+            % \midrule
+            % \textbf{Initial values} \\
+            % V/A scaling & \phantom{a} & 4.89 & & \phantom{a} & 8.04 & & \phantom{a} & 0.60 & \\
+            % Flowline & \phantom{a} &  6.90 & & \phantom{a} & 8.04 & & \phantom{a} & 0.80 & \\
+            % $\bm{\Delta T}$\textbf{ = \SI{-0.5}{\celsius}} \\
+            % % \cmidrule{1-10}
+            % V/A scaling & \phantom{a} & 5.25 & (\SI{+7}{\percent}) & \phantom{a} & 8.98 & (\SI{+12}{\percent}) & \phantom{a} & 0.70 & (\SI{+17}{\percent}) \\
+            % Flowline & \phantom{a} &  9.80 & (\SI{+42}{\percent}) & \phantom{a} & 10.64 & (\SI{+33}{\percent}) & \phantom{a} &  1.38 & (\SI{+72}{\percent}) \\
+            % \addlinespace
+            % $\bm{\Delta T}$\textbf{ = \SI{+0.5}{\celsius}} \\
+            % % \cmidrule{1-10}
+            % V/A scaling & \phantom{a} & 4.54 & (\SI{-7}{\percent}) & \phantom{a} & 7.12 & (\SI{-11}{\percent}) & \phantom{a} & 0.50 & (\SI{-15}{\percent}) \\
+            % Flowline & \phantom{a} &   3.80 & (\SI{-45}{\percent}) & \phantom{a} & 6.16 & (\SI{-23}{\percent}) & \phantom{a} & 0.46 & (\SI{-42}{\percent}) \\
+            % \bottomrule
+          \end{tabular}
+        \end{table}
+
+   \begin{table}[htp]
+        \centering
+        \small
+        \ra{1.3}
+
+        \caption{asdf}
+        \label{tab:cmip}
+          
+        \begin{tabular}{@{}llcccc@{}}
+          \toprule
+          % {} & \phantom{a} & \textbf{Central Europe} & \textbf{Central Asia} & \textbf{South Asia West} & \textbf{South Asia East} \\
+          {} & \phantom{a} & \textbf{Region 11} & \textbf{Region 13} & \textbf{Region 14} & \textbf{Region 15} \\
+          \midrule
+          $\mathbf{V_\text{2003}}$ \textbf{[\si{\percent}]} \\
+          V/A scaling model & {} & 150 & 110 & 107 & 119\\
+          Flowline model & \phantom{a} & 134 & 107 & 103 & 119\\
+          $\mathbf{V_\text{2100}}$ \textbf{[\si{\percent}]} - \textbf{SSP1-2.6}\\
+          V/A scaling model & {} & 63 ± 10 & 61 ± 3 & 73 ± 3 & 49 ± 4\\
+          Flowline model & {} & 31 ± 16 & 56 ± 6 & 74 ± 8 & 45 ± 5\\
+          $\mathbf{V_\text{2100}}$ \textbf{[\si{\percent}]} - \textbf{SSP2-4.5}\\
+          V/A scaling model & {} & 40 ± 6 & 54 ± 3 & 70 ± 3 & 41 ± 4\\
+          Flowline model & {} & 12 ± 8 & 46 ± 5 & 67 ± 8 & 37 ± 4\\
+          $\mathbf{V_\text{2100}}$ \textbf{[\si{\percent}]} - \textbf{SSP3-7.0}\\
+          V/A scaling model & {} & 25 ± 6 & 48 ± 3 & 66 ± 4 & 35 ± 3\\
+          Flowline model & {} & 4 ± 4 & 37 ± 5 & 60 ± 9 & 30 ± 4\\
+          $\mathbf{V_\text{2100}}$ \textbf{[\si{\percent}]} - \textbf{SSP5-8.5}\\
+          V/A scaling model & {} & 16 ± 5 & 43 ± 4 & 63 ± 4 & 30 ± 4\\
+          Flowline model & {} & 2 ± 2 & 30 ± 6 & 52 ± 10 & 24 ± 5\\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+
 % Table showing the e-folding time scales for Hintereisferner, time scales as rows
 % --------------------------------------------------------------------------------
 

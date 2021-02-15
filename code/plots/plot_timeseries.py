@@ -6,6 +6,7 @@ import xarray as xr
 import matplotlib.pyplot as plt
 
 from plots.master_colors import vas_cycle, fl_cycle
+# from master_colors import vas_cycle, fl_cycle
 
 import logging
 
@@ -164,7 +165,7 @@ def plot_eq_time_series(ds, var, title='', suptitle='', xlim=None):
 
 def plot_both_climates(ds, var,
                        title=['Volume/area scaling model', 'Flowline model'],
-                       xlim=None):
+                       xlim=None, scale=1):
     # define fig size and axes size and location
     figsize = [4, 3]
     ax_size = [0, 0, 1, 1]
@@ -175,15 +176,16 @@ def plot_both_climates(ds, var,
     fig_vas = plt.figure(figsize=figsize)
     ax_vas = fig_vas.add_axes(ax_size)
     # flowline model
-    ds.sel(model='fl', mb_model='random')[var].plot(hue='temp_bias', ax=ax_vas,
-                                                    add_legend=False,
-                                                    color='lightgray',
-                                                    lw=0.5)
+    (ds.sel(model='fl', mb_model='random')[var]*scale).plot(hue='temp_bias',
+                                                            ax=ax_vas,
+                                                            add_legend=False,
+                                                            color='lightgray',
+                                                            lw=0.5)
     # vas model
     ax_vas.set_prop_cycle('color', vas_cycle)
-    handles_vas_r = ds.sel(model='vas', mb_model='random')[var].plot(
+    handles_vas_r = (ds.sel(model='vas', mb_model='random')[var]*scale).plot(
         hue='temp_bias', ax=ax_vas, add_legend=False, lw=2)
-    handles_vas_c = ds.sel(model='vas', mb_model='constant')[var].plot(
+    handles_vas_c = (ds.sel(model='vas', mb_model='constant')[var]*scale).plot(
         hue='temp_bias', ax=ax_vas, add_legend=False,
         lw=1.7, ls='--')
     # define legend labels
@@ -192,7 +194,7 @@ def plot_both_climates(ds, var,
         ['{:+.1f} °C'.format(bias) for bias in ds.temp_bias.values]).repeat(2))
     # define legend handles
     title_proxy, = plt.plot(
-        ds.sel(model='vas', mb_model='random')[var].isel(temp_bias=0,
+        (ds.sel(model='vas', mb_model='random')[var]*scale).isel(temp_bias=0,
                                                          time=0).values,
         marker='None', linestyle='None', label='dummy')
     handles_vas = list(np.array(np.repeat(title_proxy, 2)))
@@ -219,10 +221,10 @@ def plot_both_climates(ds, var,
         ax_vas.axhline(1, lw=0.8, ls=':', c='k')
     else:
         # add ylabel
-        unit = 'm' if var == 'length' else 'm$^2$' if var == 'area' else 'm$^3$'
+        unit = 'km' if var == 'length' else 'km$^2$' if var == 'area' else 'km$^3$'
         ax_vas.set_ylabel('Glacier {} [{}]'.format(var, unit))
         # aux line
-        ax_vas.axhline(ds.sel(model='vas')[var].isel(time=0).mean(), lw=0.8,
+        ax_vas.axhline((ds.sel(model='vas')[var]*scale).isel(time=0).mean(), lw=0.8,
                        ls=':', c='k')
 
     # add grid
@@ -235,15 +237,16 @@ def plot_both_climates(ds, var,
     ax_fl = fig_fl.add_axes(ax_size)
 
     # vas model
-    ds.sel(model='vas', mb_model='random')[var].plot(hue='temp_bias', ax=ax_fl,
-                                                     add_legend=False,
-                                                     color='lightgray',
-                                                     lw=0.5)
+    (ds.sel(model='vas', mb_model='random')[var]*scale).plot(hue='temp_bias',
+                                                             ax=ax_fl,
+                                                             add_legend=False,
+                                                             color='lightgray',
+                                                             lw=0.5)
     # flowline model
     ax_fl.set_prop_cycle('color', fl_cycle)
-    handles_fl_r = ds.sel(model='fl', mb_model='random')[var].plot(
+    handles_fl_r = (ds.sel(model='fl', mb_model='random')[var]*scale).plot(
         hue='temp_bias', ax=ax_fl, add_legend=False, lw=2)
-    handles_fl_c = ds.sel(model='fl', mb_model='constant')[var].plot(
+    handles_fl_c = (ds.sel(model='fl', mb_model='constant')[var]*scale).plot(
         hue='temp_bias', ax=ax_fl, add_legend=False,
         lw=1.7, ls='--')
 
@@ -278,10 +281,10 @@ def plot_both_climates(ds, var,
         ax_fl.axhline(1, lw=0.8, ls=':', c='k')
     else:
         # add ylabel
-        unit = 'm' if var == 'length' else 'm$^2$' if var == 'area' else 'm$^3$'
+        unit = 'km' if var == 'length' else 'km$^2$' if var == 'area' else 'km$^3$'
         ax_fl.set_ylabel('Glacier {} [{}]'.format(var, unit))
         # aux line
-        ax_fl.axhline(ds.sel(model='fl')[var].isel(time=0).mean(), lw=0.8,
+        ax_fl.axhline(ds.sel(model='fl')[var].isel(time=0).mean()*scale, lw=0.8,
                       ls=':', c='k')
 
     # add grid
@@ -773,8 +776,16 @@ def plot_histalp_commitment_both_climates():
             # define limit of x-axis
             xlim = [0, 1e3]
 
+            scale = 1
+            if not norm:
+                if var == 'length':
+                    scale = 1e-3
+                if var == 'volume':
+                    scale = 1e-9
+
             figs = plot_both_climates(ds.sel(normalized=norm, rgi_id='sum'),
-                                      var=var, title=None, xlim=xlim)
+                                      var=var, title=None, xlim=xlim,
+                                      scale=scale)
 
             # store to file
             for m, fig in zip(['vas', 'fl'], figs):
@@ -839,6 +850,6 @@ def plot_random_length():
 if __name__ == '__main__':
     # plot_single_glaciers_both_climates()
     # plot_random_length()
-    # plot_histalp_commitment_both_climates()
-    plot_histalp_projection()
+    plot_histalp_commitment_both_climates()
+    # plot_histalp_projection()
 

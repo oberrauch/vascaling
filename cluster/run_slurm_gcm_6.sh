@@ -35,7 +35,7 @@ export OGGM_EXTRACT_DIR="/work/$SLURM_JOB_USER/$SLURM_JOB_ID/oggm_tmp"
 mkdir -p "$OGGM_WORKDIR/cache/cluster.klima.uni-bremen.de"
 ln -s /home/www/fmaussion "$OGGM_WORKDIR/cache/cluster.klima.uni-bremen.de/~fmaussion"
 
-# Add other useful defaults
+# Add other useful defakults
 export LRU_MAXSIZE=1000
 
 OGGM_OUTDIR="/work/$SLURM_JOB_USER/$SLURM_JOB_ID/out"
