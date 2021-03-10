@@ -7,8 +7,9 @@
 
 % ---- my packages:
 % date and time formatting
-\usepackage{datetime}
+\usepackage[ngerman]{datetime}
 \newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
+\newdateformat{datum}{\THEDAY.\monthnamengerman[\THEMONTH] \THEYEAR}
 
 \usepackage[all]{nowidow}
 
@@ -183,11 +184,14 @@
 % ---- start page numbering again:
 \setcounter{page}{1}
 
+
+% start plain pages for front matter
+\pagestyle{plain}
+
 % ==== DEDICATION ==============================================================
 % ---- include tex-file:
 \include{dedication}
 \newpage
-\thispagestyle{plain}
 
 
 % ==== EIDESTAATLICHE ERKLÄRUNG ================================================
@@ -220,6 +224,7 @@
 
 % ==== START MAIN MATTER (use ARABIC numerals) =================================
 \mainmatter
+\pagestyle{headings}
 
 
 % ==== INTRODUCTION (CHAPTER 1) ================================================

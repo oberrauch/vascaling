@@ -3,4 +3,17 @@
 \addcontentsline{toc}{chapter}{Eidesstattliche Erklärung}
 \thispagestyle{plain}
 
-\includegraphics[width=0.99\textwidth, trim=2cm 10cm 2cm 1cm]{/Users/oberrauch/Desktop/master_abschluss/eidesstattliche-erklearung_wissenschaftliche-arbeiten.pdf}
+\hspace*{-2cm}
+\includegraphics[scale=0.8]{universitaet-innsbruck-logo.pdf}
+\vspace*{1cm}
+
+\newcommand{\vcenteredinclude}[2]{\begingroup
+\setbox0=\hbox{\includegraphics[scale=#1]{#2}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+{\setlength\parindent{0pt}
+\textbf{\Large Eidesstattliche Erklärung}\\[0.5cm]
+Ich erkläre hiermit an Eides statt durch meine eigenhändige Unterschrift, dass ich die vorliegende Arbeit selbständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel verwendet habe. Alle Stellen, die wörtlich oder inhaltlich den angegebenen Quellen entnommen wurden, sind als solche kenntlich gemacht.\\[0.5cm]
+Die vorliegende Arbeit wurde bisher in gleicher oder ähnlicher Form noch nicht als Magister-/Master-/Diplomarbeit/Dissertation eingereicht.\\[1cm]
+Innsbruck, \datum\today{} \hfill \vcenteredinclude{0.3}{signature.pdf}
+}
