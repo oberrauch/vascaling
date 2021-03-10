@@ -1,0 +1,15 @@
+2021-01-30 22:36:53: oggm_vas.core: Shifting regional MB bias by 716.7953647221976
+2021-01-30 22:36:53: oggm_vas.core: Observations give -873.67
+2021-01-30 22:36:53: oggm_vas.core: OGGM SMB gives -1590.4653647221976
+
+2021-02-26 12:36:40: oggm_vas.core: Shifting regional MB bias by 244.21964052129215
+2021-02-26 12:36:40: oggm_vas.core: Observations give -248.81
+2021-02-26 12:36:40: oggm_vas.core: OGGM SMB gives -493.02964052129215
+
+2021-01-30 22:42:33: oggm_vas.core: Shifting regional MB bias by 364.34282905530324
+2021-01-30 22:42:33: oggm_vas.core: Observations give -157.84
+2021-01-30 22:42:33: oggm_vas.core: OGGM SMB gives -522.1828290553033
+
+2021-01-30 22:39:00: oggm_vas.core: Shifting regional MB bias by 177.19820402351627
+2021-01-30 22:39:00: oggm_vas.core: Observations give -505.65
+2021-01-30 22:39:00: oggm_vas.core: OGGM SMB gives -682.8482040235162

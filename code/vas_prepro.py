@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     # Go - get the pre-processed glacier directories
     base_url = 'https://cluster.klima.uni-bremen.de/~oggm/gdirs/oggm_v1.4/' \
-               'L3-L5_files/RGIV62_fleb_qc3_CRU_pcp2.5'
+               'exps/thesis_vas/'
     gdirs = workflow.init_glacier_directories(rgi_ids, from_prepro_level=3,
                                               prepro_base_url=base_url,
                                               prepro_rgi_version=rgi_version)
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     vascaling.match_regional_geodetic_mb(gdirs=gdirs, rgi_reg=rgi_reg)
     # prepare historic "spinup"
     workflow.execute_entity_task(vascaling.run_from_climate_data, gdirs,
-                                 ys=2003, ye=2020,
+                                 ys=None, ye=2020,
                                  output_filesuffix='_historical')
 
     # compress all gdirs

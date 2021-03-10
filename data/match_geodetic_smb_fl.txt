@@ -1,0 +1,15 @@
+2021-01-25 23:58:07: oggm.workflow: Shifting regional MB bias by 734.7091192005718
+2021-01-25 23:58:07: oggm.workflow: Observations give -873.67
+2021-01-25 23:58:07: oggm.workflow: OGGM SMB gives -1608.3791192005717
+
+2021-01-26 00:32:38: oggm.workflow: Shifting regional MB bias by 266.62327937197705
+2021-01-26 00:32:38: oggm.workflow: Observations give -248.81
+2021-01-26 00:32:38: oggm.workflow: OGGM SMB gives -515.433279371977
+
+2021-01-26 00:14:29: oggm.workflow: Shifting regional MB bias by 340.97172948892114
+2021-01-26 00:14:29: oggm.workflow: Observations give -157.84
+2021-01-26 00:14:29: oggm.workflow: OGGM SMB gives -498.8117294889212
+
+2021-01-26 00:04:25: oggm.workflow: Shifting regional MB bias by 233.9136298622824
+2021-01-26 00:04:25: oggm.workflow: Observations give -505.65
+2021-01-26 00:04:25: oggm.workflow: OGGM SMB gives -739.5636298622824

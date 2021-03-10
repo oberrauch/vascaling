@@ -2,7 +2,7 @@
 \chapter{Results}\label{chap:results}
 \thispagestyle{plain}
 
-  This chapter details all performed experiments and presents their results. All experiments run the implemented \vas{} model in a variety of setting and compare it to the flowline model. The focus is on the intrinsic model behavior and its comparison to the flowline model, and with the exception of the final projection experiment less on absolute ice volume estimations. The experiments start with a test run performed on six different single glacier (Section~\ref{sec:single_glacier_test_case_results}), including time series analysis investigating autocorrelation functions and power spectral density (Section~\ref{sec:autocorrelation_and_power_spectral_density_results}). The same equilibrium runs are repeated on a regional scale (Section~\ref{sec:regional_runs_with_all_alpine_glaciers_results}), before looking into the model's sensitivities to its scaling parameters (Section~\ref{sec:sensitivity_experiments_results}).
+  This chapter details all performed experiments and presents their results. All experiments run the implemented \vas{} model in a variety of settings and compare it to the flowline model. The focus is on the intrinsic model behavior and its comparison to the flowline model, and with the exception of the final projection experiment less on absolute ice volume estimations. The experiments start with a test run performed on six different single glacier (Section~\ref{sec:single_glacier_test_case_results}), including time series analysis investigating autocorrelation functions and power spectral density (Section~\ref{sec:autocorrelation_and_power_spectral_density_results}). The same equilibrium runs are repeated on a regional scale (Section~\ref{sec:regional_runs_with_all_alpine_glaciers_results}), before looking into the model's sensitivities to its scaling parameters (Section~\ref{sec:sensitivity_experiments_results}).
   The final experiment runs projections over the 21st century for Central Europe and High Mountain Asia (Section~\ref{sec:projections_for_the_21st_century}).
 
   \section{Single glacier test case} % (fold)
@@ -476,7 +476,7 @@
 
       Figure~\ref{fig:pacf} shows the partial autocorrelation function (PACF) of modeled glacier length for lag times up to twenty years. The PACF measures only the direct influences from one point in time to the following, eliminating the effects of all shorter lag times. This is an important additional measure, since strong correlations for short lag times influences the correlation of all following lag terms. Consider, for example, an exponentially decaying signal, which halves its value with each time step $\Phi(t) = 0.5 \Phi(t-1)$, will have an autocorrelation of 0.5 for lag 1, 0.25 for lag 2, 0.125 for lag 3, and so on. Depending on the sample size these values will be statistically significant. However, in this example only the previous value $\Phi(t-1)$ has a direct effect on the current one $\Phi(t)$, since only one lag term is included in the definition of the signal. The PACF will only show a significant correlation at lag one, i.e., defining an AR(1) process.
 
-      All the PACFs of the \vas{} model lengths (left panels of Figure~\ref{fig:pacf}) show a strong positive correlation for lag times of 1 year, followed by a strong negative correlation which then slowly increases towards zero. Correlations for lag times ten and greater are not, or only marginally, significant. Again, there are no discernible differences between different sizes of the same glacier and very little differences from one glacier to another. The PACFs for the flowline model lengths show the same high correlation for the lag time of one year, before decreasing towards zero. The decrease towards statistical insignificant correlations happens quite fast for most glaciers. Only Mer de Glace (Figure~\ref{fig:pacf:mer_de_glace}) and Glacier d'Argentière (Figure~\ref{fig:pacf:glacier_d_argentiere}), both for the warmer climate, and Rhonegletscher (Figure~\ref{fig:pacf:rhonegletscher}), for the equilibrium climate, show significant correlations for lag times greater than three years. For higher lag times between ten and twenty years there are some negative correlations, even though they are only marginally significant. This indicates that the length of the previous year has a strong direct influence on the current length (almost 1:1), while length of two or more years back has only a weak direct (for the flowline model) or even an inverse influence (for the \vas model). Those results mainly from the mathematical derivation of the PACF and has hence little physical meaning.
+      All the PACFs of the \vas{} model lengths (left panels of Figure~\ref{fig:pacf}) show a strong positive correlation for lag times of 1 year, followed by a strong negative correlation which then slowly increases towards zero. Correlations for lag times ten and greater are not, or only marginally, significant. Again, there are no discernible differences between different sizes of the same glacier and very little differences from one glacier to another. The PACFs for the flowline model lengths show the same high correlation for the lag time of one year, before decreasing towards zero. The decrease towards statistical insignificant correlations happens quite fast for most glaciers. Only Mer de Glace (Figure~\ref{fig:pacf:mer_de_glace}) and Glacier d'Argentière (Figure~\ref{fig:pacf:glacier_d_argentiere}), both for the warmer climate, and Rhonegletscher (Figure~\ref{fig:pacf:rhonegletscher}), for the equilibrium climate, show significant correlations for lag times greater than three years. For higher lag times between ten and twenty years there are some negative correlations, even though they are only marginally significant. Those results stem mainly from the mathematical derivation of the PACF and  hence, have little physical meaning. Since changes in glacier geometry happen relatively slow, this years glacier length is almost perfectly predictable with last years glacier length (cf. persistence forecasting). This explains the strong (\SI{\approx 100}{\percent}) correlation for lag times of one year, and the subsequent strong decline in PACF. Last years lengths has such a strong influence on this years length, that the previous years do not really matter.
 
       The number of statistically significant terms of the PACF informs on the order $p$ for the AR($p$) model. The order specifies the of number lag terms that are considered. Analogously, the order $q$ for the MA($q$) model can be estimated from the number of significant terms of the ACF. By this definition, the \vas{} model could be represented by an ARMA(9, 70) model, and the flowline model by an ARMA(3, 140). Hereby, the orders are taken as average over all glaciers and climate scenarios (see Appendix~\ref{appendix_B} for details). While an AR model with nine lag terms would be big but still feasible, a MA model with over one-hundred lag terms is neither practicable nor does it make sense. Especially, since \citet{Roe2014} use an ARMA(3,3) model to produce comparable results to a flowline model. It is not the intent of this work to investigate the relation between a glacier's geometry and its ACF, neither to fit an ARMA model to the data. However, it is most notable that the flowline model behaves differently not only for different glaciers, but also for different sizes of the same glacier. The \textit{one size fits all} approach of the \vas{} model produces more homogeneous results, the ACFs and PACFs are mostly independent of a glacier's size.
 
@@ -657,11 +657,11 @@
     \subsection{Experimental setup} % (fold)
     \label{sub:experimental_setup_projections}
 
-      The inclusion of non Alpine glaciers makes necessitates the use of the global CRU climate dataset. As with the HISTALP dataset before, the \vas{} mass balance model must be calibrated (see Section~\ref{ssub:mb_calib}), which is done using updated global parameters from \citet{Malles2020} ($a = 3, T^\text{melt} = \SI{0}{\celsius}, T^\text{solid precip} = \SI{4}{\celsius}$). The flowline model defaults to the standard OGGM values. To further increase the accuracy of the results, the mass balance residual \bias{} of both models is corrected via the \lstinline`match_regional_geodetic_mb` task, to match the observations presented by \citet{Davaze2020}.
+      The inclusion of non Alpine glaciers makes necessitates the use of the global CRU climate dataset. As with the HISTALP dataset before, the \vas{} mass balance model must be calibrated (see Section~\ref{ssub:mb_calib}), which is done using updated global parameters from \citet{Malles2020} ($a = 3, T^\text{melt} = \SI{0}{\celsius}, T^\text{solid precip} = \SI{4}{\celsius}$). The flowline model defaults to the standard OGGM values. To further increase the accuracy of the results and assure similar region wide surface mass balance estimates between both models, the mass balance residual \bias{} of both models is corrected via the \lstinline`match_regional_geodetic_mb` task to match the observations presented by \citet{Hugonnet2020}. 
 
       The 21st century projections are modeled with climate data from fifteen GCMs from CMIP6 for the pathways SSP1-2.6, SSP2-4.5, SSP3-7.0 and SSP5-8.5. The new scenario framework brings together the social development pathways and the Representative Concentration Pathways (RCPS, indicated by the radiative forcing in \si{\watt\per\square\meter} in 2100), or details see \citet{ONeill2016, Riahi2017}.  The GCM data from CMIP6 is prepared using the OGGM task \lstinline`process_cmip_data`, which applies the anomalies to the CRU baseline climate.
       
-      The projections start in 2003 (the  observation date of most RGI outlines) and run until 2020 using CRU data, before continuing with the GCM data for the rest of the 21st century. The runs are invoked via the \lstinline`run_from_climate_data`. The presented aggregate ice volumes are normalized with their respective value in 2020 for better comparability.
+      The projections start in 2000 whereby the models are initialize so that the glacier area corresponds to the RGI area at the date of measurement. The projections run until 2020 using CRU data, before continuing with the GCM data for the rest of the 21st century. The runs are invoked via the \lstinline`run_from_climate_data`. The presented aggregate ice volumes are normalized with their respective value in 2020 for better comparability.
     
     % subsection experimental_setup (end)
 
@@ -672,36 +672,37 @@
       % - trotz selber Kalibrierung die Ergebisse 2000-2020 tastächlich anders sind
       % - Unterschiede zwischen den Modellen sind schon recht krass, zB in den Alpen
 
-      \begin{figure}[b!]
+      First of all, the results of the mass balance correction via \lstinline`match_regional_geodetic_mb` need some explanation. The mass balance estimations of both model are comparable (minimum difference of \SI{18}{\milli\meter\waterequivalent\per\year} for RGI region 11 and maximum difference of \SI{43}{\milli\meter\waterequivalent\per\year} for RGI region 15). Both models estimate higher negative regional surface mass balances than the geodetic observations from 2006 to 2018 \citep{Hugonnet2020} but with strong regional differences. For Central Europe (RGI region 11) the regional average geodetic surface mass balance observations is \SI{-874}{\milli\metre\waterequivalent\per\year}, while the \vas{} model estimates \SI{-1590}{\milli\metre\waterequivalent\per\year} and the flowline model \SI{-1608}{\milli\metre\waterequivalent\per\year}. Those large differences necessitate a shift of over \SI{700}{\milli\metre\waterequivalent\per\year} and show that both models in their respective ``out-of-the-box'' state have difficulties reproducing the mass balance observations for the Alps. For High Mountain Asia (RGI region 13, 14 and 15) the absolute differences are smaller, amounting to mass balance shifts between \SI{177}{\milli\metre\waterequivalent\per\year} and \SI{364}{\milli\metre\waterequivalent\per\year}. After the shift, the differences in average surface mass balance from 2000 to 2020 between the \vas{} model and flowline model amount to a maximum of \SI{34}{\milli\metre\waterequivalent\per\year}, due to differences in dynamic response. This assures that the boundary conditions of both models are as similar as possible and the results as physical as possible.
+
+      \begin{figure}[htp]
           \centering
           % VAS Region 11
-          \begin{subfigure}[b]{0.476\textwidth}
-              \caption{\Vas{} model projection for Central Europe (RGI region 11) }
+          \begin{subfigure}[b]{0.95\textwidth}
+              \caption{\small \Vas{} model projection for Central Europe (RGI region 11) }
               \label{fig:cmip:vas_reg_11}
               \centering
               \includegraphics[width=\textwidth]{../plots/final_plots/time_series/cmip/cmip_vas_11.pdf}
           \end{subfigure}
-          \hfill
+          \vspace{1cm}
+
           % Flowline Region 11
-          \begin{subfigure}[b]{0.476\textwidth}
-              \caption{Flowline model projection for Central Europe (RGI region 11) }
+          \begin{subfigure}[b]{0.95\textwidth}
+              \caption{\small Flowline model projection for Central Europe (RGI region 11) }
               \label{fig:cmip:fl_reg_11}
               \centering
               \includegraphics[width=\textwidth]{../plots/final_plots/time_series/cmip/cmip_fl_11.pdf}
           \end{subfigure}
+          \vspace{1cm}
 
-          \caption{Ice volume projection for Central Europe (RGI region 11) using CMIP6 climate data over the 21st century, relative to the year 2020. The left panel shows the result of the volume/area scaling model, the right panel shows the results of the flowline model. Solid lines represent the ensemble average, while the shade represents the $1\sigma$ band. All ensembles have fifteen members. Colors denote different Shared Socioeconomic Pathways, refer to the legend for details. Thereby, the percentage values in parentheses indicate the ice loss relative to 2020.}
+          \caption{Ice volume projection for Central Europe (RGI region 11) using CMIP6 climate data over the 21st century, relative to the year 2020. The left panel shows the result of the volume/area scaling model, the right panel shows the results of the flowline model. Solid lines represent the ensemble average, while the shade represents the $1\sigma$ band. All ensembles have fifteen members. Colors denote different Shared Socioeconomic Pathways; refer to the legend for details. The percentage values in parentheses indicate the ice loss relative to 2020.}
           \label{fig:cmip_alps}
       \end{figure}
 
-      Figure~\ref{fig:cmip_alps} shows the ice volume projections for Central Europe (RGI region 11) for the aforementioned SSPs, computed with the \vas{} model in the left panel and the flowline model in the right panel. All percentages are in relation to the 2020 ice volume. Again, both evolution models show qualitatively comparable results, while there are significant quantitative differences.
+      Figure~\ref{fig:cmip_alps} shows the ice volume projections for Central Europe (RGI region 11) for the aforementioned SSPs, computed with the \vas{} model in the upper panel and the flowline model in the lower panel. The relative ice volume changes and sea level rise equivalent (SLE) are in relation to the 2020. Again, both evolution models show qualitatively comparable results, while there are significant quantitative differences.
 
-      The \vas{} model predicts a strong and almost linear decrease in ice volume up to 2020, after which the mass loss attenuates. A new equilibrium is reached only under SSP1-2.6, after an estimated ice loss of $-37\SI{\pm10}{\percent}$. The ensemble average even shows a slight increase over the last 25 years, which most likely stems from the oscillatory behavior of the \vas{} model (cf. Section~\ref{sub:results_test_case} and \ref{sub:results_regional_run}). Under all other SSPs the ice volume is still on a downward trajectory, with an estimated ice loss until 2020 of $-59\SI{\pm6}{\percent}$, $-75\SI{\pm6}{\percent}$, $-83\SI{\pm5}{\percent}$ under SSP2-4.5, SSP3-7.0, SSP5-8.5 respectively. The ice loss predicted by the flowline model ramps up over the initial years, than continues with a rather constant rate before attenuation in the second half of the 21st century and approaching a new equilibrium. The total ice loss amounts to $-68\SI{\pm16}{\percent}$ under SSP1-2.6 and $-88\SI{\pm8}{\percent}$  under SSP2-4.5. For the two SSPs with high forcings the entire glacier ice melts within the margin of error: $-96\SI{\pm4}{\percent}$ under SSP3-7.0 and $-98\SI{\pm2}{\percent}$ under SSP5-8.5.
+      Despite the basically identical mass balance estimations, the flowline model glaciers loose more ice mass (relative and absolute) between 2000 and 2020 than the \vas{} model glaciers ($\SI{25}{\percent} \equiv \SI{0.08}{\milli\meter\sealevelrise}$ vs. $\SI{20}{\percent} \equiv \SI{0.06}{\milli\meter\sealevelrise}$). After 2020, the ice loss predicted by the flowline model continues with the same constant rate over the first half of the 21st century, before it attenuates and approaches a new equilibrium. Up to around 2040, there are little differences between the different SSPs. The total ice loss amounts to $-69\SI{\pm16}{\percent} $ under SSP1-2.6 and $-88\SI{\pm8}{\percent}$  under SSP2-4.5. For the two SSPs with high forcings the entire glacier ice melts within the margin of error: $-96\SI{\pm4}{\percent}$ under SSP3-7.0 and $-98\SI{\pm2}{\percent}$ under SSP5-8.5. The ensemble averages equal to a sea lever rise between \SI{0.16}{\milli\meter\sealevelrise} and \SI{0.24}{\milli\meter\sealevelrise}, for SSP1-2.6 and SSP5-8.5 respectively (see Table~\ref{tab:cmip} for details). The \vas{} model predicts much less relative ice loss, especially for the SSPs with lower forcings. A new equilibrium is reached only under SSP1-2.6, after an estimated ice loss of $-32\SI{\pm10}{\percent}$. The ensemble average even shows a slight increase over the last 25 years, which most likely stems from the oscillatory behavior of the \vas{} model (cf. Section~\ref{sub:results_test_case} and \ref{sub:results_regional_run}). Under all other SSPs the ice volume is still on a downward trajectory, with an estimated ice loss until 2100 of $-56\SI{\pm7}{\percent}$, $-73\SI{\pm6}{\percent}$, $-82\SI{\pm5}{\percent}$ under SSP2-4.5, SSP3-7.0, SSP5-8.5 respectively. Only for SSP5-8.5 does the estimated absolute mass loss of \SI{0.21}{\milli\meter\sealevelrise} compare to the flowline model, while for SSP1-2.6 with \SI{0.08}{\milli\meter\sealevelrise} it is only half of the flowline model estimate. A comparison of these values to the existing literature is given in Section~\ref{sec:relative_and_absolute_values_of_ice_volume_change}.
 
-      Comparing the full simulation period, the \vas{} model generally shows an asymptotic decrease in ice volume while the ice loss predicted by the flowline model follows a sigmoidal shape. Overall, the \vas{} predicts less ice melt than the flowline model, so much so that the final estimates of one model are outside the margin of error of the other. The \vas{} model still shows a downward trajectory for all but the lowest forcing, indicating that \vas{} model reacts slower than the flowline model and may therefore catch up once a new equilibrium is reached. This, however, contradicts all the equilibrium experiments, where the \vas{} model reached its new equilibrium always before the flowline model.
-
-      Focusing on the ``historical'' part from 2003 to 2020, the \vas{} model estimates a total ice volume loss of one third (from \SI{150}{\percent} in 2003 to \SI{100}{\percent} in 2020) while the flowline model estimates a loss of one fourth (from \SI{135}{\percent} in 2003 to \SI{100}{\percent} in 2020).
-      The regional average geodetic surface mass balance observations for Central Europe between 2000 and 2020 is \SI{-874}{\milli\metre\waterequivalent\per\year}, while \vas{} model estimates \SI{-1590}{\milli\metre\waterequivalent\per\year} and the flowline model \SI{-1608}{\milli\metre\waterequivalent\per\year}. Those rather large differences show that both models in their respective ``out-of-the-box'' state have difficulties reproducing the mass balance observations for the Alps. Hence, the last calibration step uses \lstinline`match_regional_geodetic_mb` to shift the mass balance residual \bias{} accordingly. This assures that the boundary conditions of both models are as similar as possible and the results as physical as possible. Therefore, the difference between the two models are all the more interesting, showing once more that they do not resolve all the same processes.
+      In summary, the \vas{} predicts less loss in ice mass than the flowline model, so much so that the final estimates of one model are outside the margin of error of the other. The \vas{} model still shows a downward trajectory for all but the lowest forcing, indicating that \vas{} model reacts slower than the flowline model and may therefore catch up once a new equilibrium is reached. This, however, contradicts all the equilibrium experiments, where the \vas{} model reached its new equilibrium always before the flowline model.
 
       \begin{figure}[htp]
 
@@ -762,45 +763,97 @@
         \small
         \ra{1.3}
 
-        \caption{Ensemble mean and standard deviation of projected ice volume loss in 2100, relative to the ice volume in 2020. \Vas{} model and flowline model are driven by climate data of fifteen GCMs from CMIP6.}
+        \caption{Ensemble mean and standard deviation of projected ice volume loss ($\Delta V$) and corresponding sea level rise equivalent (SLE) in 2100, relative to 2020. \Vas{} model and flowline model are driven by climate data of fifteen GCMs from CMIP6.}
         \label{tab:cmip}
-        
-        \begin{tabular}{@{}rlrllrl@{}}
+
+        \begin{tabular}{@{}rlrlrllrlrl@{}}
           \toprule
-          % {} & \phantom{a} & \multicolumn{2}{c}{\textbf{V/A scaling model}} & \phantom{a} & \multicolumn{2}{c}{\textbf{{Flowline model}}} \\
-          {} & \phantom{a} & \multicolumn{2}{l}{\textbf{V/A scaling}} & \phantom{a} & \multicolumn{2}{l}{\textbf{Flowline}} \\
-          {} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} \\
+          {} & \phantom{a} & \multicolumn{4}{c}{\textbf{V/A scaling model}} & \phantom{a} & \multicolumn{4}{c}{\textbf{Flowline model}} \\
+          {} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} & \multicolumn{2}{l}{$\overline{SLE} \pm \sigma$ [\si{\milli\meter}]} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} & \multicolumn{2}{l}{$\overline{SLE} \pm \sigma$ [\si{\milli\meter}]} \\
           \midrule
           \textbf{Central Europe}\\
-          SSP1-2.6 & \phantom{a} & -37 & ± 10 & \phantom{a} & -69 & ± 16\\
-          SSP2-4.5 & \phantom{a} & -60 & ± 6 & \phantom{a} & -88 & ± 8\\
-          SSP3-7.0 & \phantom{a} & -75 & ± 6 & \phantom{a} & -96 & ± 4\\
-          SSP5-8.5 & \phantom{a} & -84 & ± 5 & \phantom{a} & -98 & ± 2\\
+          SSP1-2.6 & \phantom{a} & -32 & ± 10 & 0.08 & ± 0.03 & \phantom{a} & -69 & ± 16 & 0.16 & ± 0.04\\
+          SSP2-4.5 & \phantom{a} & -56 & ± 7 & 0.14 & ± 0.02 & \phantom{a} & -88 & ± 8 & 0.21 & ± 0.02\\
+          SSP3-7.0 & \phantom{a} & -73 & ± 6 & 0.19 & ± 0.02 & \phantom{a} & -96 & ± 4 & 0.23 & ± 0.01\\
+          SSP5-8.5 & \phantom{a} & -82 & ± 5 & 0.21 & ± 0.01 & \phantom{a} & -98 & ± 2 & 0.24 & ± 0.01\\
           \textbf{Central Asia}\\
-          SSP1-2.6 & \phantom{a} & -39 & ± 3 & \phantom{a} & -44 & ± 6\\
-          SSP2-4.5 & \phantom{a} & -46 & ± 3 & \phantom{a} & -54 & ± 5\\
-          SSP3-7.0 & \phantom{a} & -52 & ± 3 & \phantom{a} & -63 & ± 5\\
-          SSP5-8.5 & \phantom{a} & -57 & ± 4 & \phantom{a} & -70 & ± 6\\
-          \textbf{South Asia East}\\
-          SSP1-2.6 & \phantom{a} & -27 & ± 3 & \phantom{a} & -26 & ± 8\\
-          SSP2-4.5 & \phantom{a} & -30 & ± 3 & \phantom{a} & -33 & ± 8\\
-          SSP3-7.0 & \phantom{a} & -34 & ± 4 & \phantom{a} & -40 & ± 9\\
-          SSP5-8.5 & \phantom{a} & -37 & ± 4 & \phantom{a} & -48 & ± 10\\
+          SSP1-2.6 & \phantom{a} & -26 & ± 3 & 2.43 & ± 0.32 & \phantom{a} & -44 & ± 6 & 3.28 & ± 0.43\\
+          SSP2-4.5 & \phantom{a} & -34 & ± 3 & 3.18 & ± 0.32 & \phantom{a} & -54 & ± 5 & 4.02 & ± 0.34\\
+          SSP3-7.0 & \phantom{a} & -42 & ± 4 & 3.88 & ± 0.37 & \phantom{a} & -63 & ± 5 & 4.63 & ± 0.37\\
+          SSP5-8.5 & \phantom{a} & -48 & ± 5 & 4.51 & ± 0.46 & \phantom{a} & -70 & ± 6 & 5.18 & ± 0.43\\
           \textbf{South Asia West}\\
-          SSP1-2.6 & \phantom{a} & -51 & ± 4 & \phantom{a} & -55 & ± 5\\
-          SSP2-4.5 & \phantom{a} & -59 & ± 4 & \phantom{a} & -63 & ± 4\\
-          SSP3-7.0 & \phantom{a} & -65 & ± 3 & \phantom{a} & -70 & ± 4\\
-          SSP5-8.5 & \phantom{a} & -70 & ± 4 & \phantom{a} & -76 & ± 5\\
+          SSP1-2.6 & \phantom{a} & -12 & ± 4 & 1.23 & ± 0.38 & \phantom{a} & -26 & ± 8 & 1.72 & ± 0.54\\
+          SSP2-4.5 & \phantom{a} & -16 & ± 4 & 1.67 & ± 0.42 & \phantom{a} & -33 & ± 8 & 2.24 & ± 0.54\\
+          SSP3-7.0 & \phantom{a} & -21 & ± 4 & 2.09 & ± 0.46 & \phantom{a} & -40 & ± 9 & 2.72 & ± 0.60\\
+          SSP5-8.5 & \phantom{a} & -25 & ± 6 & 2.54 & ± 0.56 & \phantom{a} & -48 & ± 10 & 3.26 & ± 0.68\\
+          \textbf{South Asia East}\\
+          SSP1-2.6 & \phantom{a} & -41 & ± 4 & 0.93 & ± 0.10 & \phantom{a} & -55 & ± 5 & 1.00 & ± 0.10\\
+          SSP2-4.5 & \phantom{a} & -51 & ± 4 & 1.14 & ± 0.09 & \phantom{a} & -63 & ± 4 & 1.16 & ± 0.08\\
+          SSP3-7.0 & \phantom{a} & -58 & ± 4 & 1.30 & ± 0.08 & \phantom{a} & -70 & ± 4 & 1.29 & ± 0.08\\
+          SSP5-8.5 & \phantom{a} & -64 & ± 5 & 1.44 & ± 0.11 & \phantom{a} & -76 & ± 5 & 1.40 & ± 0.09\\
           \bottomrule
         \end{tabular}
+        
+        % \begin{tabular}{@{}rlrllrl@{}}
+        %   \toprule
+        %   % {} & \phantom{a} & \multicolumn{2}{c}{\textbf{V/A scaling model}} & \phantom{a} & \multicolumn{2}{c}{\textbf{{Flowline model}}} \\
+        %   {} & \phantom{a} & \multicolumn{2}{l}{\textbf{V/A scaling}} & \phantom{a} & \multicolumn{2}{l}{\textbf{Flowline}} \\
+        %   {} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} & \phantom{a} & \multicolumn{2}{l}{$\overline{\Delta V} \pm \sigma$ [\si{\percent}]} \\
+        %   \midrule
+        %   \textbf{Central Europe}\\
+        %   SSP1-2.6 & \phantom{a} & -32 & ± 10 & \phantom{a} & -69 & ± 16\\
+        %   SSP2-4.5 & \phantom{a} & -56 & ± 7 & \phantom{a} & -88 & ± 8\\
+        %   SSP3-7.0 & \phantom{a} & -73 & ± 6 & \phantom{a} & -96 & ± 4\\
+        %   SSP5-8.5 & \phantom{a} & -82 & ± 5 & \phantom{a} & -98 & ± 2\\
+        %   \textbf{Central Asia}\\
+        %   SSP1-2.6 & \phantom{a} & -26 & ± 3 & \phantom{a} & -44 & ± 6\\
+        %   SSP2-4.5 & \phantom{a} & -34 & ± 3 & \phantom{a} & -54 & ± 5\\
+        %   SSP3-7.0 & \phantom{a} & -42 & ± 4 & \phantom{a} & -63 & ± 5\\
+        %   SSP5-8.5 & \phantom{a} & -48 & ± 5 & \phantom{a} & -70 & ± 6\\
+        %   \textbf{South Asia East}\\
+        %   SSP1-2.6 & \phantom{a} & -12 & ± 4 & \phantom{a} & -26 & ± 8\\
+        %   SSP2-4.5 & \phantom{a} & -16 & ± 4 & \phantom{a} & -33 & ± 8\\
+        %   SSP3-7.0 & \phantom{a} & -21 & ± 4 & \phantom{a} & -40 & ± 9\\
+        %   SSP5-8.5 & \phantom{a} & -25 & ± 6 & \phantom{a} & -48 & ± 10\\
+        %   \textbf{South Asia West}\\
+        %   SSP1-2.6 & \phantom{a} & -41 & ± 4 & \phantom{a} & -55 & ± 5\\
+        %   SSP2-4.5 & \phantom{a} & -51 & ± 4 & \phantom{a} & -63 & ± 4\\
+        %   SSP3-7.0 & \phantom{a} & -58 & ± 4 & \phantom{a} & -70 & ± 4\\
+        %   SSP5-8.5 & \phantom{a} & -64 & ± 5 & \phantom{a} & -76 & ± 5\\
+        %   \bottomrule
+        % \end{tabular}
       \end{table}
 
-      Figure~\ref{fig:cmip_hma} shows the 21st century ice volume projections for High Mountain Asia: Central Asia (RGI region 13) in the upper panels, South Asia East (RGI region 14) in the middle panels, South Asia West (RGI region 15) in the lower panels. The overall results are comparable to the simulation for Central Europe. The ensemble averages show an asymptotic or even linear decrease in ice volume for the \vas{} model (with rather narrow uncertainty bands) and a more sigmoidal decrease for the flowline model (with much broader uncertainty bands). The final values of both models are in closer agreement with each other, and are mostly within each others uncertainty bands (see Table~\ref{tab:cmip}). However, the flowline model still predicts more ice loss than the \vas{} model. The differences in estimated ice loss up to 2020 between \vas{} and flowline model are also less pronounced, than for Central Europe. This can possibly be explained by the better agreement between observed and modeled mass balance, the computed differences and following shift of \bias{} range between 177 and \SI{364}{\milli\metre\waterequivalent\per\year}. Furthermore, given the empirical nature of the scaling relations the model performance increases with increasing glacier population size.%\vspace*{1cm}
+      Figure~\ref{fig:cmip_hma} shows the 21st century ice volume projections for High Mountain Asia: Central Asia (RGI region 13) in the upper panels, South Asia East (RGI region 14) in the middle panels, South Asia West (RGI region 15) in the lower panels. Overall, the predicted loss of relative ice mass is much lower compared to the simulation for Central Europe, while the loss of absolute mass is much larger given the larger population size. Again, the flowline model predicts more ice loss (before and after 2020) than the \vas{} model. While the relative values can be drastically different, the absolute values in SLE are in better agreement, to the end that uncertainty estimates of both models overlap for most regions and SSPs (see Table~\ref{tab:cmip} for details). This can potentially be explained by the empirical nature of the scaling relations: the model performance increases with increasing glacier population size and the regions of High Mountain Asia are comprised of an order of magnitude more glaciers than Central Europe.
 
       % Also wenn ich du wäre würde ich darüber noch diskutieren.
       % Und ich wurde vielleicht noch regional ein bisschen unterscheiden zwischen Gletschern des oberer und unteren Quartils (bezogen auf Fläche), um zu sehen ob die ‘model response’ anders ist
 
       Finally, the model response is investigated as a function of initial glacier surface area. The glaciers of each region are divided in two size classes, above and below the 95th percentiles in RGI area (see Table~\ref{tab:area_percentile} for details). While the regions have different distributions of glacier sizes, the area thresholds for all regions are in the same order of magnitude (\SI{\approx 3}{\square\kilo\meter}) and the aggregate area of the upper \SI{5}{\percent} of glaciers amounts to more than half of the total area (between \SI{52}{\percent} and \SI{66}{\percent}).
+
+      \begin{table}[htp]
+        \centering
+        \small
+        \ra{1.4}
+
+        \caption{Number of glaciers and total surface area of the lower \SI{95}{\percent} and upper \SI{95}{\percent}  of RGI area, additional the threshold area, i.e. the 95th percentile, is given.}
+        \label{tab:area_percentile}
+          
+        \begin{tabular}{@{}rlrrlclrr@{}}
+          \toprule
+          {} & \phantom{a} & \multicolumn{2}{c}{\textbf{Lower \SI{95}{\percent}}} & \phantom{a} & \textbf{Threshold} & \phantom{a} & \multicolumn{2}{c}{\textbf{Upper \SI{5}{\percent}}} \\
+          {} & {} & $n_\text{Glaciers}$ & $\sum A$ [\si{\square\kilo\meter}] & {} & $A$ [\si{\square\kilo\meter}] & {} & $n_\text{Glaciers}$ & $\sum A$ [\si{\square\kilo\meter}] \\
+          \midrule
+          \textbf{Central Europe} & & 3730 & 831 & & 2.15 & & 197 & 1261 \\
+          \textbf{Central Asia} & & 51707 & 21460 & & 2.96 & & 2722 & 27844 \\
+          \textbf{South Asia West} & & 26588 & 11490 & & 3.46 & & 1400 & 22079 \\
+          \textbf{South Asia East} & & 12463 & 7066 & & 4.10 & & 656 & 7668 \\
+
+          \bottomrule
+        \end{tabular}
+      \end{table}
+
+      Figure~\ref{fig:cmip_area_classes} shows the 21st century volume projections distinguishing between small and large glaciers for Central Europe (RGI region 11) and South Asia West (RGI region 14). Smaller glacier (green dashed lines) loose more ice volume relative to 2020 in less time, whereby the flowline model shows less differences in ice loss between the two size classes than the \vas{} model. The same holds true for Central Asia and South Asia East (not shown). However, the differences in ice volume evolution between the two size classes are much larger for High Mountain Asia than for Central Europe. This indicates that glacier size does matter, however mostly for very large glaciers (or more precisely for glaciers above a certain size threshold). South Asia West has about seven times more glaciers than Central Europe, but almost eighteen times the surface area in the larger size class (in addition to an already higher 95th percentile, see Table~\ref{tab:area_percentile}).
 
       \begin{figure}[htp]
 
@@ -840,37 +893,9 @@
 
           \vspace*{0.5cm}
 
-          \caption{As Figure~\ref{tab:cmip} for Central Europe (upper panels) and South Asia West (lower panels), but distinguishing between small glaciers (dashed lines) and large glaciers (solid lines). Small glaciers are all glaciers below the 95th percentile in RGI start area, large glacier all glaciers above. Uncertainty bands are only shown for SSP1 and SSP5.}
+          \caption{As Figure~\ref{tab:cmip} for Central Europe (upper panels) and South Asia West (lower panels), but distinguishing between small glaciers (green colors, dashed lines) and large glaciers (red colors, solid lines). Small glaciers are all glaciers below the 95th percentile in RGI start area, large glacier all glaciers above. Uncertainty bands are only shown for SSP1 and SSP5.}
           \label{fig:cmip_area_classes}
       \end{figure}
-
-      Figure~\ref{fig:cmip_area_classes} shows the 21st century volume projections distinguishing between small and large glaciers for Central Europe and South Asia West. There are no unexpected results: the smaller glacier loose more ice volume relative to 2020 in less time; the flowline model shows less differences in ice loss between the two size classes than the \vas{} model. The same holds true for Central Asia and South Asia East (not shown). The differences in ice volume evolution between the two size classes are much larger for High Mountain Asia than for Central Europe. This indicates that glacier size does matter, however mostly for very large glaciers. South Asia West has about seven times more glaciers than Central Europe, but almost eighteen times the surface area in the larger size class (in addition to an already higher 95th percentile, see Table~\ref{tab:area_percentile}).
-
-      The small glaciers modeled by the \vas{} model loose considerably more ice volume before 2020, than the large ones. For example, the estimated ice loss for Central Europe between 2003 and 2020 amounts to \SI{64}{\percent} (i.e., from \SI{280}{\percent} to \SI{100}{\percent}) for the small glaciers, while under SSP1-2.6 and SSP2-4.5 some ice persists throughout the rest of the 21st century. However, since the glaciers in Central Europe are overall smaller, there is generally less difference in projected ice volume between the two size classes compared to High Mountain Asia (true for the \vas{} model and flowline model.)
-
-      \vspace*{1cm}
-
-      \begin{table}[htp]
-        \centering
-        \small
-        \ra{1.4}
-
-        \caption{Number of glaciers and total surface area of the lower \SI{95}{\percent} and upper \SI{95}{\percent}  of RGI area, additional the threshold area, i.e. the 95th percentile, is given.}
-        \label{tab:area_percentile}
-          
-        \begin{tabular}{@{}rlrrlclrr@{}}
-          \toprule
-          {} & \phantom{a} & \multicolumn{2}{c}{\textbf{Lower \SI{95}{\percent}}} & \phantom{a} & \textbf{Threshold} & \phantom{a} & \multicolumn{2}{c}{\textbf{Upper \SI{5}{\percent}}} \\
-          {} & {} & $n_\text{Glaciers}$ & $\sum A$ [\si{\square\kilo\meter}] & {} & $A$ [\si{\square\kilo\meter}] & {} & $n_\text{Glaciers}$ & $\sum A$ [\si{\square\kilo\meter}] \\
-          \midrule
-          \textbf{Central Europe} & & 3730 & 831 & & 2.15 & & 197 & 1261 \\
-          \textbf{Central Asia} & & 51707 & 21460 & & 2.96 & & 2722 & 27844 \\
-          \textbf{South Asia West} & & 26588 & 11490 & & 3.46 & & 1400 & 22079 \\
-          \textbf{South Asia East} & & 12463 & 7066 & & 4.10 & & 656 & 7668 \\
-
-          \bottomrule
-        \end{tabular}
-      \end{table}
 
     
     % subsection results (end)

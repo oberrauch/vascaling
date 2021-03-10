@@ -12,6 +12,8 @@
 
 \usepackage[all]{nowidow}
 
+\usepackage{pdfpages}
+
 % pretty print code lines
 \usepackage{listings}
 % default fixed font does not support bold face
@@ -29,6 +31,7 @@
 \sisetup{per-mode = reciprocal, retain-explicit-plus = true, detect-weight=true, detect-family=true, exponent-product = \cdot}
 \DeclareSIUnit\year{yr}
 \DeclareSIUnit\waterequivalent{we.}
+\DeclareSIUnit\sealevelrise{SLE}
 
 % lists
 \usepackage[inline]{enumitem}
@@ -86,7 +89,7 @@
 % ---- hyperref package for cross-references:
 \usepackage{hyperref}
 % -- USE BLACK LINKS IN PRINTOUT (uncomment the following lines if necessary):
-%\hypersetup{colorlinks,%
+% \hypersetup{colorlinks,%
 %            linktocpage,%
 %            breaklinks,%
 %            citecolor=black,%
@@ -187,11 +190,12 @@
 \thispagestyle{plain}
 
 
-% ==== PREFACE =================================================================
+% ==== EIDESTAATLICHE ERKLÄRUNG ================================================
 % ---- include tex-file:
-% \include{preface}
-% \newpage
-% \thispagestyle{plain}
+
+\include{eidesstattliche-erklaerung}
+\newpage
+\thispagestyle{plain}
 
 
 % ==== ABSTRACT ================================================================
