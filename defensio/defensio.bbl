@@ -1,0 +1,163 @@
+\begin{thebibliography}{22}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Bentsen et~al.(2019)}]{CMIP6-NorESM2-MM}
+Bentsen, M., et~al., 2019: Ncc noresm2-mm model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.608},
+  \doi{10.22033/ESGF/CMIP6.608},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.608}.
+
+\bibitem[{Danabasoglu(2019{\natexlab{a}})}]{CMIP6-CESM2}
+Danabasoglu, G., 2019{\natexlab{a}}: Ncar cesm2 model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2201},
+  \doi{10.22033/ESGF/CMIP6.2201},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2201}.
+
+\bibitem[{Danabasoglu(2019{\natexlab{b}})}]{CMIP6-CESM2-WACCM}
+Danabasoglu, G., 2019{\natexlab{b}}: Ncar cesm2-waccm model output prepared for
+  cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.10026},
+  \doi{10.22033/ESGF/CMIP6.10026},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.10026}.
+
+\bibitem[{(EC-Earth)(2019{\natexlab{a}})}]{CMIP6-EC-Earth3}
+(EC-Earth), E.-E.~C., 2019{\natexlab{a}}: Ec-earth-consortium ec-earth3 model
+  output prepared for cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.251},
+  \doi{10.22033/ESGF/CMIP6.251},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.251}.
+
+\bibitem[{(EC-Earth)(2019{\natexlab{b}})}]{CMIP6-EC-Earth3-Veg}
+(EC-Earth), E.-E.~C., 2019{\natexlab{b}}: Ec-earth-consortium ec-earth3-veg
+  model output prepared for cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.727},
+  \doi{10.22033/ESGF/CMIP6.727},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.727}.
+
+\bibitem[{Farinotti et~al.(2009)Farinotti, Huss, Bauder, Funk, and
+  Truffer}]{Farinotti2009}
+Farinotti, D., M.~Huss, A.~Bauder, M.~Funk, and M.~Truffer, 2009: {A method to
+  estimate the ice volume and ice-thickness distribution of alpine glaciers}.
+  \textit{Journal of Glaciology}, \textbf{55~(191)}, 422--430,
+  \doi{10.3189/002214309788816759},
+  \urlprefix\url{https://doi.org/10.3189/002214309788816759}.
+
+\bibitem[{Harris et~al.(2020)Harris, Osborn, Jones, and Lister}]{Harris2020}
+Harris, I., T.~J. Osborn, P.~Jones, and D.~Lister, 2020: {Version 4 of the CRU
+  TS monthly high-resolution gridded multivariate climate dataset}.
+  \textit{Scientific Data}, \textbf{7~(1)}, 1--18,
+  \doi{10.1038/s41597-020-0453-3}.
+
+\bibitem[{Hugonnet et~al.(2020)}]{Hugonnet2020}
+Hugonnet, R., et~al., 2020: A globally complete, spatially and temporally
+  resolved estimate of glacier mass change: 2000 to 2019. EGU General Assembly
+  2020,
+  \urlprefix\url{https://meetingorganizer.copernicus.org/EGU2020/EGU2020-20908.html},
+  Online, 4-8 May 2020, \doi{10.5194/egusphere-egu2020-20908},
+  \urlprefix\url{https://meetingorganizer.copernicus.org/EGU2020/EGU2020-20908.html}.
+
+\bibitem[{John et~al.(2018)}]{CMIP6-GFDL-ESM4}
+John, J.~G., et~al., 2018: Noaa-gfdl gfdl-esm4 model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1414},
+  \doi{10.22033/ESGF/CMIP6.1414},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1414}.
+
+\bibitem[{Kienholz et~al.(2014)Kienholz, Rich, Arendt, and Hock}]{Kienholz2014}
+Kienholz, C., J.~L. Rich, A.~A. Arendt, and R.~Hock, 2014: A new method for
+  deriving glacier centerlines applied to glaciers in alaska and northwest
+  canada. \textit{The Cryosphere}, \textbf{8~(2)}, 503--519,
+  \doi{10.5194/tc-8-503-2014},
+  \urlprefix\url{https://tc.copernicus.org/articles/8/503/2014/}.
+
+\bibitem[{Lee and Liang(2020)}]{CMIP6-TaiESM1.0}
+Lee, W.-L. and H.-C. Liang, 2020: As-rcec taiesm1.0 model output prepared for
+  cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.9688},
+  \doi{10.22033/ESGF/CMIP6.9688},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.9688}.
+
+\bibitem[{Lovato and Peano(2020)}]{CMIP6-CMCC-CM2-SR5}
+Lovato, T. and D.~Peano, 2020: Cmcc cmcc-cm2-sr5 model output prepared for
+  cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1365},
+  \doi{10.22033/ESGF/CMIP6.1365},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1365}.
+
+\bibitem[{Marzeion et~al.(2012)Marzeion, Jarosch, and Hofer}]{Marzeion2012b}
+Marzeion, B., A.~H. Jarosch, and M.~Hofer, 2012: {Past and future sea-level
+  change from the surface mass balance of glaciers}. \textit{The Cryosphere},
+  \textbf{6~(6)}, 1295--1322, \doi{10.5194/tc-6-1295-2012}.
+
+\bibitem[{Maussion et~al.(2019)}]{Maussion2019}
+Maussion, F., et~al., 2019: {The Open Global Glacier Model (OGGM) v1.1}.
+  \textit{Geoscientific Model Development}, \textbf{12~(3)}, 909--931,
+  \doi{10.5194/gmd-12-909-2019},
+  \urlprefix\url{https://doi.org/10.5194/gmd-12-909-2019}.
+
+\bibitem[{Rong(2019)}]{CMIP6-CAMS-CSM1.0}
+Rong, X., 2019: Cams cams-csm1.0 model output prepared for cmip6 scenariomip.
+  Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.11004},
+  \doi{10.22033/ESGF/CMIP6.11004},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.11004}.
+
+\bibitem[{Schupfner et~al.(2019)}]{CMIP6-MPI-ESM1.2-HR-DKRZ}
+Schupfner, M., et~al., 2019: Dkrz mpi-esm1.2-hr model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2450},
+  \doi{10.22033/ESGF/CMIP6.2450},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2450}.
+
+\bibitem[{Steger et~al.(2019)}]{CMIP6-MPI-ESM1.2-HR-DWD}
+Steger, C., et~al., 2019: Dwd mpi-esm1.2-hr model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1869},
+  \doi{10.22033/ESGF/CMIP6.1869},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1869}.
+
+\bibitem[{Volodin et~al.(2019{\natexlab{a}})}]{CMIP6-INM-CM4-8}
+Volodin, E., et~al., 2019{\natexlab{a}}: Inm inm-cm4-8 model output prepared
+  for cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.12321},
+  \doi{10.22033/ESGF/CMIP6.12321},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.12321}.
+
+\bibitem[{Volodin et~al.(2019{\natexlab{b}})}]{CMIP6-INM-CM5-0}
+Volodin, E., et~al., 2019{\natexlab{b}}: Inm inm-cm5-0 model output prepared
+  for cmip6 scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.12322},
+  \doi{10.22033/ESGF/CMIP6.12322},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.12322}.
+
+\bibitem[{Xin et~al.(2019)}]{CMIP6-BCC-CSM2MR}
+Xin, X., et~al., 2019: Bcc bcc-csm2mr model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1732},
+  \doi{10.22033/ESGF/CMIP6.1732},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.1732}.
+
+\bibitem[{YU(2019)}]{CMIP6-FGOALS-f3-L}
+YU, Y., 2019: Cas fgoals-f3-l model output prepared for cmip6 scenariomip.
+  Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2046},
+  \doi{10.22033/ESGF/CMIP6.2046},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.2046}.
+
+\bibitem[{Yukimoto et~al.(2019)}]{CMIP6-MRI-ESM2.0}
+Yukimoto, S., et~al., 2019: Mri mri-esm2.0 model output prepared for cmip6
+  scenariomip. Earth System Grid Federation,
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.638},
+  \doi{10.22033/ESGF/CMIP6.638},
+  \urlprefix\url{https://doi.org/10.22033/ESGF/CMIP6.638}.
+
+\end{thebibliography}

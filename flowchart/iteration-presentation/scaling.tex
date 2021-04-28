@@ -1,0 +1,287 @@
+\documentclass{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[paperwidth=300mm, paperheight=160mm, margin=5mm]{geometry}
+
+%\newcommand*{\cmcsans}{\fontfamily{comic}\selectfont}
+%\DeclareTextFontCommand{\textcmcsans}{\cmcsans}
+
+\usepackage{adjustbox}
+
+\usepackage{fontspec}
+%\setmainfont{Comic Sans MS}
+\newfontfamily\cmcsans{Comic Sans MS}
+\DeclareTextFontCommand{\textcmcsans}{\cmcsans}
+
+\usepackage{tikz}
+\usepgfmodule{oo}
+\usetikzlibrary{calc,positioning,decorations.pathmorphing,shapes,external}
+%\tikzexternalize[prefix=./dir]
+
+\tikzset{pencil draw/.style={
+    draw,
+    decorate,
+    decoration={random steps,segment length=3mm,amplitude=0.2mm}
+  }
+}
+\tikzset{every picture/.style={/utils/exec={\cmcsans}}}
+\tikzoption{base font}{\def\tikz@base@textfont{#1}}
+\tikzoption{font}{\def\tikz@textfont{\tikz@base@textfont#1}}
+\tikzset{
+  base font=\cmcsans
+}
+
+\pgfooclass{module}{
+
+% class attributes
+\attribute text;
+\attribute text width=3.0cm;
+ \attribute label;
+ \attribute width=3.5cm;
+ \attribute height=1.5cm;
+
+ % constructor method
+ \method module() {
+ }
+
+ \method text(#1) {
+  \pgfooset{text}{#1}
+ }
+
+ \method set text width(#1) {
+  \pgfooset{text width}{#1}
+ }
+
+ \method set label(#1) {
+  \pgfooset{label}{#1}
+ }
+
+ \method set width(#1) {
+  \pgfooset{width}{#1}
+ }
+
+ \method set height(#1) {
+  \pgfooset{height}{#1}
+ }
+
+
+
+ \method draw(#1,#2) {
+  \node [rectangle,
+    thick,
+    pencil draw,
+    align=center,
+    text width=\pgfoovalueof{text width},
+    minimum width=\pgfoovalueof{width},
+    minimum height=\pgfoovalueof{height},
+   font=\cmcsans
+    ] (\pgfoovalueof{label}) at (#1,#2) {\pgfoovalueof{text}};
+ }
+
+ \method place(#1) {
+	\node [rectangle,
+	thick,
+	pencil draw,
+	align=center,
+	text width=\pgfoovalueof{text width},
+	minimum width=\pgfoovalueof{width},
+	minimum height=\pgfoovalueof{height},
+	#1
+	] (\pgfoovalueof{label}) {\pgfoovalueof{text}};
+ }
+
+ \method place2(#1) {
+	\node [rectangle,
+	align=center,
+	text width=\pgfoovalueof{text width},
+	minimum width=\pgfoovalueof{width},
+	minimum height=\pgfoovalueof{height},
+	#1
+	] (\pgfoovalueof{label}) {\pgfoovalueof{text}};
+ }
+ 	
+ \method place diamond(#1) {
+  \node [diamond,
+    aspect=2,
+    thick,
+    pencil draw,
+    align=center,
+    text width=\pgfoovalueof{text width}-1cm,
+    minimum width=\pgfoovalueof{width}-1cm,
+    minimum height=\pgfoovalueof{height},
+    #1
+    ] (\pgfoovalueof{label}) {\pgfoovalueof{text}};
+ }
+
+ \method connect(#1,#2) {
+    \draw[-stealth,pencil draw,thick,decorate] (#1)--(#2);
+%    \draw[-stealth,pencil draw,thick,decorate,decoration={raise=1mm}] (#2)--(#1);   
+ }
+
+ \method connect around1(#1,#2) {
+	\draw[-stealth,pencil draw,thick,decorate] (#1)|- +(-3.75,0) -- (#2);
+%	\draw[-stealth,pencil draw,thick,decorate,decoration={raise=1mm}] (#2)--(#1);   
+ }
+
+ \method connect around2(#1,#2) {
+	\draw[-stealth,pencil draw,thick,decorate] (#1)|- +(3.75,0) -- (#2);
+	%	\draw[-stealth,pencil draw,thick,decorate,decoration={raise=1mm}] (#2)--(#1);   
+ }
+
+\method connect around3(#1.#2){
+	\draw[-stealth,pencil draw,thick,decorate,dotted] (#1)-- +(1.5,0) |- +(-1.9,-5) --(#2);
+	%	\draw[-stealth,pencil draw,thick,decorate,decoration={raise=1mm}] (#2)--(#1);   
+}
+
+ % shortcut method to easily set labels, text and draw
+ % use the \pgfoothis to refer to the current object
+ \method set and draw(#1,#2,#3,#4) {
+  \pgfoothis.set label(#1)
+  \pgfoothis.text(#2)
+  \pgfoothis.draw(#3,#4)
+ }
+
+ \method set and place diamond(#1,#2,#3) {
+	\pgfoothis.set label(#1)
+	\pgfoothis.text(#2)
+	\pgfoothis.place diamond(#3)
+ }
+
+ % shortcut method to easily set labels, text and place
+ % objects
+ \method set and place(#1,#2,#3) {
+  \pgfoothis.set label(#1)
+  \pgfoothis.text(#2)
+  \pgfoothis.place(#3)
+ }
+
+ \method set and place2(#1,#2,#3) {
+  \pgfoothis.set label(#1)
+  \pgfoothis.text(#2)
+  \pgfoothis.place2(#3)
+ }
+
+ % shortcut method to easily set the dimensions
+ \method set dimensions(#1,#2,#3) {
+  \pgfoothis.set width(#1)
+  \pgfoothis.set height(#2)
+  \pgfoothis.set text width(#3)
+ }
+}
+
+\begin{document}
+\cmcsans
+\pagestyle{empty}
+\begin{adjustbox}{center}
+\begin{tikzpicture}[scale=0.95, transform shape]
+\pgfoonew \mod=new module()
+
+\mod.set width(2.5cm)
+\mod.set text width(2.5cm)
+\mod.set height(2cm)
+
+\mod.set and draw(volume_t, VOLUME {$V(t)$}, 0, 0)
+\mod.set and place(area_t, AREA {$A(t)$}, left = 1cm of volume_t))
+\mod.set and place(length_t, LENGTH {$L(t)$}, right = 1cm of volume_t)
+
+\mod.set width(4cm)
+\mod.set text width(3.5cm)
+\mod.set height(2cm)
+
+\mod.set and place(timescales, TIME SCALES {$\tau_L(t)$} and {$\tau_A(t)$}, below = 3cm of volume_t)
+
+\mod.set and place(specmb, SPECIFIC MASS BALANCE {$B(t)$}, below = 1cm of timescales)
+
+\mod.set width(5cm)
+\mod.set text width(4.5cm)
+\mod.set height(2cm)
+
+% volume change and new volume
+\mod.set and place(volume, VOLUME CHANGE {$\Delta V(t)$} and NEW VOLUME {$V(t+1)$}, below = 1cm of specmb)
+% area and length change placed below left and right of volume change, resp.
+\mod.set and place(area, AREA CHANGE {$\Delta A(t)$} and NEW AREA {$A(t+1)$}, left = 1cm of volume)
+\mod.set and place(length, LENGTH CHANGE {$\Delta L(t)$} and NEW LENGTH {$L(t+1)$}, right = 1cm of volume)
+
+\mod.set width(5cm)
+\mod.set text width(4cm)
+\mod.set height(2cm)
+
+\mod.set and place(min_hgt, NEW TERMINUS ELEVATION {$z_\text{min}(t+1)$}, right = 1cm of length)
+
+\mod.set width(4.5cm)
+\mod.set text width(4cm)
+\mod.set height(2cm)
+
+% start values for length, min and max elevation
+\mod.set and place(length_0, START LENGTH {$L_0$}, below right = 0.5cm and 1.5cm of min_hgt)
+\mod.set and place(min_hgt_0, START TERMINUS ELEVATION {$z_{\text{min}, 0}$}, right = 1.5 of min_hgt)
+\mod.set and place(max_hgt, MAXIMUM ELEVATION {$z_\text{max}$}, above right = 0.5cm and 1.5cm of min_hgt)
+% terminus elevation (place outside frame)
+\mod.set and place(min_hgt_t, TERMINUS ELEVATION {$z_\text{min}(t)$}, above = 0.5cm of max_hgt)
+
+\mod.set width(8cm)
+\mod.set text width(7.5cm)
+\mod.set height(2cm)
+% climatological precipitation
+\mod.set and place(prcp_clim, AVG. SOLID PRECIPIATION over equilibrium climate period {$P_\text{clim}^\text{solid}(t^*)$}, above right = 2cm and 5.5 of timescales)
+
+\mod.set width(7cm)
+\mod.set text width(6.5cm)
+\mod.set height(2cm)
+\mod.set and place2(iteration, COMPUTATION OF GLACIER GEOMETRY FOR YEAR $t+1$, below = 0cm of area)
+
+% ----------------
+%   Connections
+% ----------------
+
+% connect geometrical parameters of year=t with time scales
+\mod.connect(area_t, timescales)
+\mod.connect(volume_t, timescales)
+\mod.connect(length_t, timescales)
+\mod.connect(prcp_clim.south west, timescales.north east)
+
+% connect area and length of year=t with area and length of year=t+1
+\draw[-stealth,pencil draw,thick,decorate,dotted] (area_t.west)-- +(-0.6,0) -- (area);
+\draw[-stealth,pencil draw,thick,decorate,dotted] (length_t.east)-- +(+0.6,0) -- (length.north);
+
+% connect specific mass balance and area with volume of year=t+1
+\mod.connect(specmb, volume)
+\draw[-stealth,pencil draw,thick,decorate] (area_t.south)-- +(0,-7) --(volume.north west);
+
+% connect volume of year=t with area and length of year=t+1
+\draw[-stealth,pencil draw,thick,decorate,dotted] (volume_t.south west) -- ++(-1.5, -1.5) --(volume.north west);
+% connect volume and time scales with area and length of year=t+1
+\mod.connect(volume, area)
+\mod.connect around1(timescales.west, area.north)
+\mod.connect(volume, length)
+\mod.connect around2(timescales.east, length.north)
+
+% connect length with terminus elevation of year=t+1
+\mod.connect(length, min_hgt)
+% connect terminus elevation with specific mass balance of year=t
+\mod.connect(max_hgt, specmb)
+\mod.connect(min_hgt_t, specmb)
+%\draw[-stealth,pencil draw,thick,decorate] (min_hgt_t.south)-- +(0,-7) -- (specmb);
+
+% connect maximum elevation with specific mass balance of year=t
+%\draw[-stealth,pencil draw,thick,decorate, out=150,in=30] (min_hgt_t.north west) to (specmb.north east);
+
+% connect starting values of min/max elevation and lenght
+% with terminus elevation of year=t+1
+\mod.connect(max_hgt, min_hgt)
+\mod.connect(min_hgt_0, min_hgt)
+\mod.connect(length_0, min_hgt)
+
+% -------------
+%   Rectangle
+% -------------
+
+% draw rectangle over stepping algorith
+\draw[pencil draw, thick, decorate, dashed] (-9,-3) rectangle (15,-14);
+
+
+%\mod.set and draw(step, ITERATIVE STEP for year $t$, 0, 0)
+
+\end{tikzpicture}
+\end{adjustbox}
+\end{document}

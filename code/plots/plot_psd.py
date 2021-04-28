@@ -104,6 +104,99 @@ def plot_psd(ds, rgi_df, plot_periods=False, spinup_time=0, norm=False):
         dir_path = '/Users/oberrauch/work/master/plots/final_plots/psd/'
         f_name = '{}{}.pdf'.format(name.replace(' ', '_'),
                                    '_norm' if norm else '')
+        # plt.savefig(os.path.join(dir_path, f_name), bbox_inches='tight')
+        print(ax.get_ylim())
+
+
+def plot_psd_mb(ds_mb, rgi_df, plot_periods=False, spinup_time=0, norm=False):
+    # iterate over all above selected glaciers
+    for rgi_id, glacier in rgi_df.iterrows():
+        # select glacier
+        rgi_id = rgi_id
+        name = glacier['name']
+        log.info(f'Plotting PSD for {name}')
+        # create figure and axes
+        fig, ax = plt.subplots(1, 1, figsize=[8, 6])
+        # select from complete dataset
+        ds_sel = ds_mb.sel(rgi_id=rgi_id)
+        # truncate spinup if necessary
+        ds_sel = ds_sel.isel(year=slice(int(spinup_time), None))
+
+        # plots for the FLOWLINE model
+        for i, b in enumerate(np.sort(ds_mb.temp_bias)):
+            # select values by temperature bias
+            ds_tmp = ds_sel.sel(temp_bias=b).spec_mb
+            # compute the power of the signal per frequency band
+            sig = ds_tmp.sel(model='fl').values.flatten()
+            nperseg = int(len(sig) / 10)
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
+            # convert frequency into periods
+            if plot_periods:
+                freqs = 1 / freqs
+            # normalize power density
+            if norm:
+                psd = psd / psd[0]
+            ax.loglog(freqs, psd, label='{:+.1f} °C'.format(b), c=fl_cycle[i],
+                      lw=2)
+
+        # plots for the V/A SCALING model
+        for i, b in enumerate(np.sort(ds_mb.temp_bias)):
+            # select values by temperature bias
+            ds_tmp = ds_sel.sel(temp_bias=b).spec_mb
+            # compute the power of the signel per frequency band
+            sig = ds_tmp.sel(model='vas').values.flatten()
+            freqs, psd = signal.welch(sig, nperseg=nperseg)
+            # convert frequency into periods
+            if plot_periods:
+                freqs = 1 / freqs
+            # normalize power density
+            if norm:
+                psd = psd / psd[0]
+            ax.loglog(freqs, psd, label='{:+.1f} °C'.format(b), c=vas_cycle[i],
+                      lw=2)
+
+        # make x-axis tight
+        ax.autoscale(enable=True, axis='x', tight=True)
+
+        # get legend handles and labels
+        handles, labels = ax.get_legend_handles_labels()
+        title_proxy, = plt.plot(0, marker='None', linestyle='None',
+                                label='dummy')
+
+        # create list of handles and labels in correct order
+        my_handles = list([title_proxy])
+        my_handles.extend(handles[:3])
+        my_handles.extend([title_proxy])
+        my_handles.extend(handles[3:])
+        my_labels = list(["$\\bf{Flowline\ model}$"])
+        my_labels.extend(labels[:3])
+        my_labels.extend(["$\\bf{VAS\ model}$"])
+        my_labels.extend(labels[3:])
+        # add single two-column legend
+        ax.legend(my_handles, my_labels, ncol=2, loc=3)
+
+        # add grid
+        ax.grid(which='both')
+
+        ax.set_ylim((0.010493453462322543, 282327512.32164896))
+        # invert x-axis
+        if plot_periods:
+            ax.invert_xaxis()
+
+        # title, labels, ...
+        if plot_periods:
+            ax.set_xlabel('Period [yr]')
+        else:
+            ax.set_xlabel('Frequency [yr$^{-1}$]')
+        if norm:
+            ax.set_ylabel('Normalized power density')
+        else:
+            ax.set_ylabel('Power density [(mm w.e./yr)$^2$/yr$^{-1}$]')
+
+        # store plot
+        dir_path = '/Users/oberrauch/work/master/plots/final_plots/psd/'
+        f_name = '{}{}_mb.pdf'.format(name.replace(' ', '_'),
+                                   '_norm' if norm else '')
         plt.savefig(os.path.join(dir_path, f_name), bbox_inches='tight')
 
 
@@ -275,5 +368,6 @@ if __name__ == '__main__':
     spinup_time = 3e3
 
     # call plotting functions
-    plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=False)
+    # plot_psd(ds, showcase_glaciers, spinup_time=spinup_time, norm=False)
     # plot_psd_length_mb(ds, ds_mb, showcase_glaciers, spinup_time)
+    plot_psd_mb(ds_mb, showcase_glaciers, spinup_time=spinup_time)
